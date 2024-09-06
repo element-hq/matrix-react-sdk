@@ -202,8 +202,7 @@ yarn cache clean && yarn install --force
 
 Now the yarn commands should work as normal.
 
-🦡
 ### End-to-End tests
 
 We use Playwright and Element Web for end-to-end tests. See
-[`docs/playwright.md`](docs/playwright.md) for more information.
+[`docs/playwright.md`](docs/playwright.md) for more information. 🦉
