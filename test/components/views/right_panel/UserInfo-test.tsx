@@ -242,8 +242,8 @@ describe("<UserInfo />", () => {
 
         it("renders user timezone if set", async () => {
             // For timezone, force a consistent locale.
-            jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(function (_locale, opts) {
-                return origDate.call(this, "en-US", opts); // eslint-disable-line @typescript-eslint/no-invalid-this
+            jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(function (this: Date, _locale, opts) {
+                return origDate.call(this, "en-US", opts);
             });
             mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
             mockClient.getExtendedProfileProperty.mockResolvedValue("Europe/London");
