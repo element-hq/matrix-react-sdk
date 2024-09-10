@@ -247,6 +247,13 @@ describe("<UserInfo />", () => {
             await expect(screen.findByText(/\d\d:\d\d (AM|PM)/)).resolves.toBeInTheDocument();
         });
 
+        it("does not renders user timezone if timezone is invalid", async () => {
+            mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
+            mockClient.getExtendedProfileProperty.mockResolvedValue("invalid-tz");
+            renderComponent();
+            expect(screen.queryByText(/\d\d:\d\d (AM|PM)/)).not.toBeInTheDocument();
+        });
+
         it("renders encryption info panel without pending verification", () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel });
             expect(screen.getByRole("heading", { name: /encryption/i })).toBeInTheDocument();
