@@ -1225,6 +1225,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "Electron.monochromeIcon": {
         supportedLevels: [SettingLevel.PLATFORM],
         displayName: _td("settings|preferences|monochrome_icon"),
-        default: true,
+        default: process.platform === "linux",
     },
 };
