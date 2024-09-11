@@ -38,7 +38,9 @@ describe("CompleteSecurity", () => {
         mocked(client.getCrypto()!.getUserDeviceInfo).mockResolvedValue(userIdToDevices);
 
         const mockSetupEncryptionStore = new MockSetupEncryptionStore();
-        jest.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(mockSetupEncryptionStore as SetupEncryptionStore);
+        jest.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(
+            mockSetupEncryptionStore as SetupEncryptionStore,
+        );
     });
 
     afterEach(() => {
@@ -48,7 +50,7 @@ describe("CompleteSecurity", () => {
     it("Renders with a cancel button by default", () => {
         render(<CompleteSecurity onFinished={() => {}} />);
 
-        expect(screen.getByRole("button", { name: "Skip verification for now"})).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Skip verification for now" })).toBeInTheDocument();
     });
 
     it("Renders with a cancel button if forceVerification false", () => {
@@ -60,7 +62,7 @@ describe("CompleteSecurity", () => {
 
         render(<CompleteSecurity onFinished={() => {}} />);
 
-        expect(screen.getByRole("button", { name: "Skip verification for now"})).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Skip verification for now" })).toBeInTheDocument();
     });
 
     it("Renders without a cancel button if forceVerification true", () => {
@@ -72,6 +74,6 @@ describe("CompleteSecurity", () => {
 
         render(<CompleteSecurity onFinished={() => {}} />);
 
-        expect(screen.queryByRole("button", { name: "Skip verification for now"})).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Skip verification for now" })).not.toBeInTheDocument();
     });
 });
