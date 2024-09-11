@@ -15,7 +15,7 @@ import { mocked, MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import StorageEvictedDialog from "../src/components/views/dialogs/StorageEvictedDialog";
-import { logout, restoreFromLocalStorage, setLoggedIn } from "../src/Lifecycle";
+import { logout, restoreSessionFromStorage, setLoggedIn } from "../src/Lifecycle";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import Modal from "../src/Modal";
 import * as StorageAccess from "../src/utils/StorageAccess";
@@ -172,7 +172,7 @@ describe("Lifecycle", () => {
         mac: expect.any(String),
     };
 
-    describe("restoreFromLocalStorage()", () => {
+    describe("restoreSessionFromStorage()", () => {
         beforeEach(() => {
             initLocalStorageMock();
             initSessionStorageMock();
@@ -196,18 +196,18 @@ describe("Lifecycle", () => {
             // @ts-ignore dirty mocking
             global.localStorage = undefined;
 
-            expect(await restoreFromLocalStorage()).toEqual(false);
+            expect(await restoreSessionFromStorage()).toEqual(false);
         });
 
         it("should return false when no session data is found in local storage", async () => {
-            expect(await restoreFromLocalStorage()).toEqual(false);
+            expect(await restoreSessionFromStorage()).toEqual(false);
             expect(logger.log).toHaveBeenCalledWith("No previous session found.");
         });
 
         it("should abort login when we expect to find an access token but don't", async () => {
             initLocalStorageMock({ mx_has_access_token: "true" });
 
-            await expect(() => restoreFromLocalStorage()).rejects.toThrow();
+            await expect(() => restoreSessionFromStorage()).rejects.toThrow();
             expect(Modal.createDialog).toHaveBeenCalledWith(StorageEvictedDialog);
             expect(mockClient.clearStores).toHaveBeenCalled();
         });
@@ -220,12 +220,12 @@ describe("Lifecycle", () => {
                 });
 
                 it("should ignore guest accounts when ignoreGuest is true", async () => {
-                    expect(await restoreFromLocalStorage({ ignoreGuest: true })).toEqual(false);
+                    expect(await restoreSessionFromStorage({ ignoreGuest: true })).toEqual(false);
                     expect(logger.log).toHaveBeenCalledWith(`Ignoring stored guest account: ${userId}`);
                 });
 
                 it("should restore guest accounts when ignoreGuest is false", async () => {
-                    expect(await restoreFromLocalStorage({ ignoreGuest: false })).toEqual(true);
+                    expect(await restoreSessionFromStorage({ ignoreGuest: false })).toEqual(true);
 
                     expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                         expect.objectContaining({
@@ -245,7 +245,7 @@ describe("Lifecycle", () => {
                 });
 
                 it("should persist credentials", async () => {
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(localStorage.setItem).toHaveBeenCalledWith("mx_user_id", userId);
                     expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_access_token", "true");
@@ -259,7 +259,7 @@ describe("Lifecycle", () => {
 
                 it("should persist access token when idb is not available", async () => {
                     jest.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                     // put accessToken in localstorage as fallback
@@ -267,7 +267,7 @@ describe("Lifecycle", () => {
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                         {
@@ -287,13 +287,13 @@ describe("Lifecycle", () => {
                 });
 
                 it("should remove fresh login flag from session storage", async () => {
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(sessionStorage.removeItem).toHaveBeenCalledWith("mx_fresh_login");
                 });
 
                 it("should start matrix client", async () => {
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(MatrixClientPeg.start).toHaveBeenCalled();
                 });
@@ -308,7 +308,7 @@ describe("Lifecycle", () => {
                     });
 
                     it("should persist credentials", async () => {
-                        expect(await restoreFromLocalStorage()).toEqual(true);
+                        expect(await restoreSessionFromStorage()).toEqual(true);
 
                         // refresh token from storage is re-persisted
                         expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_refresh_token", "true");
@@ -316,7 +316,7 @@ describe("Lifecycle", () => {
                     });
 
                     it("should create new matrix client with credentials", async () => {
-                        expect(await restoreFromLocalStorage()).toEqual(true);
+                        expect(await restoreSessionFromStorage()).toEqual(true);
 
                         expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                             {
@@ -354,7 +354,7 @@ describe("Lifecycle", () => {
                 });
 
                 it("should persist credentials", async () => {
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_access_token", "true");
 
@@ -376,7 +376,7 @@ describe("Lifecycle", () => {
                         },
                     );
 
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith(
                         "account",
@@ -395,7 +395,7 @@ describe("Lifecycle", () => {
                     });
 
                     // Perform the restore
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     // Ensure that the expected calls were made
                     expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
@@ -422,7 +422,7 @@ describe("Lifecycle", () => {
                     });
 
                     it("should persist credentials", async () => {
-                        expect(await restoreFromLocalStorage()).toEqual(true);
+                        expect(await restoreSessionFromStorage()).toEqual(true);
 
                         // refresh token from storage is re-persisted
                         expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_refresh_token", "true");
@@ -434,7 +434,7 @@ describe("Lifecycle", () => {
                     });
 
                     it("should create new matrix client with credentials", async () => {
-                        expect(await restoreFromLocalStorage()).toEqual(true);
+                        expect(await restoreSessionFromStorage()).toEqual(true);
 
                         expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                             {
@@ -484,7 +484,7 @@ describe("Lifecycle", () => {
 
                 it("should create and start new matrix client with credentials", async () => {
                     // Perform the restore
-                    expect(await restoreFromLocalStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage()).toEqual(true);
 
                     // Ensure that the expected calls were made
                     expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
@@ -511,7 +511,7 @@ describe("Lifecycle", () => {
                 initIdbMock(idbStorageSession);
                 mockClient.isVersionSupported.mockRejectedValue(new Error("Oh, noes, the server is down!"));
 
-                expect(await restoreFromLocalStorage()).toEqual(true);
+                expect(await restoreSessionFromStorage()).toEqual(true);
             });
         });
     });
