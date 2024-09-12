@@ -27,16 +27,18 @@ import PinningUtils from "../utils/PinningUtils";
 
 /**
  * Get the pinned event IDs from a room.
+ * The number of pinned events is limited to 100.
  * @param room
  */
 function getPinnedEventIds(room?: Room): string[] {
-    return (
+    const eventIds: string[] =
         room
             ?.getLiveTimeline()
             .getState(EventTimeline.FORWARDS)
             ?.getStateEvents(EventType.RoomPinnedEvents, "")
-            ?.getContent()?.pinned ?? []
-    );
+            ?.getContent()?.pinned ?? [];
+    // Limit the number of pinned events to 100
+    return eventIds.slice(0, 100);
 }
 
 /**
