@@ -1841,12 +1841,25 @@
         "files_button": "Files",
         "info": "Info",
         "pinned_messages": {
-            "empty": "Nothing pinned, yet",
-            "explainer": "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.",
+            "empty_description": "Select a message and choose “%(pinAction)s” to it include here.",
+            "empty_title": "Pin important messages so that they can be easily discovered",
+            "header": {
+                "one": "1 Pinned message",
+                "other": "%(count)s Pinned messages",
+                "zero": "Pinned message"
+            },
             "limits": {
                 "other": "You can only pin up to %(count)s widgets"
             },
-            "title": "Pinned messages"
+            "menu": "Open menu",
+            "reply_thread": "Reply to a <link>thread message</link>",
+            "title": "Pinned messages",
+            "unpin_all": {
+                "button": "Unpin all messages",
+                "content": "Make sure that you really want to remove all pinned messages. This action can’t be undone.",
+                "title": "Unpin all messages?"
+            },
+            "view": "View in timeline"
         },
         "pinned_messages_button": "Pinned messages",
         "poll": {
@@ -1954,8 +1967,6 @@
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
             },
-            "release_announcement_description": "Enjoy a simpler, more accessible room header.",
-            "release_announcement_header": "New design!",
             "room_is_public": "This room is public",
             "show_widgets_button": "Show Widgets",
             "video_call_button_ec": "Video call (%(brand)s)",
@@ -2037,6 +2048,21 @@
         "not_found_title": "This room or space does not exist.",
         "not_found_title_name": "%(roomName)s does not exist.",
         "peek_join_prompt": "You're previewing %(roomName)s. Want to join it?",
+        "pinned_message_banner": {
+            "button_close_list": "Close list",
+            "button_view_all": "View all",
+            "description": "This room has pinned messages. Click to view them.",
+            "go_to_message": "View the pinned message in the timeline.",
+            "prefix": {
+                "audio": "Audio",
+                "file": "File",
+                "image": "Image",
+                "poll": "Poll",
+                "video": "Video"
+            },
+            "preview": "<bold>%(prefix)s:</bold> %(preview)s",
+            "title": "<bold>%(index)s of %(length)s</bold> Pinned messages"
+        },
         "read_topic": "Click to read topic",
         "rejecting": "Rejecting invite…",
         "rejoin_button": "Re-join",
@@ -2188,6 +2214,8 @@
             "error_deleting_alias_description": "There was an error removing that address. It may no longer exist or a temporary error occurred.",
             "error_deleting_alias_description_forbidden": "You don't have permission to delete the address.",
             "error_deleting_alias_title": "Error removing address",
+            "error_publishing": "Unable to publish room",
+            "error_publishing_detail": "There was an error publishing this room",
             "error_save_space_settings": "Failed to save space settings.",
             "error_updating_alias_description": "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.",
             "error_updating_canonical_alias_description": "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.",
@@ -2685,6 +2713,7 @@
             "code_blocks_heading": "Code blocks",
             "compact_modern": "Use a more compact 'Modern' layout",
             "composer_heading": "Composer",
+            "default_timezone": "Browser default (%(timezone)s)",
             "dialog_title": "<strong>Settings:</strong> Preferences",
             "enable_hardware_acceleration": "Enable hardware acceleration",
             "enable_tray_icon": "Show tray icon and minimise window to it on close",
@@ -2700,7 +2729,8 @@
             "show_checklist_shortcuts": "Show shortcut to welcome checklist above the room list",
             "show_polls_button": "Show polls button",
             "surround_text": "Surround selected text when typing special characters",
-            "time_heading": "Displaying time"
+            "time_heading": "Displaying time",
+            "user_timezone": "Set timezone"
         },
         "prompt_invite": "Prompt before sending invites to potentially invalid matrix IDs",
         "replace_plain_emoji": "Automatically replace plain text Emoji",
