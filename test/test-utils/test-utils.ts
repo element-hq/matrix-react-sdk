@@ -108,6 +108,7 @@ export function createTestClient(): MatrixClient {
 
         secretStorage: {
             get: jest.fn(),
+            isStored: jest.fn().mockReturnValue(false),
         },
 
         store: {
@@ -128,6 +129,7 @@ export function createTestClient(): MatrixClient {
             getDeviceVerificationStatus: jest.fn(),
             resetKeyBackup: jest.fn(),
             isEncryptionEnabledInRoom: jest.fn(),
+            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -571,7 +573,10 @@ export function mkStubRoom(
     name: string | undefined,
     client: MatrixClient | undefined,
 ): Room {
-    const stubTimeline = { getEvents: (): MatrixEvent[] => [] } as unknown as EventTimeline;
+    const stubTimeline = {
+        getEvents: (): MatrixEvent[] => [],
+        getState: (): RoomState | undefined => undefined,
+    } as unknown as EventTimeline;
     return {
         canInvite: jest.fn(),
         client,
