@@ -1302,6 +1302,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
+    private async shouldForceVerification(): Promise<boolean> {
+        if (!SdkConfig.get("force_verification")) return false;
+        const mustVerifyFlag = localStorage.getItem("must_verify_device");
+        if (!mustVerifyFlag) return false;
+
+        const client = MatrixClientPeg.safeGet();
+        if (client.isGuest()) return false;
+
+        const crypto = client.getCrypto();
+        const crossSigningReady = await crypto?.isCrossSigningReady();
+
+        return !crossSigningReady;
+    }
+
     /**
      * Called when a new logged in session has started
      */
@@ -1309,6 +1323,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         ThemeController.isLogin = false;
         this.themeWatcher.recheck();
         StorageManager.tryPersistStorage();
+
+        const shouldForceVerification = await this.shouldForceVerification();
 
         if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
             this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
@@ -1331,6 +1347,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     }
                 },
             );
+        } else if (shouldForceVerification) {
+            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
         } else {
             return this.onShowPostLoginScreen();
         }

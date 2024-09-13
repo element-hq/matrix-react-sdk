@@ -824,8 +824,6 @@ async function doSetLoggedIn(
     }
     checkSessionLock();
 
-    dis.fire(Action.OnLoggedIn);
-
     const clientPegOpts: MatrixClientPegAssignOpts = {};
     if (credentials.pickleKey) {
         // The pickleKey, if provided, is probably a base64-encoded 256-bit key, so can be used for the crypto store.
@@ -845,6 +843,15 @@ async function doSetLoggedIn(
 
     // Run the migrations after the MatrixClientPeg has been assigned
     SettingsStore.runMigrations(isFreshLogin);
+
+    if (isFreshLogin && !credentials.guest) {
+        // For newly registered users, set a flag so that we force them to verify,
+        // (we don't want to force users with existing sessions to verify though)
+        localStorage.setItem("must_verify_device", "true");
+    }
+
+    // Fire this at the end, now that we've also set up crypto & started the sync running
+    dis.fire(Action.OnLoggedIn);
 
     return client;
 }
