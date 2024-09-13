@@ -190,6 +190,32 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
         }
 
+        const hasCaption =
+            [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) &&
+            content.filename &&
+            content.filename !== content.body;
+        if (hasCaption) {
+            return <CaptionBody
+                ref={this.body}
+                mxEvent={this.props.mxEvent}
+                highlights={this.props.highlights}
+                highlightLink={this.props.highlightLink}
+                showUrlPreview={this.props.showUrlPreview}
+                forExport={this.props.forExport}
+                maxImageHeight={this.props.maxImageHeight}
+                replacingEventId={this.props.replacingEventId}
+                editState={this.props.editState}
+                onHeightChanged={this.props.onHeightChanged}
+                onMessageAllowed={this.onTileUpdate}
+                permalinkCreator={this.props.permalinkCreator}
+                mediaEventHelper={this.mediaHelper}
+                getRelationsForEvent={this.props.getRelationsForEvent}
+                isSeeingThroughMessageHiddenForModeration={this.props.isSeeingThroughMessageHiddenForModeration}
+                inhibitInteraction={this.props.inhibitInteraction}
+                WrappedBodyType={BodyType}
+            />;
+        }
+
         return BodyType ? (
             <BodyType
                 ref={this.body}
@@ -212,3 +238,13 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         ) : null;
     }
 }
+
+const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React.ComponentType<IBodyProps> }> = ({
+    WrappedBodyType,
+    ...props
+}) => (
+    <div className="mx_EventTile_content">
+        <WrappedBodyType {...props} />
+        <TextualBody {...{ ...props, ref: undefined }} />
+    </div>
+);
