@@ -184,7 +184,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 class="mx_EventTile_body translate"
                 dir="auto"
               >
-                First pinned message
+                The second one
               </div>
             </div>
           </div>
@@ -250,7 +250,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 class="mx_EventTile_body translate"
                 dir="auto"
               >
-                The second one
+                First pinned message
               </div>
             </div>
           </div>
@@ -358,7 +358,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_bh2qc_17"
                 data-state="closed"
-                id="radix-18"
+                id="radix-218"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -379,7 +379,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="mx_EventTile_body translate"
                 dir="auto"
               >
-                First pinned message
+                The second one
               </div>
             </div>
           </div>
@@ -424,7 +424,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_bh2qc_17"
                 data-state="closed"
-                id="radix-19"
+                id="radix-219"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -445,7 +445,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="mx_EventTile_body translate"
                 dir="auto"
               >
-                The second one
+                First pinned message
               </div>
             </div>
           </div>
