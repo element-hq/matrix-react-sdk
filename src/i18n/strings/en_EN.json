@@ -1853,6 +1853,11 @@
                 "other": "You can only pin up to %(count)s widgets"
             },
             "menu": "Open menu",
+            "release_announcement": {
+                "close": "Ok",
+                "description": "Find all messages pinned to a room here",
+                "title": "View all pinned messages"
+            },
             "reply_thread": "Reply to a <link>thread message</link>",
             "title": "Pinned messages",
             "unpin_all": {
