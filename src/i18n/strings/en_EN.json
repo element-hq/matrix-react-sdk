@@ -1855,8 +1855,8 @@
             "menu": "Open menu",
             "release_announcement": {
                 "close": "Ok",
-                "description": "Find all messages pinned to a room here",
-                "title": "View all pinned messages"
+                "description": "Find all pinned messages here. Rollover any message and select “Pin” to add it.",
+                "title": "All new pinned messages"
             },
             "reply_thread": "Reply to a <link>thread message</link>",
             "title": "Pinned messages",
