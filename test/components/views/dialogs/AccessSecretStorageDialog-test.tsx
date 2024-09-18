@@ -58,7 +58,6 @@ describe("AccessSecretStorageDialog", () => {
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
-            keyBackupKeyFromRecoveryKey: jest.fn(),
             checkSecretStorageKey: jest.fn(),
             isValidRecoveryKey: jest.fn(),
         });
@@ -88,8 +87,8 @@ describe("AccessSecretStorageDialog", () => {
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
         renderComponent({ onFinished, checkPrivateKey });
 
-        mockClient.keyBackupKeyFromRecoveryKey.mockImplementation(() => {
-            throw new Error("that's no key");
+        mockClient.checkSecretStorageKey.mockImplementation(() => {
+            throw new Error("invalid key");
         });
 
         await enterSecurityKey();

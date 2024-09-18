@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent } from "react";
-import { MatrixClient, MatrixError, SecretStorage } from "matrix-js-sdk/src/matrix";
+import { decodeRecoveryKey, MatrixClient, MatrixError, SecretStorage } from "matrix-js-sdk/src/matrix";
 import { IKeyBackupRestoreResult } from "matrix-js-sdk/src/crypto/keybackup";
 import { logger } from "matrix-js-sdk/src/logger";
 import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -184,7 +184,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 { progressCallback: this.progressCallback },
             );
             if (this.props.keyCallback) {
-                const key = MatrixClientPeg.safeGet().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
+                const key = decodeRecoveryKey(this.state.recoveryKey);
                 this.props.keyCallback(key);
             }
             if (!this.props.showSummary) {
