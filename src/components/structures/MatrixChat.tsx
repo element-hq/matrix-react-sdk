@@ -952,13 +952,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private async startRegistration(params: { [key: string]: string }, isMobileRegistration?: boolean): Promise<void> {
-        const isMobileRegistrationAllowed =
-            isMobileRegistration && SettingsStore.getValue("Registration.mobileRegistrationHelper");
-
-        if (!SettingsStore.getValue(UIFeature.Registration) || !isMobileRegistrationAllowed) {
+        if (!SettingsStore.getValue(UIFeature.Registration)) {
             this.showScreen("welcome");
             return;
         }
+        const isMobileRegistrationAllowed =
+            isMobileRegistration && SettingsStore.getValue("Registration.mobileRegistrationHelper");
 
         const newState: Partial<IState> = {
             view: Views.REGISTER,
