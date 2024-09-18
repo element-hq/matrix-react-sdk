@@ -62,6 +62,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
     }
 
     public componentWillUnmount(): void {
+        alert("test");
         this.resetRecaptcha();
         const chaptchas = document.getElementsByClassName("g-recaptcha-bubble-arrow");
         if (chaptchas.length > 0) chaptchas[0].parentElement?.remove();
