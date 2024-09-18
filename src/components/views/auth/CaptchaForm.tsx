@@ -62,10 +62,18 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
     }
 
     public componentWillUnmount(): void {
-        alert("test");
+        alert(`this.captchaWidgetId ${this.captchaWidgetId}`);
         this.resetRecaptcha();
-        const chaptchas = document.getElementsByClassName("g-recaptcha-bubble-arrow");
-        if (chaptchas.length > 0) chaptchas[0].parentElement?.remove();
+        const iframes = document.querySelectorAll("iframe");
+        for (const iframe of iframes) {
+            if (iframe.src.includes("https://www.recaptcha.net/recaptcha/api2/bframe")) {
+                let parentBeforeBody: HTMLElement | null = iframe;
+                do {
+                    parentBeforeBody = parentBeforeBody.parentElement;
+                } while (parentBeforeBody?.parentElement && parentBeforeBody.parentElement != document.body);
+                parentBeforeBody?.remove();
+            }
+        }
     }
 
     // Borrowed directly from: https://github.com/codeep/react-recaptcha-google/commit/e118fa5670fa268426969323b2e7fe77698376ba
