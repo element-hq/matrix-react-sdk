@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ICryptoCallbacks, SecretStorage } from "matrix-js-sdk/src/matrix";
+import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto-api";
 import { deriveKey } from "matrix-js-sdk/src/crypto/key_passphrase";
-import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type CreateSecretStorageDialog from "./async-components/views/dialogs/security/CreateSecretStorageDialog";
