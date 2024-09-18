@@ -176,13 +176,6 @@ export class Bot extends Client {
                     });
                 }
 
-                if (!opts.startClient) {
-                    return cli;
-                }
-
-                await cli.initRustCrypto({ useIndexedDB: false });
-                cli.setGlobalErrorOnUnknownDevices(false);
-                await cli.startClient();
                 return cli;
             },
             {
@@ -191,6 +184,17 @@ export class Bot extends Client {
                 opts: this.opts,
             },
         );
+
+        // If we weren't configured to start the client, bail out now.
+        if (!this.opts.startClient) {
+            return clientHandle;
+        }
+
+        await clientHandle.evaluate(async (cli) => {
+            await cli.initRustCrypto({ useIndexedDB: false });
+            cli.setGlobalErrorOnUnknownDevices(false);
+            await cli.startClient();
+        });
 
         if (this.opts.bootstrapCrossSigning) {
             // XXX: workaround https://github.com/element-hq/element-web/issues/26755
