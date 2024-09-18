@@ -63,6 +63,8 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
 
     public componentWillUnmount(): void {
         this.resetRecaptcha();
+        const chaptchas = document.getElementsByClassName("g-recaptcha-bubble-arrow");
+        if (chaptchas.length > 0) chaptchas[0].parentElement?.remove();
     }
 
     // Borrowed directly from: https://github.com/codeep/react-recaptcha-google/commit/e118fa5670fa268426969323b2e7fe77698376ba
