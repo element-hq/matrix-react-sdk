@@ -1,21 +1,13 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, JSX } from "react";
-import { Room, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Button, Separator } from "@vector-im/compound-web";
 import classNames from "classnames";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
@@ -35,6 +27,7 @@ import Modal from "../../../Modal";
 import { UnpinAllDialog } from "../dialogs/UnpinAllDialog";
 import EmptyState from "./EmptyState";
 import { usePinnedEvents, useReadPinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
+import PinningUtils from "../../../utils/PinningUtils.ts";
 
 /**
  * List the pinned messages in a room inside a Card.
@@ -141,10 +134,9 @@ function PinnedMessages({ events, room, permalinkCreator }: PinnedMessagesProps)
 
     /**
      * Whether the client can unpin events from the room.
+     * Listen to room state to update this value.
      */
-    const canUnpin = useRoomState(room, (state) =>
-        state.mayClientSendStateEvent(EventType.RoomPinnedEvents, matrixClient),
-    );
+    const canUnpin = useRoomState(room, () => PinningUtils.userHasPinOrUnpinPermission(matrixClient, room));
 
     /**
      * Opens the unpin all dialog.
@@ -164,7 +156,7 @@ function PinnedMessages({ events, room, permalinkCreator }: PinnedMessagesProps)
                 })}
                 role="list"
             >
-                {events.reverse().map((event, i) => (
+                {events.map((event, i) => (
                     <>
                         <PinnedEventTile
                             key={event.getId()}

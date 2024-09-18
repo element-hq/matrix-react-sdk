@@ -1,23 +1,14 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2017 Travis Ralston
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, EventType, M_POLL_START, MatrixClient, EventTimeline } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, EventType, M_POLL_START, MatrixClient, EventTimeline, Room } from "matrix-js-sdk/src/matrix";
 
 import { isContentActionable } from "./EventUtils";
-import SettingsStore from "../settings/SettingsStore";
 import { ReadPinsEventId } from "../components/views/right_panel/types";
 
 export default class PinningUtils {
@@ -71,23 +62,52 @@ export default class PinningUtils {
     }
 
     /**
-     * Determines if the given event may be pinned or unpinned by the current user.
-     * This checks if the user has the necessary permissions to pin or unpin the event, and if the event is pinnable.
+     * Determines if the given event may be pinned or unpinned by the current user
+     * It doesn't check if the event is pinnable or unpinnable.
      * @param matrixClient
      * @param mxEvent
+     * @private
      */
-    public static canPinOrUnpin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
-        if (!SettingsStore.getValue("feature_pinning")) return false;
+    private static canPinOrUnpin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
         if (!isContentActionable(mxEvent)) return false;
 
         const room = matrixClient.getRoom(mxEvent.getRoomId());
         if (!room) return false;
 
+        return PinningUtils.userHasPinOrUnpinPermission(matrixClient, room);
+    }
+
+    /**
+     * Determines if the given event may be pinned by the current user.
+     * This checks if the user has the necessary permissions to pin or unpin the event, and if the event is pinnable.
+     * @param matrixClient
+     * @param mxEvent
+     */
+    public static canPin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
+        return PinningUtils.canPinOrUnpin(matrixClient, mxEvent) && PinningUtils.isPinnable(mxEvent);
+    }
+
+    /**
+     * Determines if the given event may be unpinned by the current user.
+     * This checks if the user has the necessary permissions to pin or unpin the event, and if the event is unpinnable.
+     * @param matrixClient
+     * @param mxEvent
+     */
+    public static canUnpin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
+        return PinningUtils.canPinOrUnpin(matrixClient, mxEvent) && PinningUtils.isUnpinnable(mxEvent);
+    }
+
+    /**
+     * Determines if the current user has permission to pin or unpin events in the given room.
+     * @param matrixClient
+     * @param room
+     */
+    public static userHasPinOrUnpinPermission(matrixClient: MatrixClient, room: Room): boolean {
         return Boolean(
             room
                 .getLiveTimeline()
                 .getState(EventTimeline.FORWARDS)
-                ?.mayClientSendStateEvent(EventType.RoomPinnedEvents, matrixClient) && PinningUtils.isPinnable(mxEvent),
+                ?.mayClientSendStateEvent(EventType.RoomPinnedEvents, matrixClient),
         );
     }
 
@@ -127,5 +147,14 @@ export default class PinningUtils {
             matrixClient.sendStateEvent(room.roomId, EventType.RoomPinnedEvents, { pinned: pinnedIds }, ""),
             roomAccountDataPromise,
         ]);
+    }
+
+    /**
+     * Unpin all events in the given room.
+     * @param matrixClient
+     * @param roomId
+     */
+    public static async unpinAllEvents(matrixClient: MatrixClient, roomId: string): Promise<void> {
+        await matrixClient.sendStateEvent(roomId, EventType.RoomPinnedEvents, { pinned: [] }, "");
     }
 }

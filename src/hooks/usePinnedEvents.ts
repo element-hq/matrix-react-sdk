@@ -1,17 +1,9 @@
 /*
+ * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * Please see LICENSE files in the repository root for full details.
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -32,19 +24,22 @@ import { ReadPinsEventId } from "../components/views/right_panel/types";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useAsyncMemo } from "./useAsyncMemo";
 import PinningUtils from "../utils/PinningUtils";
+import { batch } from "../utils/promise.ts";
 
 /**
  * Get the pinned event IDs from a room.
+ * The number of pinned events is limited to 100.
  * @param room
  */
 function getPinnedEventIds(room?: Room): string[] {
-    return (
+    const eventIds: string[] =
         room
             ?.getLiveTimeline()
             .getState(EventTimeline.FORWARDS)
             ?.getStateEvents(EventType.RoomPinnedEvents, "")
-            ?.getContent()?.pinned ?? []
-    );
+            ?.getContent()?.pinned ?? [];
+    // Limit the number of pinned events to 100
+    return eventIds.slice(0, 100);
 }
 
 /**
@@ -181,12 +176,11 @@ export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Ar
     const cli = useMatrixClientContext();
 
     return useAsyncMemo(
-        () =>
-            Promise.all(
-                pinnedEventIds.map(
-                    async (eventId): Promise<MatrixEvent | null> => fetchPinnedEvent(room, eventId, cli),
-                ),
-            ),
+        () => {
+            const fetchPromises = pinnedEventIds.map((eventId) => () => fetchPinnedEvent(room, eventId, cli));
+            // Fetch the pinned events in batches of 10
+            return batch(fetchPromises, 10);
+        },
         [cli, room, pinnedEventIds],
         null,
     );

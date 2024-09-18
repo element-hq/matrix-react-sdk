@@ -1,23 +1,15 @@
 /*
+ * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * Please see LICENSE files in the repository root for full details.
  */
 
 import React, { JSX, useEffect, useMemo, useState } from "react";
 import { Icon as PinIcon } from "@vector-im/compound-design-tokens/icons/pin-solid.svg";
 import { Button } from "@vector-im/compound-web";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { M_POLL_START, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { usePinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
@@ -32,6 +24,7 @@ import dis from "../../../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
+import PosthogTrackers from "../../../PosthogTrackers.ts";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.
@@ -59,21 +52,17 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
     const [currentEventIndex, setCurrentEventIndex] = useState(eventCount - 1);
     // When the number of pinned messages changes, we want to display the last message
     useEffect(() => {
-        setCurrentEventIndex((currentEventIndex) => eventCount - 1);
+        setCurrentEventIndex(() => eventCount - 1);
     }, [eventCount]);
 
     const pinnedEvent = pinnedEvents[currentEventIndex];
-    // Generate a preview for the pinned event
-    const eventPreview = useMemo(() => {
-        if (!pinnedEvent || pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure()) return null;
-        return MessagePreviewStore.instance.generatePreviewForEvent(pinnedEvent);
-    }, [pinnedEvent]);
-
     if (!pinnedEvent) return null;
 
     const shouldUseMessageEvent = pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure();
 
     const onBannerClick = (): void => {
+        PosthogTrackers.trackInteraction("PinnedMessageBannerClick");
+
         // Scroll to the pinned message
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
@@ -116,7 +105,7 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
                             )}
                         </div>
                     )}
-                    {eventPreview && <span className="mx_PinnedMessageBanner_message">{eventPreview}</span>}
+                    <EventPreview pinnedEvent={pinnedEvent} />
                     {/* In case of redacted event, we want to display the nice sentence of the message event like in the timeline or in the pinned message list */}
                     {shouldUseMessageEvent && (
                         <div className="mx_PinnedMessageBanner_redactedMessage">
@@ -133,6 +122,84 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
             {!isSinglePinnedEvent && <BannerButton room={room} />}
         </div>
     );
+}
+
+/**
+ * The props for the {@link EventPreview} component.
+ */
+interface EventPreviewProps {
+    /**
+     * The pinned event to display the preview for
+     */
+    pinnedEvent: MatrixEvent;
+}
+
+/**
+ * A component that displays a preview for the pinned event.
+ */
+function EventPreview({ pinnedEvent }: EventPreviewProps): JSX.Element | null {
+    const preview = useEventPreview(pinnedEvent);
+    if (!preview) return null;
+
+    const prefix = getPreviewPrefix(pinnedEvent.getType(), pinnedEvent.getContent().msgtype as MsgType);
+    if (!prefix)
+        return (
+            <span className="mx_PinnedMessageBanner_message" data-testid="banner-message">
+                {preview}
+            </span>
+        );
+
+    return (
+        <span className="mx_PinnedMessageBanner_message" data-testid="banner-message">
+            {_t(
+                "room|pinned_message_banner|preview",
+                {
+                    prefix,
+                    preview,
+                },
+                {
+                    bold: (sub) => <span className="mx_PinnedMessageBanner_prefix">{sub}</span>,
+                },
+            )}
+        </span>
+    );
+}
+
+/**
+ * Hooks to generate a preview for the pinned event.
+ * @param pinnedEvent
+ */
+function useEventPreview(pinnedEvent: MatrixEvent | null): string | null {
+    return useMemo(() => {
+        if (!pinnedEvent || pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure()) return null;
+        return MessagePreviewStore.instance.generatePreviewForEvent(pinnedEvent);
+    }, [pinnedEvent]);
+}
+
+/**
+ * Get the prefix for the preview based on the type and the message type.
+ * @param type
+ * @param msgType
+ */
+function getPreviewPrefix(type: string, msgType: MsgType): string | null {
+    switch (type) {
+        case M_POLL_START.name:
+            return _t("room|pinned_message_banner|prefix|poll");
+        default:
+    }
+
+    switch (msgType) {
+        case MsgType.Audio:
+            return _t("room|pinned_message_banner|prefix|audio");
+        case MsgType.Image:
+            return _t("room|pinned_message_banner|prefix|image");
+        case MsgType.Video:
+            return _t("room|pinned_message_banner|prefix|video");
+        case MsgType.File:
+            return _t("room|pinned_message_banner|prefix|file");
+        default:
+            return null;
+    }
 }
 
 const MAX_INDICATORS = 3;
@@ -237,6 +304,9 @@ function BannerButton({ room }: BannerButtonProps): JSX.Element {
             className="mx_PinnedMessageBanner_actions"
             kind="tertiary"
             onClick={() => {
+                if (isPinnedMessagesPhase) PosthogTrackers.trackInteraction("PinnedMessageBannerCloseListButton");
+                else PosthogTrackers.trackInteraction("PinnedMessageBannerViewAllButton");
+
                 RightPanelStore.instance.showOrHidePhase(RightPanelPhases.PinnedMessages);
             }}
         >

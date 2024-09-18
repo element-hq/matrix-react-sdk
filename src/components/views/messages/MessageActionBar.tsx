@@ -1,19 +1,11 @@
 /*
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 - 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactElement, useCallback, useContext, useEffect } from "react";
@@ -67,6 +59,7 @@ import { GetRelationsForEvent, IEventTileType } from "../rooms/EventTile";
 import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import PinningUtils from "../../../utils/PinningUtils";
+import PosthogTrackers from "../../../PosthogTrackers.ts";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -407,12 +400,13 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
     /**
      * Pin or unpin the event.
      */
-    private onPinClick = async (event: ButtonEvent): Promise<void> => {
+    private onPinClick = async (event: ButtonEvent, isPinned: boolean): Promise<void> => {
         // Don't open the regular browser or our context menu on right-click
         event.preventDefault();
         event.stopPropagation();
 
         await PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
+        PosthogTrackers.trackPinUnpinMessage(isPinned ? "Pin" : "Unpin", "Timeline");
     };
 
     public render(): React.ReactNode {
@@ -432,14 +426,17 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             );
         }
 
-        if (PinningUtils.canPinOrUnpin(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
+        if (
+            PinningUtils.canPin(MatrixClientPeg.safeGet(), this.props.mxEvent) ||
+            PinningUtils.canUnpin(MatrixClientPeg.safeGet(), this.props.mxEvent)
+        ) {
             const isPinned = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
             toolbarOpts.push(
                 <RovingAccessibleButton
                     className="mx_MessageActionBar_iconButton"
                     title={isPinned ? _t("action|unpin") : _t("action|pin")}
-                    onClick={this.onPinClick}
-                    onContextMenu={this.onPinClick}
+                    onClick={(e) => this.onPinClick(e, isPinned)}
+                    onContextMenu={(e: ButtonEvent) => this.onPinClick(e, isPinned)}
                     key="pin"
                     placement="left"
                 >

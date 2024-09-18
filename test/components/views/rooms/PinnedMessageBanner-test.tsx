@@ -1,17 +1,9 @@
 /*
+ * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * Please see LICENSE files in the repository root for full details.
  */
 
 import { act, screen, render } from "@testing-library/react";
@@ -22,7 +14,7 @@ import userEvent from "@testing-library/user-event";
 import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
 import { PinnedMessageBanner } from "../../../../src/components/views/rooms/PinnedMessageBanner";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
-import { stubClient } from "../../../test-utils";
+import { makePollStartEvent, stubClient } from "../../../test-utils";
 import dis from "../../../../src/dispatcher/dispatcher";
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
@@ -183,6 +175,32 @@ describe("<PinnedMessageBanner />", () => {
             room_id: room.roomId,
             metricsTrigger: undefined, // room doesn't change
         });
+    });
+
+    it.each([
+        ["m.file", "File"],
+        ["m.audio", "Audio"],
+        ["m.video", "Video"],
+        ["m.image", "Image"],
+    ])("should display the %s event type", (msgType, label) => {
+        const body = `Message with ${msgType} type`;
+        const event = makePinEvent({ content: { body, msgtype: msgType } });
+        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
+        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
+
+        const { asFragment } = renderBanner();
+        expect(screen.getByTestId("banner-message")).toHaveTextContent(`${label}: ${body}`);
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should display display a poll event", async () => {
+        const event = makePollStartEvent("Alice?", userId);
+        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
+        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
+
+        const { asFragment } = renderBanner();
+        expect(screen.getByTestId("banner-message")).toHaveTextContent("Poll: Alice?");
+        expect(asFragment()).toMatchSnapshot();
     });
 
     describe("Right button", () => {
