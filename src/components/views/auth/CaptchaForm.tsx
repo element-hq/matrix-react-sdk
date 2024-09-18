@@ -62,7 +62,6 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
     }
 
     public componentWillUnmount(): void {
-        alert(`this.captchaWidgetId ${this.captchaWidgetId}`);
         this.resetRecaptcha();
         const iframes = document.querySelectorAll("iframe");
         for (const iframe of iframes) {
