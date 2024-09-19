@@ -627,6 +627,7 @@ export default class Registration extends React.Component<IProps, IState> {
                         serverConfig={this.props.serverConfig}
                         canSubmit={!this.state.serverErrorIsFatal}
                         matrixClient={this.state.matrixClient}
+                        mobileRegister={this.props.mobileRegister}
                     />
                 </React.Fragment>
             );
