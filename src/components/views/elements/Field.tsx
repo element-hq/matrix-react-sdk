@@ -60,7 +60,7 @@ interface IProps {
     tooltipContent?: React.ReactNode;
     // If specified the tooltip will be shown regardless of feedback
     forceTooltipVisible?: boolean;
-    // If specified, the tooltip with be aligned accorindly with the field, defaults to RIGHT.
+    // If specified, the tooltip with be aligned accorindly with the field, defaults to Right.
     tooltipAlignment?: Alignment;
     // If specified alongside tooltipContent, the class name to apply to the
     // tooltip itself.
@@ -127,7 +127,6 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         validateOnFocus: true,
         validateOnBlur: true,
         validateOnChange: true,
-        tooltipAlignment: Tooltip.Alignment.Right,
     };
 
     /*
@@ -264,6 +263,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             validateOnFocus,
             usePlaceholderAsHint,
             forceTooltipVisible,
+            tooltipAlignment,
             ...inputProps
         } = this.props;
 
@@ -289,7 +289,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
                     tooltipClassName={classNames("mx_Field_tooltip", "mx_Tooltip_noMargin", tooltipClassName)}
                     visible={visible}
                     label={tooltipContent || this.state.feedback}
-                    alignment={this.props.tooltipAlignment}
+                    alignment={tooltipAlignment || Alignment.Right}
                     role={role}
                 />
             );
