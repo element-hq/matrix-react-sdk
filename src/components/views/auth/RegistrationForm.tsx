@@ -539,7 +539,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 onChange={this.onUsernameChange}
                 onValidate={this.onUsernameValidate}
                 tooltipAlignment={this.tooltipAlignment()}
-                autoCorrect="none"
+                autoCorrect="off"
                 autoCapitalize="none"
             />
         );
