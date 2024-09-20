@@ -140,7 +140,7 @@ import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 // legacy export
 export { default as Views } from "../../Views";
 
-const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
+const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
@@ -195,6 +195,7 @@ interface IState {
     register_session_id?: string;
     // eslint-disable-next-line camelcase
     register_id_sid?: string;
+    isMobileRegistration?: boolean;
     // When showing Modal dialogs we need to set aria-hidden on the root app element
     // and disable it when there are no dialogs
     hideToSRUsers: boolean;
@@ -249,6 +250,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             currentUserId: null,
 
             hideToSRUsers: false,
+            isMobileRegistration: false,
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
             resizeNotifier: new ResizeNotifier(),
@@ -661,6 +663,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case "require_registration":
                 startAnyRegistrationFlow(payload as any);
                 break;
+            case "start_mobile_registration":
+                this.startRegistration(payload.params || {}, true);
+                break;
             case "start_registration":
                 if (Lifecycle.isSoftLogout()) {
                     this.onSoftLogout();
@@ -957,8 +962,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private async startRegistration(params: { [key: string]: string }): Promise<void> {
-        if (!SettingsStore.getValue(UIFeature.Registration)) {
+    private async startRegistration(params: { [key: string]: string }, isMobileRegistration?: boolean): Promise<void> {
+        // If registration is disabled or mobile registration is requested but not enabled in settings redirect to the welcome screen
+        if (
+            !SettingsStore.getValue(UIFeature.Registration) ||
+            (isMobileRegistration && !SettingsStore.getValue("Registration.mobileRegistrationHelper"))
+        ) {
             this.showScreen("welcome");
             return;
         }
@@ -967,9 +976,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view: Views.REGISTER,
         };
 
-        // Only honour params if they are all present, otherwise we reset
-        // HS and IS URLs when switching to registration.
-        if (params.client_secret && params.session_id && params.hs_url && params.is_url && params.sid) {
+        if (isMobileRegistration && params.hs_url) {
+            try {
+                const config = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(params.hs_url);
+                newState.serverConfig = config;
+            } catch (err) {
+                logger.warn("Failed to load hs_url param:", params.hs_url);
+            }
+        } else if (params.client_secret && params.session_id && params.hs_url && params.is_url && params.sid) {
+            // Only honour params if they are all present, otherwise we reset
+            // HS and IS URLs when switching to registration.
             newState.serverConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
                 params.hs_url,
                 params.is_url,
@@ -989,10 +1005,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             newState.register_id_sid = params.sid;
         }
 
+        newState.isMobileRegistration = isMobileRegistration;
+
         this.setStateForNewView(newState);
         ThemeController.isLogin = true;
         this.themeWatcher.recheck();
-        this.notifyNewScreen("register");
+        this.notifyNewScreen(isMobileRegistration ? "mobile_register" : "register");
     }
 
     // switch view to the given room
@@ -1750,6 +1768,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 params: params,
             });
             PerformanceMonitor.instance.start(PerformanceEntryNames.REGISTER);
+        } else if (screen === "mobile_register") {
+            dis.dispatch({
+                action: "start_mobile_registration",
+                params: params,
+            });
         } else if (screen === "login") {
             dis.dispatch({
                 action: "start_login",
@@ -2109,6 +2132,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onServerConfigChange={this.onServerConfigChange}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     fragmentAfterLogin={fragmentAfterLogin}
+                    mobileRegister={this.state.isMobileRegistration}
                     {...this.getServerProperties()}
                 />
             );

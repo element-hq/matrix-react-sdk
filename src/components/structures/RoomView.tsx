@@ -1364,7 +1364,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
                 // For initial threads launch, chat effects are disabled see #19731
                 if (!ev.isRelation(THREAD_RELATION_TYPE.name)) {
-                    dis.dispatch({ action: `effects.${effect.command}` });
+                    dis.dispatch({ action: `effects.${effect.command}`, event: ev });
                 }
             }
         });
@@ -2408,13 +2408,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </AuxPanel>
         );
 
-        const isPinningEnabled = SettingsStore.getValue<boolean>("feature_pinning");
-        let pinnedMessageBanner;
-        if (isPinningEnabled) {
-            pinnedMessageBanner = (
-                <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
-            );
-        }
+        const pinnedMessageBanner = (
+            <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
+        );
 
         let messageComposer;
         const showComposer =
