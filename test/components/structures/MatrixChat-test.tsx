@@ -1470,7 +1470,7 @@ describe("<MatrixChat />", () => {
             // wait for welcome page chrome render
             await screen.findByText("powered by Matrix");
 
-            // go to login page
+            // go to mobile_register page
             defaultDispatcher.dispatch({
                 action: "start_mobile_registration",
             });
