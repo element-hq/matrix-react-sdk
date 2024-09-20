@@ -240,7 +240,7 @@ describe("Registration", function () {
             it("should show password and confirm password fields in separate rows", async function () {
                 const { container } = getComponent(defaultHsUrl, defaultIsUrl, undefined, true);
 
-                await waitFor(() => expect(container.querySelector("#mx_RegistrationForm_username")).toBeTruthy);
+                await waitFor(() => expect(container.querySelector("#mx_RegistrationForm_username")).toBeTruthy());
                 // when password and confirm password fields are in separate rows there should be 4 rather than 3
                 expect(container.querySelectorAll(".mx_AuthBody_fieldRow")).toHaveLength(4);
             });
