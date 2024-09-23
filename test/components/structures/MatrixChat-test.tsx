@@ -60,6 +60,8 @@ import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
 import { DRAFT_LAST_CLEANUP_KEY } from "../../../src/DraftCleaner";
 import { UIFeature } from "../../../src/settings/UIFeature";
+import AutoDiscoveryUtils from "../../../src/utils/AutoDiscoveryUtils";
+import { ValidatedServerConfig } from "../../../src/utils/ValidatedServerConfig";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -213,22 +215,16 @@ describe("<MatrixChat />", () => {
     beforeEach(async () => {
         initPromise = undefined;
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
-        fetchMock.get("https://test.com/_matrix/client/versions", {
-            unstable_features: {},
-            versions: SERVER_SUPPORTED_MATRIX_VERSIONS,
-        });
-        fetchMock.catch({
-            status: 404,
-            body: '{"errcode": "M_UNRECOGNIZED", "error": "Unrecognized request"}',
-            headers: { "content-type": "application/json" },
-        });
+        jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
 
-        //jest.spyOn(StorageAccess, "idbLoad").mockReset();
-        //jest.spyOn(StorageAccess, "idbSave").mockResolvedValue(undefined);
         jest.spyOn(defaultDispatcher, "dispatch").mockClear();
         jest.spyOn(defaultDispatcher, "fire").mockClear();
 
         DMRoomMap.makeShared(mockClient);
+
+        jest.spyOn(AutoDiscoveryUtils, "validateServerConfigWithStaticUrls").mockResolvedValue(
+            {} as ValidatedServerConfig,
+        );
 
         await clearAllModals();
     });
@@ -245,7 +241,6 @@ describe("<MatrixChat />", () => {
         DMRoomMap.setShared(null);
 
         jest.restoreAllMocks();
-        fetchMock.mockReset();
 
         // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
         // (must be sync otherwise the next test will start before it happens)
@@ -340,7 +335,6 @@ describe("<MatrixChat />", () => {
 
         beforeEach(() => {
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
-            (loginClient as any).this_is_the_login_client = true;
             // this is used to create a temporary client during login
             jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
 
@@ -573,21 +567,12 @@ describe("<MatrixChat />", () => {
         it("should render welcome page after login", async () => {
             getComponent();
 
-            // we think we are logged in, but are still waiting for the /sync to complete
-            const logoutButton = await screen.findByText("Logout");
-
-            expect(logoutButton).toBeInTheDocument();
-            expect(screen.getByRole("progressbar")).toBeInTheDocument();
-
-            // initial sync
-            mockClient.emit(ClientEvent.Sync, SyncState.Prepared, null);
-
             // wait for logged in view to load
             await screen.findByLabelText("User menu");
 
             expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
             const h1Element = screen.getByRole("heading", { level: 1 });
-            expect(h1Element).toHaveTextContent(`Welcome ${userId}`);
+            expect(h1Element).toHaveTextContent(`Welcome Ernie`);
         });
 
         describe("clean up drafts", () => {
