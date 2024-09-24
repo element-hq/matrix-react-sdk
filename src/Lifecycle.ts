@@ -824,6 +824,10 @@ async function doSetLoggedIn(
     }
     checkSessionLock();
 
+    // We are now logged in, so fire this. We have yet to start the client but the
+    // client_started dispatch is for that.
+    dis.fire(Action.OnLoggedIn);
+
     const clientPegOpts: MatrixClientPegAssignOpts = {};
     if (credentials.pickleKey) {
         // The pickleKey, if provided, is probably a base64-encoded 256-bit key, so can be used for the crypto store.
@@ -849,9 +853,6 @@ async function doSetLoggedIn(
         // (we don't want to force users with existing sessions to verify though)
         localStorage.setItem("must_verify_device", "true");
     }
-
-    // Fire this at the end, now that we've also set up crypto & started the sync running
-    dis.fire(Action.OnLoggedIn);
 
     return client;
 }
