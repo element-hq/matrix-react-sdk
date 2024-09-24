@@ -1232,9 +1232,7 @@ describe("<MatrixChat />", () => {
                 loginClient.login.mockResolvedValue(loginResponseWithWellKnown);
                 getComponent({ realQueryParams });
 
-                await flushPromises();
-
-                expect(localStorage.getItem("mx_hs_url")).toEqual(hsUrlFromWk);
+                await waitFor(() => expect(localStorage.getItem("mx_hs_url")).toEqual(hsUrlFromWk));
             });
 
             it("should continue to post login setup when no session is found in local storage", async () => {
