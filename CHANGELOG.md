@@ -1,3 +1,24 @@
+Changes in [3.110.0](https://github.com/element-hq/matrix-react-sdk/releases/tag/v3.110.0) (2024-09-24)
+=======================================================================================================
+## ✨ Features
+
+* Add Release announcement for the pinning message list ([#46](https://github.com/element-hq/matrix-react-sdk/pull/46)). Contributed by @florianduros.
+* Unlabs feature pinning ([#22](https://github.com/element-hq/matrix-react-sdk/pull/22)). Contributed by @florianduros.
+* Add mobile registration ([#42](https://github.com/element-hq/matrix-react-sdk/pull/42)). Contributed by @langleyd.
+* Add support for `org.matrix.cross_signing_reset` UIA stage flow ([#34](https://github.com/element-hq/matrix-react-sdk/pull/34)). Contributed by @t3chguy.
+* Add timezone to user profile ([#20](https://github.com/element-hq/matrix-react-sdk/pull/20)). Contributed by @Half-Shot.
+* Add config option to force verification ([#29](https://github.com/element-hq/matrix-react-sdk/pull/29)). Contributed by @dbkr.
+* Reduce pinned message banner size ([#28](https://github.com/element-hq/matrix-react-sdk/pull/28)). Contributed by @florianduros.
+* Enable message pinning labs by default ([#25](https://github.com/element-hq/matrix-react-sdk/pull/25)). Contributed by @florianduros.
+* Remove release announcement of the new header ([#23](https://github.com/element-hq/matrix-react-sdk/pull/23)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* Fix timeout type ([#40](https://github.com/element-hq/matrix-react-sdk/pull/40)). Contributed by @dbkr.
+* Fix huge usage bandwidth and performance issue of pinned message banner. ([#37](https://github.com/element-hq/matrix-react-sdk/pull/37)). Contributed by @florianduros.
+* Reverse order of pinned message list ([#19](https://github.com/element-hq/matrix-react-sdk/pull/19)). Contributed by @florianduros.
+
+
 Changes in [3.108.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.108.0) (2024-08-27)
 =======================================================================================================
 ## ✨ Features
