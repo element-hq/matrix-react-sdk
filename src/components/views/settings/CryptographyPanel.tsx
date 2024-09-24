@@ -97,20 +97,22 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
             <SettingsSubsection heading={_t("settings|security|cryptography_section")}>
                 <SettingsSubsectionText>
                     <table className="mx_CryptographyPanel_sessionInfo">
-                        <tr>
-                            <th scope="row">{_t("settings|security|session_id")}</th>
-                            <td>
-                                <code>{deviceId}</code>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{_t("settings|security|session_key")}</th>
-                            <td>
-                                <code>
-                                    <b>{identityKey}</b>
-                                </code>
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th scope="row">{_t("settings|security|session_id")}</th>
+                                <td>
+                                    <code>{deviceId}</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{_t("settings|security|session_key")}</th>
+                                <td>
+                                    <code>
+                                        <b>{identityKey}</b>
+                                    </code>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </SettingsSubsectionText>
                 {importExportButtons}
