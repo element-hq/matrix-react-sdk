@@ -1027,7 +1027,9 @@ describe("<MatrixChat />", () => {
                             },
                         });
 
-                        loginClient.isRoomEncrypted.mockImplementation((roomId) => roomId === encryptedRoom.roomId);
+                        loginClient.isRoomEncrypted.mockImplementation((roomId) => {
+                            return roomId === encryptedRoom.roomId;
+                        });
                     });
 
                     it("should go straight to logged in view when user is not in any encrypted rooms", async () => {

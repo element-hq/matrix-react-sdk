@@ -892,7 +892,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 });
                 break;
             case "client_started":
-                this.onClientStarted();
+                this.onClientStarted().then();
                 break;
             case "send_event":
                 this.onSendEvent(payload.room_id, payload.event);
@@ -1353,8 +1353,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher.recheck();
         StorageManager.tryPersistStorage();
 
-        const shouldForceVerification = await this.shouldForceVerification();
-
         if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
             this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
 
@@ -1376,10 +1374,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     }
                 },
             );
-        } else if (shouldForceVerification) {
-            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-        } else {
-            return this.onShowPostLoginScreen();
         }
     }
 
@@ -1731,8 +1725,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * setting up anything that requires the client to be started.
      * @private
      */
-    private onClientStarted(): void {
+    private async onClientStarted(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
+
+        // XXX: Don't replace the screen if it's already one of these: postLoginSetup
+        // changes to these screens in certain circumstances so we shouldn't clobber it.
+        // We should probably have one place where we decide what the next screen is after
+        // login.
+        if (![Views.COMPLETE_SECURITY, Views.E2E_SETUP].includes(this.state.view)) {
+            const shouldForceVerification = await this.shouldForceVerification();
+
+            if (shouldForceVerification) {
+                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+            } else {
+                await this.onShowPostLoginScreen();
+            }
+        }
 
         if (cli.isCryptoEnabled()) {
             const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
@@ -2042,7 +2050,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // complete security / e2e setup has finished
     private onCompleteSecurityE2eSetupFinished = (): void => {
-        this.onLoggedIn();
+        this.onShowPostLoginScreen().then();
     };
 
     private getFragmentAfterLogin(): string {
