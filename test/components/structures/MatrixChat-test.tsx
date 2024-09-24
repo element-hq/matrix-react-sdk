@@ -1197,10 +1197,8 @@ describe("<MatrixChat />", () => {
 
                 getComponent({ realQueryParams });
 
-                await flushPromises();
-
                 // just check we called the clearStorage function
-                expect(loginClient.clearStores).toHaveBeenCalled();
+                await waitFor(() => expect(loginClient.clearStores).toHaveBeenCalled());
                 expect(localStorage.getItem("mx_sso_hs_url")).toBe(null);
                 expect(localStorageClearSpy).toHaveBeenCalled();
             });
