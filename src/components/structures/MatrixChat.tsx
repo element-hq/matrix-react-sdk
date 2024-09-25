@@ -1374,6 +1374,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     }
                 },
             );
+        } else {
+            await this.onShowPostLoginScreen();
         }
     }
 
@@ -1580,9 +1582,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
 
             dis.fire(Action.FocusSendMessageComposer);
-            this.setState({
-                ready: true,
-            });
         });
 
         cli.on(HttpApiEvent.SessionLoggedOut, function (errObj) {
@@ -1737,8 +1736,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             if (shouldForceVerification) {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-            } else {
-                await this.onShowPostLoginScreen();
             }
         }
 
@@ -1759,6 +1756,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
             this.initPosthogAnalyticsToast();
         }
+
+        this.setState({
+            ready: true,
+        });
     }
 
     public showScreen(screen: string, params?: { [key: string]: any }): void {
