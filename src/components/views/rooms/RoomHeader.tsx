@@ -242,14 +242,14 @@ export default function RoomHeader({
         <>
             <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
                 <WithPresenceIndicator room={room} size="8px">
-                    {/* We hide this from the tabIndex list as it is a mouse only shortcut and superfluous for a11y */}
+                    {/* We hide this from the tabIndex list as it is a pointer shortcut and superfluous for a11y */}
                     <RoomAvatar
                         room={room}
                         size="40px"
                         oobData={oobData}
                         onClick={onAvatarClick}
                         tabIndex={-1}
-                        role="presentation"
+                        aria-label={_t("room|header_avatar_open_settings_label")}
                     />
                 </WithPresenceIndicator>
                 <button
