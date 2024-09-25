@@ -1353,30 +1353,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher.recheck();
         StorageManager.tryPersistStorage();
 
-        if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
-            this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
-
-            // Listen to changes in settings and hide the use case screen if appropriate - this is necessary because
-            // account settings can still be changing at this point in app init (due to the initial sync being cached,
-            // then subsequent syncs being received from the server)
-            //
-            // This seems unlikely for something that should happen directly after registration, but if a user does
-            // their initial login on another device/browser than they registered on, we want to avoid asking this
-            // question twice
-            //
-            // initPosthogAnalyticsToast pioneered this technique, we’re just reusing it here.
-            SettingsStore.watchSetting(
-                "FTUE.useCaseSelection",
-                null,
-                (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
-                    if (newValue !== null && this.state.view === Views.USE_CASE_SELECTION) {
-                        this.onShowPostLoginScreen();
-                    }
-                },
-            );
-        } else {
-            await this.onShowPostLoginScreen();
-        }
+        this.onShowPostLoginScreen().then();
     }
 
     private async onShowPostLoginScreen(useCase?: UseCase): Promise<void> {
@@ -1727,13 +1704,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private async onClientStarted(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
 
+        const shouldForceVerification = await this.shouldForceVerification();
         // XXX: Don't replace the screen if it's already one of these: postLoginSetup
         // changes to these screens in certain circumstances so we shouldn't clobber it.
         // We should probably have one place where we decide what the next screen is after
         // login.
         if (![Views.COMPLETE_SECURITY, Views.E2E_SETUP].includes(this.state.view)) {
-            const shouldForceVerification = await this.shouldForceVerification();
-
             if (shouldForceVerification) {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             }
@@ -2051,7 +2027,30 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // complete security / e2e setup has finished
     private onCompleteSecurityE2eSetupFinished = (): void => {
-        this.onShowPostLoginScreen().then();
+        if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
+            this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
+
+            // Listen to changes in settings and hide the use case screen if appropriate - this is necessary because
+            // account settings can still be changing at this point in app init (due to the initial sync being cached,
+            // then subsequent syncs being received from the server)
+            //
+            // This seems unlikely for something that should happen directly after registration, but if a user does
+            // their initial login on another device/browser than they registered on, we want to avoid asking this
+            // question twice
+            //
+            // initPosthogAnalyticsToast pioneered this technique, we’re just reusing it here.
+            SettingsStore.watchSetting(
+                "FTUE.useCaseSelection",
+                null,
+                (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
+                    if (newValue !== null && this.state.view === Views.USE_CASE_SELECTION) {
+                        this.onShowPostLoginScreen();
+                    }
+                },
+            );
+        } else {
+            this.onShowPostLoginScreen().then();
+        }
     };
 
     private getFragmentAfterLogin(): string {
