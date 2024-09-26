@@ -10,3 +10,24 @@ Please see LICENSE files in the repository root for full details.
     color: $secondary-content;
     font-style: italic;
 }
+
+// Formatting for the "Verified identity has changed" error
+.mx_DecryptionFailureVerifiedIdentityChanged > span {
+    // Show it in red
+    color: $e2e-warning-color;
+    // TODO: background colour?
+
+    // With a red border
+    border: 1px solid $e2e-warning-color;
+    border-radius: $font-16px;
+
+    // Some space inside the border
+    padding: 4px 12px 4px 8px;
+
+    // some space between the (!) icon and text
+    display: inline-flex;
+    gap: 8px;
+
+    // Center vertically
+    align-items: center;
+}
