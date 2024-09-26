@@ -77,14 +77,37 @@ function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: Matri
 }
 
 function useShowNotificationsPrompt(): boolean {
-    const [value, setValue] = useState<boolean>(Notifier.shouldShowPrompt());
+    const client = useMatrixClientContext();
+
+    const [value, setValue] = useState<boolean>(client.pushRules ? Notifier.shouldShowPrompt() : true);
+
+    const updateValue = useCallback(() => {
+        setValue(client.pushRules ? Notifier.shouldShowPrompt() : true);
+    }, [client]);
+
     useEventEmitter(Notifier, NotifierEvent.NotificationHiddenChange, () => {
-        setValue(Notifier.shouldShowPrompt());
+        updateValue();
     });
+
     const setting = useSettingValue("notificationsEnabled");
     useEffect(() => {
-        setValue(Notifier.shouldShowPrompt());
-    }, [setting]);
+        updateValue();
+    }, [setting, updateValue]);
+
+    // shouldShowPrompt is dependent on the client having push rules. There isn't an event for the client
+    // fetching its push rules, but we'll know it has them by the time it sync, so we update this on sync.
+    useEffect(() => {
+        const onSync = (): void => {
+            updateValue();
+        };
+
+        client.on(ClientEvent.Sync, onSync);
+
+        return () => {
+            client.removeListener(ClientEvent.Sync, onSync);
+        };
+    }, [client, updateValue]);
+
     return value;
 }
 
