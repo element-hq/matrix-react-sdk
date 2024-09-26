@@ -124,7 +124,13 @@ describe("<MatrixChat />", () => {
         userHasCrossSigningKeys: jest.fn(),
         setGlobalBlacklistUnverifiedDevices: jest.fn(),
         setGlobalErrorOnUnknownDevices: jest.fn(),
-        getCrypto: jest.fn(),
+        getCrypto: jest.fn().mockReturnValue({
+            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+            isCrossSigningReady: jest.fn().mockReturnValue(false),
+            getUserDeviceInfo: jest.fn().mockReturnValue(new Map()),
+            getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
+            getVersion: jest.fn().mockReturnValue("1"),
+        }),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
         },
@@ -146,23 +152,7 @@ describe("<MatrixChat />", () => {
         warning: "",
     };
     let initPromise: Promise<void> | undefined;
-    const defaultProps: ComponentProps<typeof MatrixChat> = {
-        config: {
-            brand: "Test",
-            help_url: "help_url",
-            help_encryption_url: "help_encryption_url",
-            element_call: {},
-            feedback: {
-                existing_issues_url: "https://feedback.org/existing",
-                new_issue_url: "https://feedback.org/new",
-            },
-            validated_server_config: serverConfig,
-        },
-        onNewScreen: jest.fn(),
-        onTokenLoginCompleted: jest.fn(),
-        realQueryParams: {},
-        initPromiseCallback: (p: Promise<void>) => (initPromise = p),
-    };
+    let defaultProps: ComponentProps<typeof MatrixChat>;
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
         render(<MatrixChat {...defaultProps} {...props} />);
 
@@ -213,6 +203,24 @@ describe("<MatrixChat />", () => {
     };
 
     beforeEach(async () => {
+        defaultProps = {
+            config: {
+                brand: "Test",
+                help_url: "help_url",
+                help_encryption_url: "help_encryption_url",
+                element_call: {},
+                feedback: {
+                    existing_issues_url: "https://feedback.org/existing",
+                    new_issue_url: "https://feedback.org/new",
+                },
+                validated_server_config: serverConfig,
+            },
+            onNewScreen: jest.fn(),
+            onTokenLoginCompleted: jest.fn(),
+            realQueryParams: {},
+            initPromiseCallback: (p: Promise<void>) => (initPromise = p),
+        };
+
         initPromise = undefined;
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
         jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
@@ -245,6 +253,8 @@ describe("<MatrixChat />", () => {
         // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
         // (must be sync otherwise the next test will start before it happens)
         defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true);
+
+        localStorage.clear();
     });
 
     resetJsDomAfterEach();
@@ -880,6 +890,16 @@ describe("<MatrixChat />", () => {
                         expect(logoutClient.clearStores).toHaveBeenCalled();
                     });
                 });
+            });
+        });
+
+        describe("unskippable verification", () => {
+            it("should show the complete security screen if unskippable verification is enabled", async () => {
+                defaultProps.config.force_verification = true;
+                localStorage.setItem("must_verify_device", "true");
+                getComponent();
+
+                await screen.findByRole("heading", { name: "Unable to verify this device", level: 1 });
             });
         });
     });
