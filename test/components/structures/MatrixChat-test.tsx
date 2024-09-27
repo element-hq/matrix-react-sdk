@@ -55,7 +55,7 @@ import * as Lifecycle from "../../../src/Lifecycle";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../src/BasePlatform";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
-import { MatrixClientPeg as peg } from "../../../src/MatrixClientPeg";
+import { MatrixClientPeg, MatrixClientPeg as peg } from "../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
 import { DRAFT_LAST_CLEANUP_KEY } from "../../../src/DraftCleaner";
@@ -131,6 +131,7 @@ describe("<MatrixChat />", () => {
             getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
             getVersion: jest.fn().mockReturnValue("1"),
         }),
+        bootstrapCrossSigning: jest.fn(),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
         },
@@ -1109,6 +1110,15 @@ describe("<MatrixChat />", () => {
 
                 // set up keys screen is rendered
                 expect(screen.getByText("Setting up keys")).toBeInTheDocument();
+            });
+
+            it("should go to use case selection if user just registered", async () => {
+                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
+                MatrixClientPeg.setJustRegisteredUserId(userId);
+
+                await getComponentAndLogin();
+
+                await expect(await screen.findByRole("heading", { name: "You're in", level: 1 })).toBeInTheDocument();
             });
         });
     });
