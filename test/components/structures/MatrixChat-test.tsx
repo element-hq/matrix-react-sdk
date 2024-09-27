@@ -21,7 +21,7 @@ import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize
 import { logger } from "matrix-js-sdk/src/logger";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import { BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
-import { defer, sleep } from "matrix-js-sdk/src/utils";
+import { defer, IDeferred, sleep } from "matrix-js-sdk/src/utils";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import MatrixChat from "../../../src/components/structures/MatrixChat";
@@ -75,6 +75,7 @@ describe("<MatrixChat />", () => {
     const deviceId = "qwertyui";
     const accessToken = "abc123";
     const refreshToken = "def456";
+    let bootstrapDeferred: IDeferred<void>;
     // reused in createClient mock below
     const getMockClientMethods = () => ({
         ...mockClientMethodsUser(userId),
@@ -131,7 +132,8 @@ describe("<MatrixChat />", () => {
             getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
             getVersion: jest.fn().mockReturnValue("1"),
         }),
-        bootstrapCrossSigning: jest.fn(),
+        // This needs to not finish immediately because we need to test the screen appears
+        bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
         },
@@ -234,6 +236,8 @@ describe("<MatrixChat />", () => {
         jest.spyOn(AutoDiscoveryUtils, "validateServerConfigWithStaticUrls").mockResolvedValue(
             {} as ValidatedServerConfig,
         );
+
+        bootstrapDeferred = defer();
 
         await clearAllModals();
     });
@@ -1079,10 +1083,8 @@ describe("<MatrixChat />", () => {
 
                     expect(loginClient.userHasCrossSigningKeys).toHaveBeenCalled();
 
-                    await flushPromises();
-
                     // set up keys screen is rendered
-                    expect(screen.getByText("Setting up keys")).toBeInTheDocument();
+                    await expect(await screen.findByText("Setting up keys")).toBeInTheDocument();
                 });
             });
 
@@ -1117,6 +1119,8 @@ describe("<MatrixChat />", () => {
                 MatrixClientPeg.setJustRegisteredUserId(userId);
 
                 await getComponentAndLogin();
+
+                bootstrapDeferred.resolve();
 
                 await expect(await screen.findByRole("heading", { name: "You're in", level: 1 })).toBeInTheDocument();
             });
