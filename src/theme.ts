@@ -113,8 +113,8 @@ export function getOrderedThemes(): ITheme[] {
 
 function clearCustomTheme(): void {
     // remove all css variables, we assume these are there because of the custom theme
-    for (let i = 0; i < document.body.style.length; i++) {
-        const prop = document.body.style[i];
+    const inlineStyleProps = Object.values(document.body.style);
+    for (const prop of inlineStyleProps) {
         if (prop.startsWith("--")) {
             document.body.style.removeProperty(prop);
         }
