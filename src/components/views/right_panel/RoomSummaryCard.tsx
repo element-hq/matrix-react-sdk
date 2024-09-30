@@ -269,7 +269,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
     );
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
-    const header = (
+    const roomInfo = (
         <header className="mx_RoomSummaryCard_container">
             <RoomAvatar room={room} size="80px" viewAvatarOnClick />
             <RoomName room={room}>
@@ -337,42 +337,34 @@ const RoomSummaryCard: React.FC<IProps> = ({
     const canInviteToState = useEventEmitterState(room, RoomStateEvent.Update, () => canInviteTo(room));
     const isFavorite = roomTags.includes(DefaultTagID.Favourite);
 
+    const header = onSearchChange && (
+        <Form.Root className="mx_RoomSummaryCard_search" onSubmit={(e) => e.preventDefault()}>
+            <Search
+                placeholder={_t("room|search|placeholder")}
+                name="room_message_search"
+                onChange={onSearchChange}
+                className="mx_no_textinput"
+                ref={searchInputRef}
+                autoFocus={focusRoomSearch}
+                onKeyDown={(e) => {
+                    if (searchInputRef.current && e.key === Key.ESCAPE) {
+                        searchInputRef.current.value = "";
+                        onSearchCancel?.();
+                    }
+                }}
+            />
+        </Form.Root>
+    );
+
     return (
         <BaseCard
-            hideHeaderButtons
             id="room-summary-panel"
             className="mx_RoomSummaryCard"
             ariaLabelledBy="room-summary-panel-tab"
             role="tabpanel"
+            header={header}
         >
-            <Flex
-                as="header"
-                className="mx_RoomSummaryCard_header"
-                gap="var(--cpd-space-3x)"
-                align="center"
-                justify="space-between"
-            >
-                {onSearchChange && (
-                    <Form.Root className="mx_RoomSummaryCard_search" onSubmit={(e) => e.preventDefault()}>
-                        <Search
-                            placeholder={_t("room|search|placeholder")}
-                            name="room_message_search"
-                            onChange={onSearchChange}
-                            className="mx_no_textinput"
-                            ref={searchInputRef}
-                            autoFocus={focusRoomSearch}
-                            onKeyDown={(e) => {
-                                if (searchInputRef.current && e.key === Key.ESCAPE) {
-                                    searchInputRef.current.value = "";
-                                    onSearchCancel?.();
-                                }
-                            }}
-                        />
-                    </Form.Root>
-                )}
-            </Flex>
-
-            {header}
+            {roomInfo}
 
             <Separator />
 
