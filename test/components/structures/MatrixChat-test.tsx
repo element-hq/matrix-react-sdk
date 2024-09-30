@@ -60,6 +60,7 @@ import { UIFeature } from "../../../src/settings/UIFeature";
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
 }));
+jest.mock("../../../src/settings/watchers/ThemeWatcher");
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
