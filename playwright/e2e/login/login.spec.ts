@@ -171,7 +171,6 @@ test.describe("Login", () => {
                     homeserver,
                     request,
                 }) => {
-                    console.log(`uid ${creds.userId} body`, DEVICE_SIGNING_KEYS_BODY);
                     const res = await request.post(
                         `${homeserver.config.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
                         { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
