@@ -116,7 +116,7 @@ test.describe("RightPanel", () => {
             await page.getByTestId("base-card-back-button").click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
 
-            await page.getByLabel("Room info").click();
+            await page.getByLabel("Room info").nth(1).click();
             await checkRoomSummaryCard(page, ROOM_NAME);
         });
     });
