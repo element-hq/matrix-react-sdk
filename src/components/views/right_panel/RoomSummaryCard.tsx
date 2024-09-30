@@ -27,6 +27,9 @@ import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/set
 import { Icon as ExportArchiveIcon } from "@vector-im/compound-design-tokens/icons/export-archive.svg";
 import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
+import ExtensionsIcon from "@vector-im/compound-design-tokens/assets/web/icons/extensions";
+import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
+import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
 import PollsIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
 import { Icon as LockIcon } from "@vector-im/compound-design-tokens/icons/lock-solid.svg";
@@ -82,8 +85,20 @@ interface IProps {
     focusRoomSearch?: boolean;
 }
 
+const onRoomMembersClick = (): void => {
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, true);
+};
+
+const onRoomThreadsClick = (): void => {
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.ThreadPanel }, true);
+};
+
 const onRoomFilesClick = (): void => {
     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, true);
+};
+
+const onRoomExtensionsClick = (): void => {
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.Extensions }, true);
 };
 
 const onRoomPinsClick = (): void => {
@@ -379,6 +394,8 @@ const RoomSummaryCard: React.FC<IProps> = ({
 
                 <Separator />
 
+                <MenuItem Icon={UserProfileIcon} label={_t("common|people")} onSelect={onRoomMembersClick} />
+                <MenuItem Icon={ThreadsIcon} label={_t("common|threads")} onSelect={onRoomThreadsClick} />
                 {!isVideoRoom && (
                     <>
                         <ReleaseAnnouncement
@@ -401,6 +418,11 @@ const RoomSummaryCard: React.FC<IProps> = ({
                             </div>
                         </ReleaseAnnouncement>
                         <MenuItem Icon={FilesIcon} label={_t("right_panel|files_button")} onSelect={onRoomFilesClick} />
+                        <MenuItem
+                            Icon={ExtensionsIcon}
+                            label={_t("right_panel|extensions_button")}
+                            onSelect={onRoomExtensionsClick}
+                        />
                     </>
                 )}
 
