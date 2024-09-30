@@ -222,16 +222,16 @@ describe("RightPanelStore", () => {
         await viewRoom("!1:example.org");
 
         // Open the memberlist panel
-        store.showOrHidePanel(RightPanelPhases.RoomMemberList);
+        store.showOrHidePhase(RightPanelPhases.RoomMemberList);
         expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
         expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomMemberList);
 
         // showOrHide with RoomSummary should now close the panel
-        store.showOrHidePanel(RightPanelPhases.RoomSummary);
+        store.showOrHidePhase(RightPanelPhases.RoomSummary);
         expect(store.isOpenForRoom("!1:example.org")).toEqual(false);
 
         // showOrHide with RoomSummary should now open the panel
-        store.showOrHidePanel(RightPanelPhases.RoomSummary);
+        store.showOrHidePhase(RightPanelPhases.RoomSummary);
         expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
         expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomSummary);
     });
