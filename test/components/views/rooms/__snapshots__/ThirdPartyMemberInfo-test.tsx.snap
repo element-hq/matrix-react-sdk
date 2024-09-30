@@ -10,6 +10,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
     >
       <p
         class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
         Profile
       </p>
@@ -78,6 +79,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
     >
       <p
         class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
         Profile
       </p>

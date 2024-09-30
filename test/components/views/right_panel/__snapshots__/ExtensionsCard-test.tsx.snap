@@ -10,6 +10,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
     >
       <p
         class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
         Extensions
       </p>
@@ -90,6 +91,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
     >
       <p
         class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
         Extensions
       </p>
