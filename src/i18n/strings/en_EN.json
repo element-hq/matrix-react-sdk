@@ -1848,7 +1848,7 @@
             "header": {
                 "one": "1 Pinned message",
                 "other": "%(count)s Pinned messages",
-                "zero": "Pinned message"
+                "zero": "Pinned messages"
             },
             "limits": {
                 "other": "You can only pin up to %(count)s widgets"
