@@ -60,6 +60,9 @@ import { UIFeature } from "../../../src/settings/UIFeature";
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
 }));
+
+// Stub out ThemeWatcher as the necessary bits for themes are done in element-web's index.html and thus are lacking here,
+// plus JSDOM's implementation of CSSStyleDeclaration has a bunch of differences to real browsers which cause issues.
 jest.mock("../../../src/settings/watchers/ThemeWatcher");
 
 /** The matrix versions our mock server claims to support */
