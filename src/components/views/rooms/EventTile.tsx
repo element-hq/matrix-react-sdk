@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, forwardRef, MouseEvent, ReactNode, JSX } from "react";
+import React, { createRef, forwardRef, JSX, MouseEvent, ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -1443,8 +1443,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         {this.props.layout !== Layout.IRC && (
                             <>
                                 <div className="mx_EventTile_badges">
-                                    {pinnedMessageBadge}
+                                    {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
                                     {reactionsRow}
+                                    {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
                                 </div>
                                 {this.renderThreadInfo()}
                             </>
