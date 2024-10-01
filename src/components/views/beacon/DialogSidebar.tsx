@@ -32,7 +32,7 @@ const DialogSidebar: React.FC<Props> = ({ beacons, onBeaconClick, requestClose }
                     title={_t("location_sharing|close_sidebar")}
                     data-testid="dialog-sidebar-close"
                 >
-                    <CloseIcon className="mx_DialogSidebar_closeButtonIcon" />
+                    <CloseIcon className="mx_DialogSidebar_closeButtonIcon" height="24px" width="24px" />
                 </AccessibleButton>
             </div>
             {beacons?.length ? (
