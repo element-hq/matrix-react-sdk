@@ -1,3 +1,10 @@
+Changes in [3.111.0](https://github.com/element-hq/matrix-react-sdk/releases/tag/v3.111.0) (2024-10-01)
+=======================================================================================================
+## ✨ Features
+
+* [Backport staging] Allow joining calls and video rooms without enabling the labs flags ([#106](https://github.com/element-hq/matrix-react-sdk/pull/106)). Contributed by @RiotRobot.
+
+
 Changes in [3.110.0](https://github.com/element-hq/matrix-react-sdk/releases/tag/v3.110.0) (2024-09-24)
 =======================================================================================================
 ## ✨ Features
