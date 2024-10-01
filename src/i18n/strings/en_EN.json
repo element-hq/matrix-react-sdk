@@ -1555,9 +1555,7 @@
         "error_send_description": "%(brand)s could not send your location. Please try again later.",
         "error_send_title": "We couldn't send your location",
         "error_sharing_live_location": "An error occurred whilst sharing your live location",
-        "error_sharing_live_location_try_again": "An error occurred whilst sharing your live location, please try again",
         "error_stopping_live_location": "An error occurred while stopping your live location",
-        "error_stopping_live_location_try_again": "An error occurred while stopping your live location, please try again",
         "expand_map": "Expand map",
         "failed_generic": "Failed to fetch your location. Please try again later.",
         "failed_load_map": "Unable to load map",
@@ -1587,7 +1585,6 @@
         "share_type_own": "My current location",
         "share_type_pin": "Drop a Pin",
         "share_type_prompt": "What location type do you want to share?",
-        "stop_and_close": "Stop and close",
         "toggle_attribution": "Toggle attribution"
     },
     "member_list": {
