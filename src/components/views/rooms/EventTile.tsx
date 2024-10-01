@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, forwardRef, MouseEvent, ReactNode } from "react";
+import React, { createRef, forwardRef, MouseEvent, ReactNode, JSX } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -76,6 +76,8 @@ import { ElementCall } from "../../../models/Call";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
+import PinningUtils from "../../../utils/PinningUtils.ts";
+import { PinnedMessageBadge } from "../messages/PinnedMessageBadge.tsx";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1123,6 +1125,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const timestamp = showTimestamp && ts ? messageTimestamp : null;
 
+        let pinnedMessageBadge: JSX.Element | undefined;
+        if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
+            pinnedMessageBadge = <PinnedMessageBadge />;
+        }
+
         let reactionsRow: JSX.Element | undefined;
         if (!isRedacted) {
             reactionsRow = (
@@ -1435,7 +1442,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         </div>
                         {this.props.layout !== Layout.IRC && (
                             <>
-                                {reactionsRow}
+                                <div className="mx_EventTile_badges">
+                                    {pinnedMessageBadge}
+                                    {reactionsRow}
+                                </div>
                                 {this.renderThreadInfo()}
                             </>
                         )}

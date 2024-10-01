@@ -509,8 +509,8 @@ $left-gutter: 64px;
             margin-left: $left-gutter;
         }
 
-        .mx_ReactionsRow {
-            margin: $spacing-4 64px;
+        .mx_EventTile_badges {
+            margin: var(--cpd-space-1x) var(--cpd-space-16x);
         }
 
         > .mx_DisambiguatedProfile {
@@ -1454,6 +1454,12 @@ $left-gutter: 64px;
 
 .mx_EventTile_annotated {
     display: flex;
+}
+
+.mx_EventTile_badges {
+    display: flex;
+    gap: var(--cpd-space-2x);
+    align-items: center;
 }
 
 /* Media query for mobile UI */
