@@ -1439,7 +1439,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {actionBar}
                             {this.props.layout === Layout.IRC && (
                                 <>
-                                    {reactionsRow}
+                                    <div className="mx_EventTile_badges">
+                                        {pinnedMessageBadge}
+                                        {reactionsRow}
+                                    </div>
                                     {this.renderThreadInfo()}
                                 </>
                             )}
