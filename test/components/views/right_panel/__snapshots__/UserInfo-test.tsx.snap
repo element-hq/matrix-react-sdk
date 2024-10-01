@@ -79,6 +79,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
     >
       <p
         class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
         Profile
       </p>
@@ -387,6 +388,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
     >
       <p
         class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
         Profile
       </p>

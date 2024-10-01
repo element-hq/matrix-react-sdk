@@ -8,15 +8,12 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
     <div
       class="mx_BaseCard_header"
     >
-      <div
-        class="mx_BaseCard_header_title"
+      <p
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
-        <h4
-          class="mx_Heading_h4 mx_BaseCard_header_title_heading"
-        >
-          Pinned message
-        </h4>
-      </div>
+        Pinned messages
+      </p>
       <button
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
@@ -87,15 +84,12 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
     <div
       class="mx_BaseCard_header"
     >
-      <div
-        class="mx_BaseCard_header_title"
+      <p
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
-        <h4
-          class="mx_Heading_h4 mx_BaseCard_header_title_heading"
-        >
-          2 Pinned messages
-        </h4>
-      </div>
+        2 Pinned messages
+      </p>
       <button
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
@@ -282,15 +276,12 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
     <div
       class="mx_BaseCard_header"
     >
-      <div
-        class="mx_BaseCard_header_title"
+      <p
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+        role="heading"
       >
-        <h4
-          class="mx_Heading_h4 mx_BaseCard_header_title_heading"
-        >
-          2 Pinned messages
-        </h4>
-      </div>
+        2 Pinned messages
+      </p>
       <button
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
