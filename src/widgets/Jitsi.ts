@@ -24,9 +24,14 @@ export class Jitsi {
     private static instance: Jitsi;
 
     private domain?: string;
+    private _useFor1To1Calls = false;
 
     public get preferredDomain(): string {
         return this.domain || "meet.element.io";
+    }
+
+    public get useFor1To1Calls(): boolean {
+        return this._useFor1To1Calls;
     }
 
     /**
@@ -71,6 +76,8 @@ export class Jitsi {
         // Put the result into memory for us to use later
         this.domain = domain;
         logger.log("Jitsi conference domain:", this.preferredDomain);
+        this._useFor1To1Calls = discoveryResponse?.[JITSI_WK_PROPERTY]?.["useFor1To1Calls"] || false;
+        logger.log("Jitsi use for 1:1 calls:", this.useFor1To1Calls);
     };
 
     /**
