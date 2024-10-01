@@ -26,14 +26,14 @@ interface IProps {
      */
     sizeKey?: string;
     /**
-     * The size to use for the panel component if one isn't persisted in storage. Defaults to 350.
+     * The size to use for the panel component if one isn't persisted in storage. Defaults to 320.
      */
     defaultSize: number;
 }
 
 export default class MainSplit extends React.Component<IProps> {
     public static defaultProps = {
-        defaultSize: 350,
+        defaultSize: 320,
     };
 
     private onResizeStart = (): void => {

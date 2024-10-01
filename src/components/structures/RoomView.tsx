@@ -192,11 +192,6 @@ export interface IRoomState {
     showApps: boolean;
     isPeeking: boolean;
     showRightPanel: boolean;
-    /**
-     * Whether the right panel shown is either of ThreadPanel or ThreadView.
-     * Always false when `showRightPanel` is false.
-     */
-    threadRightPanel: boolean;
     // error object, as from the matrix client/server API
     // If we failed to load information about the room,
     // store the error here.
@@ -438,7 +433,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showApps: false,
             isPeeking: false,
             showRightPanel: false,
-            threadRightPanel: false,
             joining: false,
             showTopUnreadMessagesBar: false,
             statusBarVisible: false,
@@ -665,11 +659,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
             showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
-            threadRightPanel: roomId
-                ? [RightPanelPhases.ThreadView, RightPanelPhases.ThreadPanel].includes(
-                      this.context.rightPanelStore.currentCardForRoom(roomId).phase!,
-                  )
-                : false,
             activeCall: roomId ? CallStore.instance.getActiveCall(roomId) : null,
             promptAskToJoin: this.context.roomViewStore.promptAskToJoin(),
             viewRoomOpts: this.context.roomViewStore.getViewRoomOpts(),
@@ -1072,11 +1061,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const { roomId } = this.state;
         this.setState({
             showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
-            threadRightPanel: roomId
-                ? [RightPanelPhases.ThreadView, RightPanelPhases.ThreadPanel].includes(
-                      this.context.rightPanelStore.currentCardForRoom(roomId).phase!,
-                  )
-                : false,
         });
     };
 
@@ -2634,10 +2618,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <MainSplit
                             panel={rightPanel}
                             resizeNotifier={this.props.resizeNotifier}
-                            // Override defaults when a thread is being shown to allow persisting a separate
-                            // right panel width for thread panels as they tend to want to be wider.
-                            sizeKey={this.state.threadRightPanel ? "thread" : undefined}
-                            defaultSize={this.state.threadRightPanel ? 500 : undefined}
+                            // Override defaults for video rooms where more space is needed for the chat timeline
+                            sizeKey={
+                                this.state.mainSplitContentType !== MainSplitContentType.Timeline ? "wide" : undefined
+                            }
+                            defaultSize={
+                                this.state.mainSplitContentType !== MainSplitContentType.Timeline ? 420 : undefined
+                            }
                         >
                             <div
                                 className={mainSplitContentClasses}
