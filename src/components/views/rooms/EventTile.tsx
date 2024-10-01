@@ -1246,7 +1246,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             </a>
                             {msgOption}
                         </div>,
-                        reactionsRow,
+                        <div className="mx_EventTile_badges" key="mx_EventTile_badges">
+                            {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                            {reactionsRow}
+                            {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                        </div>,
                     ],
                 );
             }
