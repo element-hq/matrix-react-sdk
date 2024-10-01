@@ -93,7 +93,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                                 "room|invites_you_text",
                                 {},
                                 {
-                                    inviter: () => <b>{inviter?.name || inviteSender}</b>,
+                                    inviter: () => <strong>{inviter?.name || inviteSender}</strong>,
                                 },
                             )}
                         </div>

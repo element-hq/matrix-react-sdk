@@ -50,6 +50,8 @@ import WithPresenceIndicator, { useDmMember } from "../avatars/WithPresenceIndic
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import RoomContext from "../../../contexts/RoomContext";
 import { MainSplitContentType } from "../../structures/RoomView";
+import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
+import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog.tsx";
 
 export default function RoomHeader({
     room,
@@ -229,18 +231,33 @@ export default function RoomHeader({
         roomContext.mainSplitContentType === MainSplitContentType.MaximisedWidget ||
         roomContext.mainSplitContentType === MainSplitContentType.Call;
 
+    const onAvatarClick = (): void => {
+        defaultDispatcher.dispatch({
+            action: "open_room_settings",
+            initial_tab_id: RoomSettingsTab.General,
+        });
+    };
+
     return (
         <>
             <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
+                <WithPresenceIndicator room={room} size="8px">
+                    {/* We hide this from the tabIndex list as it is a pointer shortcut and superfluous for a11y */}
+                    <RoomAvatar
+                        room={room}
+                        size="40px"
+                        oobData={oobData}
+                        onClick={onAvatarClick}
+                        tabIndex={-1}
+                        aria-label={_t("room|header_avatar_open_settings_label")}
+                    />
+                </WithPresenceIndicator>
                 <button
                     aria-label={_t("right_panel|room_summary_card|title")}
                     tabIndex={0}
-                    onClick={() => RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary)}
+                    onClick={() => RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary)}
                     className="mx_RoomHeader_infoWrapper"
                 >
-                    <WithPresenceIndicator room={room} size="8px">
-                        <RoomAvatar room={room} size="40px" oobData={oobData} />
-                    </WithPresenceIndicator>
                     <Box flex="1" className="mx_RoomHeader_info">
                         <BodyText
                             as="div"
@@ -322,7 +339,7 @@ export default function RoomHeader({
                         <IconButton
                             onClick={(evt) => {
                                 evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
                             }}
                             aria-label={_t("right_panel|room_summary_card|title")}
                         >
@@ -337,7 +354,7 @@ export default function RoomHeader({
                             indicator={notificationLevelToIndicator(threadNotifications)}
                             onClick={(evt) => {
                                 evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.ThreadPanel);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.ThreadPanel);
                                 PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
                             }}
                             aria-label={_t("common|threads")}
@@ -351,7 +368,7 @@ export default function RoomHeader({
                                 indicator={notificationLevelToIndicator(globalNotificationState.level)}
                                 onClick={(evt) => {
                                     evt.stopPropagation();
-                                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
+                                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.NotificationPanel);
                                 }}
                                 aria-label={_t("notifications|enable_prompt_toast_title")}
                             >
@@ -370,7 +387,7 @@ export default function RoomHeader({
                             viewUserOnClick={false}
                             tooltipLabel={_t("room|header_face_pile_tooltip")}
                             onClick={(e: ButtonEvent) => {
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomMemberList);
                                 e.stopPropagation();
                             }}
                             aria-label={_t("common|n_members", { count: memberCount })}
