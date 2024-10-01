@@ -26,7 +26,7 @@ describe("<MainSplit/>", () => {
             <MainSplit resizeNotifier={resizeNotifier} children={children} panel={panel} />,
         );
         expect(asFragment()).toMatchSnapshot();
-        // Assert it matches the default width of 320
+        // Assert it matches the default width of 30
         expect(container.querySelector<HTMLElement>(".mx_RightPanel_ResizeWrapper")!.style.width).toBe("320px");
     });
 
