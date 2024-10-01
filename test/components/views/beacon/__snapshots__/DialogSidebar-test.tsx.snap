@@ -23,9 +23,9 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
         <svg
           class="mx_DialogSidebar_closeButtonIcon"
           fill="currentColor"
-          height="1em"
+          height="24px"
           viewBox="0 0 24 24"
-          width="1em"
+          width="24px"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -130,9 +130,9 @@ exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
         <svg
           class="mx_DialogSidebar_closeButtonIcon"
           fill="currentColor"
-          height="1em"
+          height="24px"
           viewBox="0 0 24 24"
-          width="1em"
+          width="24px"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
