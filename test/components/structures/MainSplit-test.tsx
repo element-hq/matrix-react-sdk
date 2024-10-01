@@ -26,8 +26,8 @@ describe("<MainSplit/>", () => {
             <MainSplit resizeNotifier={resizeNotifier} children={children} panel={panel} />,
         );
         expect(asFragment()).toMatchSnapshot();
-        // Assert it matches the default width of 350
-        expect(container.querySelector<HTMLElement>(".mx_RightPanel_ResizeWrapper")!.style.width).toBe("350px");
+        // Assert it matches the default width of 320
+        expect(container.querySelector<HTMLElement>(".mx_RightPanel_ResizeWrapper")!.style.width).toBe("320px");
     });
 
     it("respects defaultSize prop", () => {

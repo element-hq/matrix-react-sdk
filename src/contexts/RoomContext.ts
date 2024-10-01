@@ -35,7 +35,6 @@ const RoomContext = createContext<
     showApps: false,
     isPeeking: false,
     showRightPanel: true,
-    threadRightPanel: false,
     joining: false,
     showTopUnreadMessagesBar: false,
     statusBarVisible: false,
