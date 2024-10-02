@@ -614,10 +614,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getMainSplitContentType = (room: Room): MainSplitContentType => {
-        if (
-            (SettingsStore.getValue("feature_group_calls") && this.context.roomViewStore.isViewingCall()) ||
-            isVideoRoom(room)
-        ) {
+        if (this.context.roomViewStore.isViewingCall() || isVideoRoom(room)) {
             return MainSplitContentType.Call;
         }
         if (this.context.widgetLayoutStore.hasMaximisedWidget(room)) {
@@ -1364,7 +1361,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
                 // For initial threads launch, chat effects are disabled see #19731
                 if (!ev.isRelation(THREAD_RELATION_TYPE.name)) {
-                    dis.dispatch({ action: `effects.${effect.command}` });
+                    dis.dispatch({ action: `effects.${effect.command}`, event: ev });
                 }
             }
         });
@@ -2183,10 +2180,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         const myMembership = this.state.room.getMyMembership();
-        if (
-            isVideoRoom(this.state.room) &&
-            !(SettingsStore.getValue("feature_video_rooms") && myMembership === KnownMembership.Join)
-        ) {
+        if (isVideoRoom(this.state.room) && myMembership !== KnownMembership.Join) {
             return (
                 <ErrorBoundary>
                     <div className="mx_MainSplit">
@@ -2408,13 +2402,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </AuxPanel>
         );
 
-        const isPinningEnabled = SettingsStore.getValue<boolean>("feature_pinning");
-        let pinnedMessageBanner;
-        if (isPinningEnabled) {
-            pinnedMessageBanner = (
-                <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
-            );
-        }
+        const pinnedMessageBanner = (
+            <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
+        );
 
         let messageComposer;
         const showComposer =
@@ -2525,9 +2515,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             mx_RoomView_timeline_rr_enabled: this.state.showReadReceipts,
         });
 
+        let { mainSplitContentType } = this.state;
+        if (this.state.search) {
+            // When in the middle of a search force the main split content type to timeline
+            mainSplitContentType = MainSplitContentType.Timeline;
+        }
+
         const mainClasses = classNames("mx_RoomView", {
             mx_RoomView_inCall: Boolean(activeCall),
-            mx_RoomView_immersive: this.state.mainSplitContentType !== MainSplitContentType.Timeline,
+            mx_RoomView_immersive: mainSplitContentType !== MainSplitContentType.Timeline,
         });
 
         const showChatEffects = SettingsStore.getValue("showChatEffects");
@@ -2535,7 +2531,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let mainSplitBody: JSX.Element | undefined;
         let mainSplitContentClassName: string | undefined;
         // Decide what to show in the main split
-        switch (this.state.mainSplitContentType) {
+        switch (mainSplitContentType) {
             case MainSplitContentType.Timeline:
                 mainSplitContentClassName = "mx_MainSplit_timeline";
                 mainSplitBody = (
@@ -2599,7 +2595,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let viewingCall = false;
 
         // Simplify the header for other main split types
-        switch (this.state.mainSplitContentType) {
+        switch (mainSplitContentType) {
             case MainSplitContentType.MaximisedWidget:
                 excludedRightPanelPhaseButtons = [];
                 onAppsClick = null;

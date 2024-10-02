@@ -124,12 +124,14 @@ export function createTestClient(): MatrixClient {
             },
         },
         getCrypto: jest.fn().mockReturnValue({
+            getOwnDeviceKeys: jest.fn(),
             getUserDeviceInfo: jest.fn(),
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
             resetKeyBackup: jest.fn(),
             isEncryptionEnabledInRoom: jest.fn(),
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+            setDeviceIsolationMode: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
