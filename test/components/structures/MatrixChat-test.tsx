@@ -386,8 +386,6 @@ describe("<MatrixChat />", () => {
             await flushPromises();
 
             expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state);
-
-            //await waitFor(() => expect(screen.queryByTestId("spinner")).not.toBeInTheDocument());
         });
 
         it("should look up userId using access token", async () => {
