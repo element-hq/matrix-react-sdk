@@ -194,50 +194,29 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) &&
             content.filename &&
             content.filename !== content.body;
+        const bodyProps: IBodyProps = {
+            ref: this.body,
+            mxEvent: this.props.mxEvent,
+            highlights: this.props.highlights,
+            highlightLink: this.props.highlightLink,
+            showUrlPreview: this.props.showUrlPreview,
+            forExport: this.props.forExport,
+            maxImageHeight: this.props.maxImageHeight,
+            replacingEventId: this.props.replacingEventId,
+            editState: this.props.editState,
+            onHeightChanged: this.props.onHeightChanged,
+            onMessageAllowed: this.onTileUpdate,
+            permalinkCreator: this.props.permalinkCreator,
+            mediaEventHelper: this.mediaHelper,
+            getRelationsForEvent: this.props.getRelationsForEvent,
+            isSeeingThroughMessageHiddenForModeration: this.props.isSeeingThroughMessageHiddenForModeration,
+            inhibitInteraction: this.props.inhibitInteraction,
+        };
         if (hasCaption) {
-            return (
-                <CaptionBody
-                    ref={this.body}
-                    mxEvent={this.props.mxEvent}
-                    highlights={this.props.highlights}
-                    highlightLink={this.props.highlightLink}
-                    showUrlPreview={this.props.showUrlPreview}
-                    forExport={this.props.forExport}
-                    maxImageHeight={this.props.maxImageHeight}
-                    replacingEventId={this.props.replacingEventId}
-                    editState={this.props.editState}
-                    onHeightChanged={this.props.onHeightChanged}
-                    onMessageAllowed={this.onTileUpdate}
-                    permalinkCreator={this.props.permalinkCreator}
-                    mediaEventHelper={this.mediaHelper}
-                    getRelationsForEvent={this.props.getRelationsForEvent}
-                    isSeeingThroughMessageHiddenForModeration={this.props.isSeeingThroughMessageHiddenForModeration}
-                    inhibitInteraction={this.props.inhibitInteraction}
-                    WrappedBodyType={BodyType}
-                />
-            );
+            return <CaptionBody {...bodyProps} WrappedBodyType={BodyType} />;
         }
 
-        return BodyType ? (
-            <BodyType
-                ref={this.body}
-                mxEvent={this.props.mxEvent}
-                highlights={this.props.highlights}
-                highlightLink={this.props.highlightLink}
-                showUrlPreview={this.props.showUrlPreview}
-                forExport={this.props.forExport}
-                maxImageHeight={this.props.maxImageHeight}
-                replacingEventId={this.props.replacingEventId}
-                editState={this.props.editState}
-                onHeightChanged={this.props.onHeightChanged}
-                onMessageAllowed={this.onTileUpdate}
-                permalinkCreator={this.props.permalinkCreator}
-                mediaEventHelper={this.mediaHelper}
-                getRelationsForEvent={this.props.getRelationsForEvent}
-                isSeeingThroughMessageHiddenForModeration={this.props.isSeeingThroughMessageHiddenForModeration}
-                inhibitInteraction={this.props.inhibitInteraction}
-            />
-        ) : null;
+        return BodyType ? <BodyType {...bodyProps} /> : null;
     }
 }
 
