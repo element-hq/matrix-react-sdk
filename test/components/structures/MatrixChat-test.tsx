@@ -135,6 +135,7 @@ describe("<MatrixChat />", () => {
             getUserDeviceInfo: jest.fn().mockReturnValue(new Map()),
             getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
             getVersion: jest.fn().mockReturnValue("1"),
+            setDeviceIsolationMode: jest.fn(),
         }),
         // This needs to not finish immediately because we need to test the screen appears
         bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
