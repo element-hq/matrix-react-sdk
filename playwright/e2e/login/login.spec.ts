@@ -147,7 +147,7 @@ test.describe("Login", () => {
                     { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
                 );
                 if (res.status() / 100 !== 2) {
-                    console.log(await res.json());
+                    console.log("Uploading dummy keys failed", await res.json());
                 }
                 expect(res.status() / 100).toEqual(2);
 
@@ -176,7 +176,7 @@ test.describe("Login", () => {
                         { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
                     );
                     if (res.status() / 100 !== 2) {
-                        console.log(await res.json());
+                        console.log("Uploading dummy keys failed", await res.json());
                     }
                     expect(res.status() / 100).toEqual(2);
 
@@ -207,7 +207,7 @@ test.describe("Login", () => {
                         { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
                     );
                     if (res.status() / 100 !== 2) {
-                        console.log(await res.json());
+                        console.log("Uploading dummy keys failed", await res.json());
                     }
                     expect(res.status() / 100).toEqual(2);
 
