@@ -1331,6 +1331,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
+    /**
+     * Returns true if the user must go through the device verification process before they
+     * can use the app.
+     * @returns true if the user must verify
+     */
     private async shouldForceVerification(): Promise<boolean> {
         if (!SdkConfig.get("force_verification")) return false;
         const mustVerifyFlag = localStorage.getItem("must_verify_device");
