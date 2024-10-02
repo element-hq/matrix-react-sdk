@@ -14,7 +14,7 @@ import { Notifier, NotifierEvent } from "../Notifier";
 import DMRoomMap from "../utils/DMRoomMap";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useSettingValue } from "./useSettings";
-import { useEventEmitter } from "./useEventEmitter";
+import { useEventEmitter, useTypedEventEmitter } from "./useEventEmitter";
 
 export interface UserOnboardingContext {
     hasAvatar: boolean;
@@ -96,17 +96,7 @@ function useShowNotificationsPrompt(): boolean {
 
     // shouldShowPrompt is dependent on the client having push rules. There isn't an event for the client
     // fetching its push rules, but we'll know it has them by the time it sync, so we update this on sync.
-    useEffect(() => {
-        const onSync = (): void => {
-            updateValue();
-        };
-
-        client.on(ClientEvent.Sync, onSync);
-
-        return () => {
-            client.removeListener(ClientEvent.Sync, onSync);
-        };
-    }, [client, updateValue]);
+    useTypedEventEmitter(client, ClientEvent.Sync, updateValue);
 
     return value;
 }
