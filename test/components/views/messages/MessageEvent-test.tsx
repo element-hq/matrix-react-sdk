@@ -9,15 +9,15 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, RenderResult } from "@testing-library/react";
 import { MatrixClient, MatrixEvent, EventType, Room, MsgType } from "matrix-js-sdk/src/matrix";
+import fetchMock from "fetch-mock-jest";
+import fs from "fs";
+import path from "path";
 
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../../../../src/voice-broadcast";
 import { mkEvent, mkRoom, stubClient } from "../../../test-utils";
 import MessageEvent from "../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
-import fetchMock from "fetch-mock-jest";
-import fs from "fs";
-import path from "path";
 
 jest.mock("../../../../src/components/views/messages/UnknownBody", () => ({
     __esModule: true,
