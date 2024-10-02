@@ -61,6 +61,10 @@ jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
 }));
 
+// Stub out ThemeWatcher as the necessary bits for themes are done in element-web's index.html and thus are lacking here,
+// plus JSDOM's implementation of CSSStyleDeclaration has a bunch of differences to real browsers which cause issues.
+jest.mock("../../../src/settings/watchers/ThemeWatcher");
+
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
 
@@ -1039,10 +1043,13 @@ describe("<MatrixChat />", () => {
                 });
 
                 describe("when encryption is force disabled", () => {
-                    const unencryptedRoom = new Room("!unencrypted:server.org", loginClient, userId);
-                    const encryptedRoom = new Room("!encrypted:server.org", loginClient, userId);
+                    let unencryptedRoom: Room;
+                    let encryptedRoom: Room;
 
                     beforeEach(() => {
+                        unencryptedRoom = new Room("!unencrypted:server.org", loginClient, userId);
+                        encryptedRoom = new Room("!encrypted:server.org", loginClient, userId);
+
                         loginClient.getClientWellKnown.mockReturnValue({
                             "io.element.e2ee": {
                                 force_disable: true,
