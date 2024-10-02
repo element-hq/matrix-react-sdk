@@ -8,12 +8,16 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
     <div
       class="mx_BaseCard_header"
     >
-      <p
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
-        role="heading"
+      <div
+        class="mx_BaseCard_header_title"
       >
-        Profile
-      </p>
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Profile
+        </p>
+      </div>
       <button
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
@@ -77,12 +81,16 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
     <div
       class="mx_BaseCard_header"
     >
-      <p
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
-        role="heading"
+      <div
+        class="mx_BaseCard_header_title"
       >
-        Profile
-      </p>
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Profile
+        </p>
+      </div>
       <button
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
