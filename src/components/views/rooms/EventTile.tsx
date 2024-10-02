@@ -1141,6 +1141,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
+        const hasFooter = Boolean(reactionsRow || pinnedMessageBadge);
+
         const linkedTimestamp = !this.props.hideTimestamp ? (
             <a
                 href={permalink}
@@ -1246,11 +1248,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             </a>
                             {msgOption}
                         </div>,
-                        <div className="mx_EventTile_badges" key="mx_EventTile_badges">
-                            {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
-                            {reactionsRow}
-                            {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
-                        </div>,
+                        hasFooter && (
+                            <div className="mx_EventTile_footer" key="mx_EventTile_footer">
+                                {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                                {reactionsRow}
+                                {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                            </div>
+                        ),
                     ],
                 );
             }
@@ -1439,21 +1443,25 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {actionBar}
                             {this.props.layout === Layout.IRC && (
                                 <>
-                                    <div className="mx_EventTile_badges">
-                                        {pinnedMessageBadge}
-                                        {reactionsRow}
-                                    </div>
+                                    {hasFooter && (
+                                        <div className="mx_EventTile_footer">
+                                            {pinnedMessageBadge}
+                                            {reactionsRow}
+                                        </div>
+                                    )}
                                     {this.renderThreadInfo()}
                                 </>
                             )}
                         </div>
                         {this.props.layout !== Layout.IRC && (
                             <>
-                                <div className="mx_EventTile_badges">
-                                    {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
-                                    {reactionsRow}
-                                    {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
-                                </div>
+                                {hasFooter && (
+                                    <div className="mx_EventTile_footer">
+                                        {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                                        {reactionsRow}
+                                        {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                                    </div>
+                                )}
                                 {this.renderThreadInfo()}
                             </>
                         )}
