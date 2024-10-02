@@ -892,7 +892,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 });
                 break;
             case "client_started":
-                this.onClientStarted().then();
+                // No need to make this handler async to wait for the result of this
+                this.onClientStarted().catch((e) => {
+                    logger.error("Exception in onClientStarted", e);
+                });
                 break;
             case "send_event":
                 this.onSendEvent(payload.room_id, payload.event);
@@ -1358,7 +1361,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher.recheck();
         StorageManager.tryPersistStorage();
 
-        this.onShowPostLoginScreen().then();
+        await this.onShowPostLoginScreen();
     }
 
     private async onShowPostLoginScreen(useCase?: UseCase): Promise<void> {
@@ -2054,7 +2057,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 },
             );
         } else {
-            this.onShowPostLoginScreen().then();
+            // This is async but we makign this function async to wait for it isn't useful
+            this.onShowPostLoginScreen().catch((e) => {
+                logger.error("Exception showing post-login screen", e);
+            });
         }
     };
 
