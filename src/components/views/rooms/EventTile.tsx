@@ -1141,7 +1141,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const hasFooter = Boolean(reactionsRow || pinnedMessageBadge);
+        // If we have reactions or a pinned message badge, we need a footer
+        const hasFooter = Boolean((reactionsRow && this.state.reactions) || pinnedMessageBadge);
 
         const linkedTimestamp = !this.props.hideTimestamp ? (
             <a
