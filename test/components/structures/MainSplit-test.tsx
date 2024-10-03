@@ -22,6 +22,10 @@ describe("<MainSplit/>", () => {
     );
     const panel = <div>Right panel</div>;
 
+    beforeEach(() => {
+        localStorage.clear();
+    });
+
     it("renders", () => {
         const { asFragment, container } = render(
             <MainSplit
