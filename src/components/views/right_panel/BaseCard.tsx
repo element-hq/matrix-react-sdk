@@ -122,9 +122,16 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
                         <div className="mx_BaseCard_header">
                             {backButton}
                             {typeof header === "string" ? (
-                                <Text size="md" weight="medium" className="mx_BaseCard_header_title" role="heading">
-                                    {header}
-                                </Text>
+                                <div className="mx_BaseCard_header_title">
+                                    <Text
+                                        size="md"
+                                        weight="medium"
+                                        className="mx_BaseCard_header_title_heading"
+                                        role="heading"
+                                    >
+                                        {header}
+                                    </Text>
+                                </div>
                             ) : (
                                 (header ?? <div className="mx_BaseCard_header_spacer" />)
                             )}
