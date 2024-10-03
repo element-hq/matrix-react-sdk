@@ -26,7 +26,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../src/editor/offset";
 import { Layout } from "../../../../src/settings/enums/Layout";
-import { IRoomState } from "../../../../src/components/structures/RoomView";
+import { IRoomState, MainSplitContentType } from "../../../../src/components/structures/RoomView";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { mockPlatformPeg } from "../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
@@ -68,6 +68,7 @@ describe("<SendMessageComposer/>", () => {
         showDisplaynameChanges: true,
         matrixClientIsReady: false,
         timelineRenderingType: TimelineRenderingType.Room,
+        mainSplitContentType: MainSplitContentType.Timeline,
         liveTimeline: undefined,
         canSelfRedact: false,
         resizing: false,

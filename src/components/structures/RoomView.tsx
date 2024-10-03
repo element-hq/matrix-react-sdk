@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef, ReactElement, ReactNode, RefObject, useContext } from "react";
+import React, { ChangeEvent, ComponentProps, createRef, ReactElement, ReactNode, RefObject, useContext } from "react";
 import classNames from "classnames";
 import {
     IRecommendedVersion,
@@ -229,7 +229,7 @@ export interface IRoomState {
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
     hasPinnedWidgets?: boolean;
-    mainSplitContentType?: MainSplitContentType;
+    mainSplitContentType: MainSplitContentType;
     // whether or not a spaces context switch brought us here,
     // if it did we don't want the room to be marked as read as soon as it is loaded.
     wasContextSwitch?: boolean;
@@ -2515,6 +2515,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
         const mainSplitContentClasses = classNames("mx_RoomView_body", mainSplitContentClassName);
 
+        let sizeKey: string | undefined;
+        let defaultSize: number | undefined;
+        let analyticsRoomType: ComponentProps<typeof MainSplit>["analyticsRoomType"] = "other_room";
+        if (this.state.mainSplitContentType !== MainSplitContentType.Timeline) {
+            // Override defaults for video rooms where more space is needed for the chat timeline
+            sizeKey = "wide";
+            defaultSize = 420;
+            analyticsRoomType =
+                this.state.mainSplitContentType === MainSplitContentType.Call ? "video_room" : "maximised_widget";
+        }
+
         return (
             <RoomContext.Provider value={this.state}>
                 <div className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
@@ -2525,13 +2536,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <MainSplit
                             panel={rightPanel}
                             resizeNotifier={this.props.resizeNotifier}
-                            // Override defaults for video rooms where more space is needed for the chat timeline
-                            sizeKey={
-                                this.state.mainSplitContentType !== MainSplitContentType.Timeline ? "wide" : undefined
-                            }
-                            defaultSize={
-                                this.state.mainSplitContentType !== MainSplitContentType.Timeline ? 420 : undefined
-                            }
+                            sizeKey={sizeKey}
+                            defaultSize={defaultSize}
+                            analyticsRoomType={analyticsRoomType}
                         >
                             <div
                                 className={mainSplitContentClasses}

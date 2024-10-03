@@ -23,7 +23,12 @@ describe("<MainSplit/>", () => {
 
     it("renders", () => {
         const { asFragment, container } = render(
-            <MainSplit resizeNotifier={resizeNotifier} children={children} panel={panel} />,
+            <MainSplit
+                resizeNotifier={resizeNotifier}
+                children={children}
+                panel={panel}
+                analyticsRoomType="other_room"
+            />,
         );
         expect(asFragment()).toMatchSnapshot();
         // Assert it matches the default width of 30
@@ -32,7 +37,13 @@ describe("<MainSplit/>", () => {
 
     it("respects defaultSize prop", () => {
         const { asFragment, container } = render(
-            <MainSplit resizeNotifier={resizeNotifier} children={children} panel={panel} defaultSize={500} />,
+            <MainSplit
+                resizeNotifier={resizeNotifier}
+                children={children}
+                panel={panel}
+                defaultSize={500}
+                analyticsRoomType="other_room"
+            />,
         );
         expect(asFragment()).toMatchSnapshot();
         // Assert it matches the default width of 350
@@ -48,6 +59,7 @@ describe("<MainSplit/>", () => {
                 panel={panel}
                 sizeKey="thread"
                 defaultSize={400}
+                analyticsRoomType="other_room"
             />,
         );
         expect(container.querySelector<HTMLElement>(".mx_RightPanel_ResizeWrapper")!.style.width).toBe("333px");

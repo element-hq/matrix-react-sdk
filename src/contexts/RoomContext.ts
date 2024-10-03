@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { createContext, useContext } from "react";
 
-import { IRoomState } from "../components/structures/RoomView";
+import { IRoomState, MainSplitContentType } from "../components/structures/RoomView";
 import { Layout } from "../settings/enums/Layout";
 
 export enum TimelineRenderingType {
@@ -58,6 +58,7 @@ const RoomContext = createContext<
     matrixClientIsReady: false,
     showUrlPreview: false,
     timelineRenderingType: TimelineRenderingType.Room,
+    mainSplitContentType: MainSplitContentType.Timeline,
     threadId: undefined,
     liveTimeline: undefined,
     narrow: false,
