@@ -54,7 +54,7 @@ import WidgetEchoStore from "../../stores/WidgetEchoStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
@@ -152,13 +152,8 @@ interface IRoomProps {
     onRegistered?(credentials: IMatrixClientCreds): void;
 }
 
-// This defines the content of the mainSplit.
-// If the mainSplit does not contain the Timeline, the chat is shown in the right panel.
-export enum MainSplitContentType {
-    Timeline,
-    MaximisedWidget,
-    Call,
-}
+export { MainSplitContentType };
+
 export interface IRoomState {
     room?: Room;
     virtualRoom?: Room;

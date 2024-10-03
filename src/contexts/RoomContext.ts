@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { createContext, useContext } from "react";
 
-import { IRoomState, MainSplitContentType } from "../components/structures/RoomView";
+import { IRoomState } from "../components/structures/RoomView";
 import { Layout } from "../settings/enums/Layout";
 
 export enum TimelineRenderingType {
@@ -19,6 +19,14 @@ export enum TimelineRenderingType {
     Notification = "Notification",
     Search = "Search",
     Pinned = "Pinned",
+}
+
+// This defines the content of the mainSplit.
+// If the mainSplit does not contain the Timeline, the chat is shown in the right panel.
+export enum MainSplitContentType {
+    Timeline,
+    MaximisedWidget,
+    Call,
 }
 
 const RoomContext = createContext<
