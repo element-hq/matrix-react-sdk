@@ -33,6 +33,11 @@ jest.mock("../../../../src/components/views/messages/MImageBody", () => ({
     default: () => <div data-testid="image-body" />,
 }));
 
+jest.mock("../../../../src/components/views/messages/MImageReplyBody", () => ({
+    __esModule: true,
+    default: () => <div data-testid="image-reply-body" />,
+}));
+
 jest.mock("../../../../src/components/views/messages/MStickerBody", () => ({
     __esModule: true,
     default: () => <div data-testid="sticker-body" />,
