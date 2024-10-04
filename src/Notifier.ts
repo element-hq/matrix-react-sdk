@@ -412,6 +412,13 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         if (ev.getSender() === MatrixClientPeg.safeGet().getUserId()) return;
         if (data.timeline.getTimelineSet().threadListType !== null) return; // Ignore events on the thread list generated timelines
 
+        if (data.liveEvent && ev.getContent()['org.matrix.msc4197.copy_hint'] !== undefined) {
+            Modal.createDialog(ErrorDialog, {
+                title: "Copy me!",
+                ev.getContent()['org.matrix.msc4197.copy_hint'],
+            });
+        }
+
         MatrixClientPeg.safeGet().decryptEventIfNeeded(ev);
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
