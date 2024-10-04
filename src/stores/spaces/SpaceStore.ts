@@ -1397,7 +1397,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 export default class SpaceStore {
     private static readonly internalInstance = (() => {
         const instance = new SpaceStoreClass();
-        instance.start();
         return instance;
     })();
 
@@ -1410,7 +1409,6 @@ export default class SpaceStore {
      */
     public static testInstance(): SpaceStoreClass {
         const store = new SpaceStoreClass();
-        store.start();
         return store;
     }
 }

@@ -285,7 +285,7 @@ describe("RoomListStore", () => {
     describe("room updates", () => {
         const makeStore = async () => {
             const store = new RoomListStoreClass(defaultDispatcher);
-            await store.start();
+            await store.useUnitTestClient(client);
             return store;
         };
 
