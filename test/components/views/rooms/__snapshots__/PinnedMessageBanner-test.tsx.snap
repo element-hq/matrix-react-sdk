@@ -27,7 +27,7 @@ exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +90,7 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +160,7 @@ exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +215,7 @@ exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +270,7 @@ exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +325,7 @@ exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
@@ -384,7 +384,7 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
@@ -462,7 +462,7 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
@@ -532,7 +532,7 @@ exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
         <svg
           class="mx_PinnedMessageBanner_PinIcon"
           fill="currentColor"
-          height="1em"
+          height="20px"
           viewBox="0 0 24 24"
           width="20px"
           xmlns="http://www.w3.org/2000/svg"
