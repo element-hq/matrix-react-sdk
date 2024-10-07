@@ -1628,18 +1628,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 room.setBlacklistUnverifiedDevices(blacklistEnabled);
             }
         });
-        cli.on(CryptoEvent.Warning, (type) => {
-            switch (type) {
-                case "CRYPTO_WARNING_OLD_VERSION_DETECTED":
-                    Modal.createDialog(ErrorDialog, {
-                        title: _t("encryption|old_version_detected_title"),
-                        description: _t("encryption|old_version_detected_description", {
-                            brand: SdkConfig.get().brand,
-                        }),
-                    });
-                    break;
-            }
-        });
         cli.on(CryptoEvent.KeyBackupFailed, async (errcode): Promise<void> => {
             let haveNewVersion: boolean | undefined;
             let newVersionInfo: KeyBackupInfo | null = null;
