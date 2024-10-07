@@ -87,7 +87,6 @@ export default class DeviceListener {
         this.client = matrixClient;
         this.client.on(CryptoEvent.WillUpdateDevices, this.onWillUpdateDevices);
         this.client.on(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
-        this.client.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
         this.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         this.client.on(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
         this.client.on(ClientEvent.AccountData, this.onAccountData);
@@ -111,7 +110,6 @@ export default class DeviceListener {
         if (this.client) {
             this.client.removeListener(CryptoEvent.WillUpdateDevices, this.onWillUpdateDevices);
             this.client.removeListener(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
-            this.client.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             this.client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
             this.client.removeListener(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
             this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
@@ -187,12 +185,6 @@ export default class DeviceListener {
     private onDevicesUpdated = (users: string[]): void => {
         if (!this.client) return;
         if (!users.includes(this.client.getSafeUserId())) return;
-        this.recheck();
-    };
-
-    private onDeviceVerificationChanged = (userId: string): void => {
-        if (!this.client) return;
-        if (userId !== this.client.getUserId()) return;
         this.recheck();
     };
 
