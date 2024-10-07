@@ -82,7 +82,6 @@ import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import UserSettingsDialog from "../views/dialogs/UserSettingsDialog";
 import CreateRoomDialog from "../views/dialogs/CreateRoomDialog";
-import KeySignatureUploadFailedDialog from "../views/dialogs/KeySignatureUploadFailedDialog";
 import IncomingSasDialog from "../views/dialogs/IncomingSasDialog";
 import CompleteSecurity from "./auth/CompleteSecurity";
 import Welcome from "../views/auth/Welcome";
@@ -1672,10 +1671,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     ) as unknown as Promise<typeof RecoveryMethodRemovedDialog>,
                 );
             }
-        });
-
-        cli.on(CryptoEvent.KeySignatureUploadFailure, (failures, source, continuation) => {
-            Modal.createDialog(KeySignatureUploadFailedDialog, { failures, source, continuation });
         });
 
         cli.on(CryptoEvent.VerificationRequestReceived, (request) => {
