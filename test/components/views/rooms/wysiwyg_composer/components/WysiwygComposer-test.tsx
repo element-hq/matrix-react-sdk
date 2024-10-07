@@ -427,7 +427,7 @@ describe("WysiwygComposer", () => {
         });
         it("typing a space to trigger an emoji replacement", async () => {
             fireEvent.input(screen.getByRole("textbox"), {
-                data: ":P",
+                data: ":-P",
                 inputType: "insertText",
             });
             fireEvent.input(screen.getByRole("textbox"), {
