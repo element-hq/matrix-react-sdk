@@ -427,6 +427,18 @@ describe("WysiwygComposer", () => {
         });
         it("typing a space to trigger an emoji replacement", async () => {
             fireEvent.input(screen.getByRole("textbox"), {
+                data: ":P",
+                inputType: "insertText",
+            });
+            fireEvent.input(screen.getByRole("textbox"), {
+                data: " ",
+                inputType: "insertText",
+            });
+
+            await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(3, expect.stringContaining("😛")));
+        });
+        it("typing a space to trigger an emoji varitation replacement", async () => {
+            fireEvent.input(screen.getByRole("textbox"), {
                 data: ":-P",
                 inputType: "insertText",
             });
