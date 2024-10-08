@@ -15,7 +15,7 @@ import CreateCrossSigningDialog from "../../views/dialogs/security/CreateCrossSi
 interface IProps {
     onFinished: () => void;
     accountPassword?: string;
-    tokenLogin?: boolean;
+    tokenLogin: boolean;
 }
 
 export default class E2eSetup extends React.Component<IProps> {
