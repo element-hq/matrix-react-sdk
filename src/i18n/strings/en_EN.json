@@ -2171,6 +2171,9 @@
             "title": "Bridges"
         },
         "delete_avatar_label": "Delete avatar",
+        "encryption": {
+            "title": "Encryption"
+        },
         "general": {
             "alias_field_has_domain_invalid": "Missing domain separator e.g. (:domain.org)",
             "alias_field_has_localpart_invalid": "Missing room name or separator e.g. (my-room:domain.org)",
@@ -2477,6 +2480,13 @@
         "emoji_autocomplete": "Enable Emoji suggestions while typing",
         "enable_markdown": "Enable Markdown",
         "enable_markdown_description": "Start messages with <code>/plain</code> to send without markdown.",
+        "encryption": {
+            "allow_key_storage": "Allow key storage",
+            "dialog_title": "<strong>Settings:</strong> Encryption",
+            "error_loading_key_backup_status": "Unable to load key backup status",
+            "key_storage_body": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",
+            "key_storage_title": "Key storage"
+        },
         "general": {
             "account_management_section": "Account management",
             "account_section": "Account",

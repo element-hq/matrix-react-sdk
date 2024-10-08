@@ -18,6 +18,7 @@ import KeyboardIcon from "@vector-im/compound-design-tokens/assets/web/icons/key
 import SidebarIcon from "@vector-im/compound-design-tokens/assets/web/icons/sidebar";
 import MicOnIcon from "@vector-im/compound-design-tokens/assets/web/icons/mic-on";
 import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
+import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import LabsIcon from "@vector-im/compound-design-tokens/assets/web/icons/labs";
 import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
 import HelpIcon from "@vector-im/compound-design-tokens/assets/web/icons/help";
@@ -44,6 +45,7 @@ import { NonEmptyArray } from "../../../@types/common";
 import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
+import EncryptionUserSettingsTab from "../settings/tabs/user/EncryptionUserSettingsTab";
 
 interface IProps {
     initialTabId?: UserTab;
@@ -75,6 +77,8 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
             return _t("settings|voip|dialog_title", undefined, subs);
         case UserTab.Security:
             return _t("settings|security|dialog_title", undefined, subs);
+        case UserTab.Encryption:
+            return _t("settings|encryption|dialog_title", undefined, subs);
         case UserTab.Labs:
             return _t("settings|labs|dialog_title", undefined, subs);
         case UserTab.Mjolnir:
@@ -176,6 +180,16 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 <LockIcon />,
                 <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
                 "UserSettingsSecurityPrivacy",
+            ),
+        );
+
+        tabs.push(
+            new Tab(
+                UserTab.Encryption,
+                _td("room_settings|encryption|title"),
+                <KeyIcon />,
+                <EncryptionUserSettingsTab closeSettingsFn={props.onFinished} />,
+                "UserSettingsEncryption",
             ),
         );
 
