@@ -9,15 +9,16 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import DialogButtons from "../../elements/DialogButtons";
 import BaseDialog from "../BaseDialog";
 import Spinner from "../../elements/Spinner";
-import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { createCrossSigning } from "../../../../CreateCrossSigning";
 
 interface Props {
+    matrixClient: MatrixClient;
     accountPassword?: string;
     tokenLogin: boolean;
     onFinished: (success?: boolean) => void;
@@ -28,19 +29,17 @@ interface Props {
  * cases, only a spinner is shown, but for more complex auth like SSO, the user
  * may need to complete some steps to proceed.
  */
-const CreateCrossSigningDialog: React.FC<Props> = ({ accountPassword, tokenLogin, onFinished }) => {
+const CreateCrossSigningDialog: React.FC<Props> = ({ matrixClient, accountPassword, tokenLogin, onFinished }) => {
     const [error, setError] = useState(false);
 
-    const cli = useMatrixClientContext();
-
     const bootstrapCrossSigning = useCallback(async () => {
-        const cryptoApi = cli.getCrypto();
+        const cryptoApi = matrixClient.getCrypto();
         if (!cryptoApi) return;
 
         setError(false);
 
         try {
-            await createCrossSigning(cli, tokenLogin, accountPassword);
+            await createCrossSigning(matrixClient, tokenLogin, accountPassword);
             onFinished(true);
         } catch (e) {
             if (tokenLogin) {
@@ -52,7 +51,7 @@ const CreateCrossSigningDialog: React.FC<Props> = ({ accountPassword, tokenLogin
             setError(true);
             logger.error("Error bootstrapping cross-signing", e);
         }
-    }, [cli, tokenLogin, accountPassword, onFinished]);
+    }, [matrixClient, tokenLogin, accountPassword, onFinished]);
 
     const onCancel = useCallback(() => {
         onFinished(false);
