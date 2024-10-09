@@ -799,18 +799,6 @@ async function doSetLoggedIn(
         PosthogAnalytics.instance.startListeningToSettingsChanges(client);
     }
 
-    if (credentials.freshLogin && SettingsStore.getValue("feature_dehydration")) {
-        // If we just logged in, try to rehydrate a device instead of using a
-        // new device.  If it succeeds, we'll get a new device ID, so make sure
-        // we persist that ID to localStorage
-        const newDeviceId = await client.rehydrateDevice();
-        if (newDeviceId) {
-            credentials.deviceId = newDeviceId;
-        }
-
-        delete credentials.freshLogin;
-    }
-
     if (localStorage) {
         try {
             await persistCredentials(credentials);

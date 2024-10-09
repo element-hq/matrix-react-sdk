@@ -16,7 +16,6 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 import { isSecureBackupRequired } from "./utils/WellKnownUtils";
 import AccessSecretStorageDialog, { KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
-import SettingsStore from "./settings/SettingsStore";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
@@ -278,14 +277,7 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
             await crypto.bootstrapSecretStorage({});
 
             const keyId = Object.keys(secretStorageKeys)[0];
-            if (keyId && SettingsStore.getValue("feature_dehydration")) {
-                let dehydrationKeyInfo = {};
-                if (secretStorageKeyInfo[keyId] && secretStorageKeyInfo[keyId].passphrase) {
-                    dehydrationKeyInfo = { passphrase: secretStorageKeyInfo[keyId].passphrase };
-                }
-                logger.log("accessSecretStorage: Setting dehydration key");
-                await cli.setDehydrationKey(secretStorageKeys[keyId], dehydrationKeyInfo, "Backup device");
-            } else if (!keyId) {
+            if (!keyId) {
                 logger.warn("accessSecretStorage: Not setting dehydration key: no SSSS key found");
             } else {
                 logger.log("accessSecretStorage: Not setting dehydration key: feature disabled");
