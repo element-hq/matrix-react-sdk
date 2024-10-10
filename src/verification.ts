@@ -77,8 +77,6 @@ export async function legacyVerifyUser(matrixClient: MatrixClient, user: User): 
             return;
         }
     }
-    const verificationRequestPromise = matrixClient.requestVerification(user.userId);
-    setRightPanel({ member: user, verificationRequestPromise });
 }
 
 export async function verifyUser(matrixClient: MatrixClient, user: User): Promise<void> {
