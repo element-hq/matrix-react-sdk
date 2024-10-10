@@ -127,7 +127,6 @@ describe("<MatrixChat />", () => {
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRooms: jest.fn().mockReturnValue([]),
         userHasCrossSigningKeys: jest.fn(),
-        setGlobalBlacklistUnverifiedDevices: jest.fn(),
         setGlobalErrorOnUnknownDevices: jest.fn(),
         getCrypto: jest.fn().mockReturnValue({
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
@@ -136,6 +135,7 @@ describe("<MatrixChat />", () => {
             getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
             getVersion: jest.fn().mockReturnValue("1"),
             setDeviceIsolationMode: jest.fn(),
+            globalBlacklistUnverifiedDevices: false,
         }),
         // This needs to not finish immediately because we need to test the screen appears
         bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),

@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { User, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
-import { VerificationMethod } from "matrix-js-sdk/src/types";
 import { CrossSigningKey, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "./dispatcher/dispatcher";
@@ -50,11 +49,9 @@ export async function verifyDevice(matrixClient: MatrixClient, user: User, devic
         device,
         onFinished: async (action): Promise<void> => {
             if (action === "sas") {
-                const verificationRequestPromise = matrixClient.legacyDeviceVerification(
-                    user.userId,
-                    device.deviceId,
-                    VerificationMethod.Sas,
-                );
+                const verificationRequestPromise = matrixClient
+                    .getCrypto()
+                    ?.requestDeviceVerification(user.userId, device.deviceId);
                 setRightPanel({ member: user, verificationRequestPromise });
             } else if (action === "legacy") {
                 Modal.createDialog(ManualDeviceKeyVerificationDialog, {
@@ -77,8 +74,6 @@ export async function legacyVerifyUser(matrixClient: MatrixClient, user: User): 
             return;
         }
     }
-    const verificationRequestPromise = matrixClient.requestVerification(user.userId);
-    setRightPanel({ member: user, verificationRequestPromise });
 }
 
 export async function verifyUser(matrixClient: MatrixClient, user: User): Promise<void> {
