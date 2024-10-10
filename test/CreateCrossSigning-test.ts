@@ -20,8 +20,6 @@ describe("CreateCrossSigning", () => {
         client = createTestClient();
     });
 
-    afterEach(() => {});
-
     it("should call bootstrapCrossSigning with an authUploadDeviceSigningKeys function", async () => {
         await createCrossSigning(client, false, "password");
 
