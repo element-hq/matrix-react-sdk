@@ -132,6 +132,7 @@ export function createTestClient(): MatrixClient {
             isEncryptionEnabledInRoom: jest.fn(),
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             setDeviceIsolationMode: jest.fn(),
+            bootstrapCrossSigning: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
