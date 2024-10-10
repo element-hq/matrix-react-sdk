@@ -275,13 +275,6 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
             });
             logger.debug("accessSecretStorage: bootstrapSecretStorage");
             await crypto.bootstrapSecretStorage({});
-
-            const keyId = Object.keys(secretStorageKeys)[0];
-            if (!keyId) {
-                logger.warn("accessSecretStorage: Not setting dehydration key: no SSSS key found");
-            } else {
-                logger.log("accessSecretStorage: Not setting dehydration key: feature disabled");
-            }
         }
 
         logger.debug("accessSecretStorage: 4S now ready");
