@@ -17,7 +17,6 @@ import {
     waitForElementToBeRemoved,
     within,
 } from "@testing-library/react";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoApi, DeviceVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
@@ -202,7 +201,6 @@ describe("<SessionManagerTab />", () => {
             ...mockClientMethodsServer(),
             getCrypto: jest.fn().mockReturnValue(mockCrypto),
             getDevices: jest.fn(),
-            getStoredDevice: jest.fn(),
             getDeviceId: jest.fn().mockReturnValue(deviceId),
             deleteMultipleDevices: jest.fn(),
             generateClientSecret: jest.fn(),
@@ -217,10 +215,7 @@ describe("<SessionManagerTab />", () => {
         });
         jest.clearAllMocks();
         jest.spyOn(logger, "error").mockRestore();
-        mockClient.getStoredDevice.mockImplementation((_userId, id) => {
-            const device = [alicesDevice, alicesMobileDevice].find((device) => device.device_id === id);
-            return device ? new DeviceInfo(device.device_id) : null;
-        });
+        jest.spyOn(logger, "error").mockRestore();
         mockCrypto.getDeviceVerificationStatus.mockReset().mockResolvedValue(new DeviceVerificationStatus({}));
 
         mockClient.getDevices.mockReset().mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
@@ -289,7 +284,6 @@ describe("<SessionManagerTab />", () => {
         mockClient.getDevices.mockResolvedValue({
             devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
         });
-        mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
         mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
             // alices device is trusted
             if (deviceId === alicesDevice.device_id) {
@@ -461,7 +455,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            mockClient.getStoredDevice.mockImplementation(() => new DeviceInfo(alicesDevice.device_id));
             mockCrypto.getDeviceVerificationStatus.mockResolvedValue(
                 new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true }),
             );
@@ -565,7 +558,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
                 if (deviceId === alicesDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
@@ -592,7 +584,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
                 // current session verified = able to verify other sessions
                 if (deviceId === alicesDevice.device_id) {
@@ -626,7 +617,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
                 if (deviceId === alicesDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
@@ -664,7 +654,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
 
             const devicesMap = new Map<string, Device>([
                 [alicesDeviceObj.deviceId, alicesDeviceObj],
@@ -705,7 +694,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
 
             const devicesMap = new Map<string, Device>([
                 [alicesDeviceObj.deviceId, alicesDeviceObj],
@@ -746,7 +734,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice, alicesOtherDehydratedDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
 
             const devicesMap = new Map<string, Device>([
                 [alicesDeviceObj.deviceId, alicesDeviceObj],
