@@ -1233,4 +1233,9 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("settings|preferences|enable_hardware_acceleration"),
         default: true,
     },
+    "Electron.monochromeIcon": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("settings|preferences|monochrome_icon"),
+        default: process.platform === "linux",
+    },
 };

@@ -336,6 +336,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
 
                         <SettingsFlag name="Electron.showTrayIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />
+                        <SettingsFlag name="Electron.monochromeIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag
                             name="Electron.enableHardwareAcceleration"
                             level={SettingLevel.PLATFORM}
