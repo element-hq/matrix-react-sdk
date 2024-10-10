@@ -136,9 +136,9 @@ describe("<MatrixChat />", () => {
             getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
             getVersion: jest.fn().mockReturnValue("1"),
             setDeviceIsolationMode: jest.fn(),
+            // This needs to not finish immediately because we need to test the screen appears
+            bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
         }),
-        // This needs to not finish immediately because we need to test the screen appears
-        bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
         },
@@ -1002,17 +1002,7 @@ describe("<MatrixChat />", () => {
 
         describe("post login setup", () => {
             beforeEach(() => {
-                const mockCrypto = {
-                    getVersion: jest.fn().mockReturnValue("Version 0"),
-                    getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-                    getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
-                    getUserVerificationStatus: jest
-                        .fn()
-                        .mockResolvedValue(new UserVerificationStatus(false, false, false)),
-                    setDeviceIsolationMode: jest.fn(),
-                };
                 loginClient.isCryptoEnabled.mockReturnValue(true);
-                loginClient.getCrypto.mockReturnValue(mockCrypto as any);
                 loginClient.userHasCrossSigningKeys.mockClear().mockResolvedValue(false);
             });
 
