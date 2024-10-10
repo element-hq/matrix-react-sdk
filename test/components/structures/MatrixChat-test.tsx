@@ -98,7 +98,6 @@ describe("<MatrixChat />", () => {
         getThirdpartyProtocols: jest.fn().mockResolvedValue({}),
         getClientWellKnown: jest.fn().mockReturnValue({}),
         isVersionSupported: jest.fn().mockResolvedValue(false),
-        isCryptoEnabled: jest.fn().mockReturnValue(false),
         initRustCrypto: jest.fn(),
         getRoom: jest.fn(),
         getMediaHandler: jest.fn().mockReturnValue({
@@ -1011,13 +1010,12 @@ describe("<MatrixChat />", () => {
                         .mockResolvedValue(new UserVerificationStatus(false, false, false)),
                     setDeviceIsolationMode: jest.fn(),
                 };
-                loginClient.isCryptoEnabled.mockReturnValue(true);
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
                 loginClient.userHasCrossSigningKeys.mockClear().mockResolvedValue(false);
             });
 
             it("should go straight to logged in view when crypto is not enabled", async () => {
-                loginClient.isCryptoEnabled.mockReturnValue(false);
+                loginClient.getCrypto.mockReturnValue(undefined);
 
                 await getComponentAndLogin(true);
 

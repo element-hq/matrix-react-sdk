@@ -571,7 +571,6 @@ describe("<SendMessageComposer/>", () => {
 
     it("should call prepareToEncrypt when the user is typing", async () => {
         const cli = stubClient();
-        cli.isCryptoEnabled = jest.fn().mockReturnValue(true);
         cli.isRoomEncrypted = jest.fn().mockReturnValue(true);
         cli.prepareToEncrypt = jest.fn();
         const room = mkStubRoom("!roomId:server", "Room", cli);
