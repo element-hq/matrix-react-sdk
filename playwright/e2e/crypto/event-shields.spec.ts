@@ -33,7 +33,7 @@ test.describe("Cryptography", function () {
             await app.client.bootstrapCrossSigning(aliceCredentials);
             await autoJoin(bob);
 
-            // create an encrypted room
+            // create an encrypted room, and wait for Bob to join it.
             testRoomId = await createSharedRoomWithUser(app, bob.credentials.userId, {
                 name: "TestRoom",
                 initial_state: [
@@ -46,6 +46,9 @@ test.describe("Cryptography", function () {
                     },
                 ],
             });
+
+            // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
+            await bob.awaitRoomMembership(testRoomId);
         });
 
         test("should show the correct shield on e2e events", async ({

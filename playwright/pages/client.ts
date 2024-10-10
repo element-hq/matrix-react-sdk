@@ -290,6 +290,42 @@ export class Client {
     }
 
     /**
+     * Wait for the client to have specific membership of a given room
+     *
+     * This is often useful after joining a room, when we need to wait for the sync loop to catch up.
+     *
+     * @param roomId - ID of the room to check
+     * @param membership - required membership.
+     */
+    public async awaitRoomMembership(roomId: string, membership: string = "join") {
+        await this.evaluate(
+            (cli: MatrixClient, { roomId, membership }) => {
+                const isReady = () => {
+                    // Fetch the room on each check, because we get a different instance before and after the join arrives.
+                    const room = cli.getRoom(roomId);
+                    const myMembership = room?.getMyMembership();
+                    // @ts-ignore access to private field "logger"
+                    cli.logger.info(`waiting for room ${roomId}: membership now ${myMembership}`);
+                    return myMembership == membership;
+                };
+                if (isReady()) return;
+
+                return new Promise<void>((resolve) => {
+                    async function onEvent() {
+                        if (isReady()) {
+                            cli.removeListener(window.matrixcs.ClientEvent.Event, onEvent);
+                            resolve();
+                        }
+                    }
+
+                    cli.on(window.matrixcs.ClientEvent.Event, onEvent);
+                });
+            },
+            { roomId, membership },
+        );
+    }
+
+    /**
      * @param {MatrixEvent} event
      * @param {ReceiptType} receiptType
      * @param {boolean} unthreaded
