@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useState, ReactNode, ChangeEvent, KeyboardEvent, useRef, ReactElement } from "react";
 import classNames from "classnames";
+import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
 
 import Autocompleter from "../../autocomplete/AutocompleteProvider";
 import { Key } from "../../Keyboard";
 import { ICompletion } from "../../autocomplete/Autocompleter";
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
 import { Icon as PillRemoveIcon } from "../../../res/img/icon-pill-remove.svg";
-import { Icon as SearchIcon } from "../../../res/img/element-icons/roomlist/search.svg";
 import useFocus from "../../hooks/useFocus";
 
 interface AutocompleteInputProps {

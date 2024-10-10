@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { sleep } from "matrix-js-sdk/src/utils";
+import CheckboxIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
 import { _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -23,7 +24,6 @@ import AuthBody from "../../views/auth/AuthBody";
 import PassphraseConfirmField from "../../views/auth/PassphraseConfirmField";
 import StyledCheckbox from "../../views/elements/StyledCheckbox";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
-import { Icon as CheckboxIcon } from "../../../../res/img/compound/checkbox-32px.svg";
 import { Icon as LockIcon } from "../../../../res/img/compound/padlock-32px.svg";
 import QuestionDialog from "../../views/dialogs/QuestionDialog";
 import { EnterEmail } from "./forgot-password/EnterEmail";

@@ -141,7 +141,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
                 <div className="mx_EntityTile_invite">
                     <img
                         alt={_t("action|invite")}
-                        src={require("../../../../res/img/plus.svg").default}
+                        src={require("@vector-im/compound-design-tokens/icons/plus.svg").default}
                         width="16"
                         height="16"
                     />

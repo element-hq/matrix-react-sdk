@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
-
-import { Icon as WarningBadgeIcon } from "../../../res/img/compound/error-16px.svg";
+import WarningBadgeIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 
 interface ErrorMessageProps {
     message: string | ReactNode | null;
