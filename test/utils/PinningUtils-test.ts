@@ -141,14 +141,6 @@ describe("PinningUtils", () => {
 
     describe("canPin & canUnpin", () => {
         describe("canPin", () => {
-            test("should return false if pinning is disabled", () => {
-                // Disable feature pinning
-                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-                const event = makePinEvent();
-
-                expect(PinningUtils.canPin(matrixClient, event)).toBe(false);
-            });
-
             test("should return false if event is not actionable", () => {
                 mockedIsContentActionable.mockImplementation(() => false);
                 const event = makePinEvent();
@@ -195,6 +187,12 @@ describe("PinningUtils", () => {
 
             test("should return true if all conditions are met", () => {
                 const event = makePinEvent();
+
+                expect(PinningUtils.canUnpin(matrixClient, event)).toBe(true);
+            });
+
+            test("should return true if the event is redacted", () => {
+                const event = makePinEvent({ unsigned: { redacted_because: "because" as unknown as IEvent } });
 
                 expect(PinningUtils.canUnpin(matrixClient, event)).toBe(true);
             });

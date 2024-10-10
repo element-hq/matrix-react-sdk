@@ -86,13 +86,14 @@ export function createTestClient(): MatrixClient {
     let txnId = 1;
 
     const client = {
+        startClient: jest.fn(),
         getHomeserverUrl: jest.fn(),
         getIdentityServerUrl: jest.fn(),
         getDomain: jest.fn().mockReturnValue("matrix.org"),
         getUserId: jest.fn().mockReturnValue("@userId:matrix.org"),
         getSafeUserId: jest.fn().mockReturnValue("@userId:matrix.org"),
         getUserIdLocalpart: jest.fn().mockResolvedValue("userId"),
-        getUser: jest.fn().mockReturnValue({ on: jest.fn(), off: jest.fn() }),
+        getUser: jest.fn().mockReturnValue({ on: jest.fn(), off: jest.fn(), removeListener: jest.fn() }),
         getDevice: jest.fn(),
         getDeviceId: jest.fn().mockReturnValue("ABCDEFGHI"),
         getStoredCrossSigningForUser: jest.fn(),
@@ -108,6 +109,7 @@ export function createTestClient(): MatrixClient {
 
         secretStorage: {
             get: jest.fn(),
+            isStored: jest.fn().mockReturnValue(false),
         },
 
         store: {
@@ -123,12 +125,17 @@ export function createTestClient(): MatrixClient {
             },
         },
         getCrypto: jest.fn().mockReturnValue({
+            getOwnDeviceKeys: jest.fn(),
             getUserDeviceInfo: jest.fn(),
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
             resetKeyBackup: jest.fn(),
             isEncryptionEnabledInRoom: jest.fn(),
+            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+            setDeviceIsolationMode: jest.fn(),
         }),
+        initCrypto: jest.fn(),
+        initRustCrypto: jest.fn(),
 
         getPushActionsForEvent: jest.fn(),
         getRoom: jest.fn().mockImplementation((roomId) => mkStubRoom(roomId, "My room", client)),
@@ -176,6 +183,7 @@ export function createTestClient(): MatrixClient {
         getSyncState: jest.fn().mockReturnValue("SYNCING"),
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: jest.fn().mockReturnValue(false),
+        setGuest: jest.fn(),
         getRoomHierarchy: jest.fn().mockReturnValue({
             rooms: [],
         }),
@@ -273,6 +281,7 @@ export function createTestClient(): MatrixClient {
         isFallbackICEServerAllowed: jest.fn().mockReturnValue(false),
         getAuthIssuer: jest.fn(),
         getOrCreateFilter: jest.fn(),
+        setNotifTimelineSet: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

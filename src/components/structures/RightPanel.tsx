@@ -17,7 +17,6 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
-import SettingsStore from "../../settings/SettingsStore";
 import MemberList from "../views/rooms/MemberList";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
@@ -34,7 +33,6 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { Action } from "../../dispatcher/actions";
 import { XOR } from "../../@types/common";
-import { RightPanelTabs } from "../views/right_panel/RightPanelTabs";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 
 interface BaseProps {
@@ -165,7 +163,6 @@ export default class RightPanel extends React.Component<Props, IState> {
                         <MemberList
                             roomId={roomId}
                             key={roomId}
-                            hideHeaderButtons
                             onClose={this.onClose}
                             searchQuery={this.state.searchQuery}
                             onSearchQueryChanged={this.onSearchQueryChanged}
@@ -220,7 +217,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                 break;
 
             case RightPanelPhases.PinnedMessages:
-                if (!!this.props.room && SettingsStore.getValue("feature_pinning")) {
+                if (!!this.props.room) {
                     card = (
                         <PinnedMessagesCard
                             room={this.props.room}
@@ -314,7 +311,6 @@ export default class RightPanel extends React.Component<Props, IState> {
 
         return (
             <aside className="mx_RightPanel" id="mx_RightPanel">
-                {phase && <RightPanelTabs room={this.props.room} phase={phase} />}
                 {card}
             </aside>
         );
