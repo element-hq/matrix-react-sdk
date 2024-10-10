@@ -290,9 +290,9 @@ test.describe("Cryptography", function () {
             // Let our app start syncing again
             await app.client.network.goOnline();
 
-            // Wait for the messages to arrive
+            // Wait for the messages to arrive. It can take quite a while for the sync to wake up.
             const last = page.locator(".mx_EventTile_last");
-            await expect(last).toContainText("test encrypted from unverified");
+            await expect(last).toContainText("test encrypted from unverified", { timeout: 20000 });
             const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
