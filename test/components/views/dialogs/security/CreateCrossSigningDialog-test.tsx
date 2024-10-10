@@ -34,6 +34,11 @@ describe("CreateCrossSigningDialog", () => {
         });
     });
 
+    afterEach(() => {
+        jest.resetAllMocks();
+        jest.restoreAllMocks();
+    });
+
     it("should call createCrossSigning and show a spinner while it runs", async () => {
         const onFinished = jest.fn();
 
