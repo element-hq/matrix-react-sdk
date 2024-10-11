@@ -306,7 +306,7 @@ export class Client {
                     const myMembership = room?.getMyMembership();
                     // @ts-ignore access to private field "logger"
                     cli.logger.info(`waiting for room ${roomId}: membership now ${myMembership}`);
-                    return myMembership == membership;
+                    return myMembership === membership;
                 };
                 if (isReady()) return;
 
