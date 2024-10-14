@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, ReactNode, TransitionEvent } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
-import { EventStatus, EventType, MatrixClient, MatrixEvent, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixClient, RoomStateEvent, EventStatus, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 
@@ -818,10 +818,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     public wantsSeparator(prevEvent: MatrixEvent | null, mxEvent: MatrixEvent): SeparatorKind {
-        if (
-            this.context.timelineRenderingType === TimelineRenderingType.ThreadsList ||
-            this.context.timelineRenderingType === TimelineRenderingType.File
-        ) {
+        if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
             return SeparatorKind.None;
         }
 
