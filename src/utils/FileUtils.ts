@@ -18,20 +18,11 @@ import {
     FileSizeReturnObject,
 } from "filesize";
 import { MediaEventContent } from "matrix-js-sdk/src/types";
-import { MsgType } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../languageHandler";
 
 export function downloadLabelForFile(content: MediaEventContent, withSize = true): string {
-    let text = _t("timeline|m.file|download_label");
-    if ([MsgType.Video, MsgType.Image, MsgType.Audio].includes(content.msgtype)) {
-        text = {
-            [MsgType.File]: _t("timeline|m.file|download_label"),
-            [MsgType.Image]: _t("timeline|m.image|download_label"),
-            [MsgType.Audio]: _t("timeline|m.audio|download_label"),
-            [MsgType.Video]: _t("timeline|m.video|download_label"),
-        }[content.msgtype];
-    }
+    let text = _t("action|download");
 
     if (content.info?.size && withSize) {
         // If we know the size of the file then add it as human-readable string to the end of the link text

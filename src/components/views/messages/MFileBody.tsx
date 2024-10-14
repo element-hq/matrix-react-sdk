@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { AllHTMLAttributes, createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MediaEventContent } from "matrix-js-sdk/src/types";
-import { MsgType } from "matrix-js-sdk/src/matrix";
 import { Button } from "@vector-im/compound-web";
 import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -234,13 +233,6 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 // Wait for the user to click on the link before downloading
                 // and decrypting the attachment.
 
-                const label = {
-                    [MsgType.File]: _t("timeline|m.file|decrypt_label"),
-                    [MsgType.Image]: _t("timeline|m.image|decrypt_label"),
-                    [MsgType.Audio]: _t("timeline|m.audio|decrypt_label"),
-                    [MsgType.Video]: _t("timeline|m.video|decrypt_label"),
-                }[this.content.msgtype];
-
                 // This button should actually Download because usercontent/ will try to click itself
                 // but it is not guaranteed between various browsers' settings.
                 return (
@@ -248,8 +240,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
                         {placeholder}
                         {showDownloadLink && (
                             <div className="mx_MFileBody_download">
-                                <Button size="sm" Icon={DownloadIcon} onClick={this.decryptFile}>
-                                    {label}
+                                <Button size="sm" kind="secondary" Icon={DownloadIcon} onClick={this.decryptFile}>
+                                    {this.linkText}
                                 </Button>
                             </div>
                         )}
@@ -273,7 +265,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                                  */}
                                 {/* this violates multiple eslint rules
                             so ignore it completely */}
-                                <Button size="sm" Icon={DownloadIcon} as="a" ref={this.dummyLink} />
+                                <Button size="sm" kind="secondary" Icon={DownloadIcon} as="a" ref={this.dummyLink} />
                             </div>
                             {/*
                             TODO: Move iframe (and dummy link) into FileDownloader.
@@ -347,7 +339,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                     {placeholder}
                     {showDownloadLink && (
                         <div className="mx_MFileBody_download">
-                            <Button size="sm" Icon={DownloadIcon} as="a" {...downloadProps}>
+                            <Button size="sm" kind="secondary" Icon={DownloadIcon} as="a" {...downloadProps}>
                                 {this.linkText}
                             </Button>
                         </div>
