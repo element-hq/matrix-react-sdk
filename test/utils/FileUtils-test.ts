@@ -13,13 +13,16 @@ describe("FileUtils", () => {
     describe("downloadLabelForFile", () => {
         it.each([
             [
-                "File",
+                "File with size",
                 {
                     input: {
                         msgtype: "m.file",
                         body: "Test",
+                        info: {
+                            size: 102434566,
+                        },
                     } as MediaEventContent,
-                    output: "Download file",
+                    output: "Download file (97.69 MB)",
                 },
             ],
             [
