@@ -3294,6 +3294,8 @@
             "unable_to_find": "Tried to load a specific point in this room's timeline, but was unable to find it."
         },
         "m.audio": {
+            "decrypt_label": "Decrypt audio",
+            "download_label": "Download audio",
             "error_downloading_audio": "Error downloading audio",
             "error_processing_audio": "Error processing audio message",
             "error_processing_voice_message": "Error processing voice message",
@@ -3329,12 +3331,14 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "decrypt_label": "Decrypt %(text)s",
-            "download_label": "Download %(text)s",
+            "decrypt_label": "Decrypt file",
+            "download_label": "Download file",
             "error_decrypting": "Error decrypting attachment",
-            "error_invalid": "Invalid file%(extra)s"
+            "error_invalid": "Invalid file"
         },
         "m.image": {
+            "decrypt_label": "Decrypt image",
+            "download_label": "Download image",
             "error": "Unable to show image due to error",
             "error_decrypting": "Error decrypting image",
             "error_downloading": "Error downloading image",
@@ -3471,6 +3475,8 @@
         "m.room.topic": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
         "m.sticker": "%(senderDisplayName)s sent a sticker.",
         "m.video": {
+            "decrypt_label": "Decrypt video",
+            "download_label": "Download video",
             "error_decrypting": "Error decrypting video"
         },
         "m.widget": {
