@@ -82,7 +82,7 @@ describe("<MFileBody/>", () => {
             </RoomContext.Provider>,
         );
 
-        expect(getByRole("link", { name: "Download image" })).toBeInTheDocument();
+        expect(getByRole("link", { name: "Download" })).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
 });

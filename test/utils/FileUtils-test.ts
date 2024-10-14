@@ -22,7 +22,7 @@ describe("FileUtils", () => {
                             size: 102434566,
                         },
                     } as MediaEventContent,
-                    output: "Download file (97.69 MB)",
+                    output: "Download (97.69 MB)",
                 },
             ],
             [
@@ -32,7 +32,7 @@ describe("FileUtils", () => {
                         msgtype: "m.image",
                         body: "Test",
                     } as MediaEventContent,
-                    output: "Download image",
+                    output: "Download",
                 },
             ],
             [
@@ -42,7 +42,7 @@ describe("FileUtils", () => {
                         msgtype: "m.video",
                         body: "Test",
                     } as MediaEventContent,
-                    output: "Download video",
+                    output: "Download",
                 },
             ],
             [
@@ -52,7 +52,7 @@ describe("FileUtils", () => {
                         msgtype: "m.audio",
                         body: "Test",
                     } as MediaEventContent,
-                    output: "Download audio",
+                    output: "Download",
                 },
             ],
         ])("should correctly label %s", (_d, { input, output }) => expect(downloadLabelForFile(input)).toBe(output));
