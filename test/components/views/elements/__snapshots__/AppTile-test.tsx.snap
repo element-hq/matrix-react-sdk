@@ -232,7 +232,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
         class="mx_AppTileMenuBar_widgets"
       >
         <div
-          aria-label="Maximise"
+          aria-label="Un-maximise"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           role="button"
           tabindex="0"
