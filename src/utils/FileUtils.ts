@@ -25,7 +25,12 @@ import { _t } from "../languageHandler";
 export function downloadLabelForFile(content: MediaEventContent, withSize = true): string {
     let text = _t("timeline|m.file|download_label");
     if ([MsgType.Video, MsgType.Image, MsgType.Audio].includes(content.msgtype)) {
-        text = _t(`timeline|${content.msgtype}|download_label`);
+        text = {
+            [MsgType.File]: _t("timeline|m.file|download_label"),
+            [MsgType.Image]: _t("timeline|m.image|download_label"),
+            [MsgType.Audio]: _t("timeline|m.audio|download_label"),
+            [MsgType.Video]: _t("timeline|m.video|download_label"),
+        }[content.msgtype];
     }
 
     if (content.info?.size && withSize) {
