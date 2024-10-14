@@ -142,7 +142,6 @@ export const mockClientMethodsCrypto = (): Partial<
     Record<MethodLikeKeys<MatrixClient> & PropertyLikeKeys<MatrixClient>, unknown>
 > => ({
     isCryptoEnabled: jest.fn(),
-    isCrossSigningReady: jest.fn(),
     isKeyBackupKeyStored: jest.fn(),
     getCrossSigningCacheCallbacks: jest.fn().mockReturnValue({ getCrossSigningKeyCache: jest.fn() }),
     getKeyBackupVersion: jest.fn().mockResolvedValue(null),
