@@ -1363,6 +1363,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
                                 {avatar}
                                 {sender}
+                                {timestamp}
                             </div>
                         </a>,
                         <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
