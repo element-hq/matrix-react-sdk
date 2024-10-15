@@ -21,7 +21,7 @@ import EventEmitter from "events";
 import { mocked } from "jest-mock";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
 import fetchMock from "fetch-mock-jest";
-import { waitFor } from "@testing-library/react";
+import { waitFor } from "jest-matrix-react";
 
 import LegacyCallHandler, {
     AudioID,
@@ -588,7 +588,6 @@ describe("LegacyCallHandler without third party protocols", () => {
             jest.spyOn(MatrixClientPeg.safeGet(), "supportsVoip").mockReturnValue(true);
 
             MatrixClientPeg.safeGet().isFallbackICEServerAllowed = jest.fn();
-            MatrixClientPeg.safeGet().prepareToEncrypt = jest.fn();
 
             MatrixClientPeg.safeGet().pushRules = {
                 global: {

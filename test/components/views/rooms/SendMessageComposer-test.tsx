@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "jest-matrix-react";
 import { IContent, MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
@@ -571,12 +571,10 @@ describe("<SendMessageComposer/>", () => {
 
     it("should call prepareToEncrypt when the user is typing", async () => {
         const cli = stubClient();
-        cli.isCryptoEnabled = jest.fn().mockReturnValue(true);
         cli.isRoomEncrypted = jest.fn().mockReturnValue(true);
-        cli.prepareToEncrypt = jest.fn();
         const room = mkStubRoom("!roomId:server", "Room", cli);
 
-        expect(cli.prepareToEncrypt).not.toHaveBeenCalled();
+        expect(cli.getCrypto()!.prepareToEncrypt).not.toHaveBeenCalled();
 
         const { container } = render(
             <MatrixClientContext.Provider value={cli}>
@@ -588,9 +586,9 @@ describe("<SendMessageComposer/>", () => {
 
         // Does not trigger on keydown as that'll cause false negatives for global shortcuts
         await userEvent.type(composer, "[ControlLeft>][KeyK][/ControlLeft]");
-        expect(cli.prepareToEncrypt).not.toHaveBeenCalled();
+        expect(cli.getCrypto()!.prepareToEncrypt).not.toHaveBeenCalled();
 
         await userEvent.type(composer, "Hello");
-        expect(cli.prepareToEncrypt).toHaveBeenCalled();
+        expect(cli.getCrypto()!.prepareToEncrypt).toHaveBeenCalled();
     });
 });

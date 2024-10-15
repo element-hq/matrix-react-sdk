@@ -22,7 +22,7 @@ import {
     IEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -97,6 +97,7 @@ describe("RoomView", () => {
         stores.rightPanelStore.useUnitTestClient(cli);
 
         jest.spyOn(VoipUserMapper.sharedInstance(), "getVirtualRoomForRoom").mockResolvedValue(undefined);
+        jest.spyOn(cli, "getCrypto").mockReturnValue(undefined);
     });
 
     afterEach(() => {
@@ -230,7 +231,6 @@ describe("RoomView", () => {
     it("updates url preview visibility on encryption state change", async () => {
         room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
         // we should be starting unencrypted
-        expect(cli.isCryptoEnabled()).toEqual(false);
         expect(cli.isRoomEncrypted(room.roomId)).toEqual(false);
 
         const roomViewInstance = await getRoomViewInstance();
@@ -246,7 +246,6 @@ describe("RoomView", () => {
         expect(roomViewInstance.state.showUrlPreview).toBe(true);
 
         // now enable encryption
-        cli.isCryptoEnabled.mockReturnValue(true);
         cli.isRoomEncrypted.mockReturnValue(true);
 
         // and fake an encryption event into the room to prompt it to re-check
