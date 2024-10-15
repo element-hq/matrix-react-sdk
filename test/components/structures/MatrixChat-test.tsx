@@ -1019,7 +1019,7 @@ describe("<MatrixChat />", () => {
 
                 await getComponentAndLogin(true);
 
-                expect(loginClient.getCrypto()!.userHasCrossSigningKeys).not.toHaveBeenCalled();
+                expect(screen.getByRole("heading", { name: "Welcome Ernie" })).toBeInTheDocument();
             });
 
             it("should go straight to logged in view when user does not have cross signing keys and server does not support cross signing", async () => {
