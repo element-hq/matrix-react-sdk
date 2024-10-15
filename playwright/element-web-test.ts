@@ -224,7 +224,7 @@ export const test = base.extend<{
     },
 
     axe: async ({ page }, use) => {
-        await use(new AxeBuilder({ page }));
+        await use(new AxeBuilder({ page }).exclude("[id^='floating-ui-']"));
     },
     checkA11y: async ({ axe }, use, testInfo) =>
         use(async () => {
@@ -345,6 +345,7 @@ export const expect = baseExpect.extend({
 
         if (!options?.showTooltips) {
             css += `
+                [role="tooltip"],
                 .mx_Tooltip_visible {
                     visibility: hidden !important;
                 }

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, RenderResult, screen, waitFor } from "jest-matrix-react";
 import {
     EventStatus,
     MatrixEvent,
@@ -112,22 +112,6 @@ describe("MessageContextMenu", () => {
             const deadBeaconEvent = makeBeaconInfoEvent("@alice:server.org", roomId, { isLive: false });
 
             createMenu(deadBeaconEvent, { rightClick: true }, {}, undefined, room);
-
-            expect(screen.queryByRole("menuitem", { name: "Pin" })).toBeFalsy();
-        });
-
-        it("does not show pin option when pinning feature is disabled", () => {
-            const eventContent = createMessageEventContent("hello");
-            const pinnableEvent = new MatrixEvent({
-                type: EventType.RoomMessage,
-                content: eventContent,
-                room_id: roomId,
-            });
-
-            // disable pinning feature
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-            createMenu(pinnableEvent, { rightClick: true }, {}, undefined, room);
 
             expect(screen.queryByRole("menuitem", { name: "Pin" })).toBeFalsy();
         });

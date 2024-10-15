@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
@@ -102,5 +102,33 @@ describe("DecryptionFailureBody", () => {
 
         // Then
         expect(container).toHaveTextContent("You don't have access to this message");
+    });
+
+    it("should handle messages from users who change identities after verification", async () => {
+        // When
+        const event = await mkDecryptionFailureMatrixEvent({
+            code: DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED,
+            msg: "User previously verified",
+            roomId: "fakeroom",
+            sender: "fakesender",
+        });
+        const { container } = customRender(event);
+
+        // Then
+        expect(container).toMatchSnapshot();
+    });
+
+    it("should handle messages from unverified devices", async () => {
+        // When
+        const event = await mkDecryptionFailureMatrixEvent({
+            code: DecryptionFailureCode.UNSIGNED_SENDER_DEVICE,
+            msg: "Unsigned device",
+            roomId: "fakeroom",
+            sender: "fakesender",
+        });
+        const { container } = customRender(event);
+
+        // Then
+        expect(container).toHaveTextContent("Encrypted by a device not verified by its owner");
     });
 });

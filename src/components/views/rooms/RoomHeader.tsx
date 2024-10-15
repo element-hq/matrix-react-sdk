@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Body as BodyText, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
-import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
-import { Icon as VoiceCallIcon } from "@vector-im/compound-design-tokens/icons/voice-call.svg";
+import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
+import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call";
 import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
-import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/threads-solid.svg";
-import { Icon as RoomInfoIcon } from "@vector-im/compound-design-tokens/icons/info-solid.svg";
-import { Icon as NotificationsIcon } from "@vector-im/compound-design-tokens/icons/notifications-solid.svg";
+import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
+import RoomInfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info-solid";
+import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-solid";
 import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
@@ -42,7 +42,7 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { VideoRoomChatButton } from "./RoomHeader/VideoRoomChatButton";
 import { RoomKnocksBar } from "./RoomKnocksBar";
-import { useIsVideoRoom } from "../../../utils/video-rooms";
+import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { notificationLevelToIndicator } from "../../../utils/notifications";
 import { CallGuestLinkButton } from "./RoomHeader/CallGuestLinkButton";
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -50,6 +50,8 @@ import WithPresenceIndicator, { useDmMember } from "../avatars/WithPresenceIndic
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import RoomContext from "../../../contexts/RoomContext";
 import { MainSplitContentType } from "../../structures/RoomView";
+import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
+import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog.tsx";
 
 export default function RoomHeader({
     room,
@@ -203,7 +205,7 @@ export default function RoomHeader({
     );
     const closeLobbyButton = (
         <Tooltip label={_t("voip|close_lobby")}>
-            <IconButton onClick={toggleCall} aria-label={_t("voip|close_lobby")}>
+            <IconButton onClick={toggleCall}>
                 <CloseCallIcon />
             </IconButton>
         </Tooltip>
@@ -223,24 +225,39 @@ export default function RoomHeader({
     }
 
     const roomContext = useContext(RoomContext);
-    const isVideoRoom = useIsVideoRoom(room);
+    const isVideoRoom = calcIsVideoRoom(room);
     const showChatButton =
         isVideoRoom ||
         roomContext.mainSplitContentType === MainSplitContentType.MaximisedWidget ||
         roomContext.mainSplitContentType === MainSplitContentType.Call;
 
+    const onAvatarClick = (): void => {
+        defaultDispatcher.dispatch({
+            action: "open_room_settings",
+            initial_tab_id: RoomSettingsTab.General,
+        });
+    };
+
     return (
         <>
             <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
+                <WithPresenceIndicator room={room} size="8px">
+                    {/* We hide this from the tabIndex list as it is a pointer shortcut and superfluous for a11y */}
+                    <RoomAvatar
+                        room={room}
+                        size="40px"
+                        oobData={oobData}
+                        onClick={onAvatarClick}
+                        tabIndex={-1}
+                        aria-label={_t("room|header_avatar_open_settings_label")}
+                    />
+                </WithPresenceIndicator>
                 <button
                     aria-label={_t("right_panel|room_summary_card|title")}
                     tabIndex={0}
-                    onClick={() => RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary)}
+                    onClick={() => RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary)}
                     className="mx_RoomHeader_infoWrapper"
                 >
-                    <WithPresenceIndicator room={room} size="8px">
-                        <RoomAvatar room={room} size="40px" oobData={oobData} />
-                    </WithPresenceIndicator>
                     <Box flex="1" className="mx_RoomHeader_info">
                         <BodyText
                             as="div"
@@ -322,7 +339,7 @@ export default function RoomHeader({
                         <IconButton
                             onClick={(evt) => {
                                 evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
                             }}
                             aria-label={_t("right_panel|room_summary_card|title")}
                         >
@@ -337,7 +354,7 @@ export default function RoomHeader({
                             indicator={notificationLevelToIndicator(threadNotifications)}
                             onClick={(evt) => {
                                 evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.ThreadPanel);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.ThreadPanel);
                                 PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
                             }}
                             aria-label={_t("common|threads")}
@@ -351,7 +368,7 @@ export default function RoomHeader({
                                 indicator={notificationLevelToIndicator(globalNotificationState.level)}
                                 onClick={(evt) => {
                                     evt.stopPropagation();
-                                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
+                                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.NotificationPanel);
                                 }}
                                 aria-label={_t("notifications|enable_prompt_toast_title")}
                             >
@@ -370,7 +387,7 @@ export default function RoomHeader({
                             viewUserOnClick={false}
                             tooltipLabel={_t("room|header_face_pile_tooltip")}
                             onClick={(e: ButtonEvent) => {
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomMemberList);
                                 e.stopPropagation();
                             }}
                             aria-label={_t("common|n_members", { count: memberCount })}

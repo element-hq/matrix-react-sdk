@@ -10,6 +10,7 @@ import { debounce } from "lodash";
 import classNames from "classnames";
 import React, { ChangeEvent, FormEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto-api";
 import { SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
@@ -100,8 +101,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
         try {
             const cli = MatrixClientPeg.safeGet();
-            const decodedKey = cli.keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
-            const correct = await cli.checkSecretStorageKey(decodedKey, this.props.keyInfo);
+            const decodedKey = decodeRecoveryKey(this.state.recoveryKey);
+            const correct = await cli.secretStorage.checkKey(decodedKey, this.props.keyInfo);
             this.setState({
                 recoveryKeyValid: true,
                 recoveryKeyCorrect: correct,

@@ -290,6 +290,54 @@ export class Client {
     }
 
     /**
+     * Wait for the client to have specific membership of a given room
+     *
+     * This is often useful after joining a room, when we need to wait for the sync loop to catch up.
+     *
+     * Times out with an error after 1 second.
+     *
+     * @param roomId - ID of the room to check
+     * @param membership - required membership.
+     */
+    public async awaitRoomMembership(roomId: string, membership: string = "join") {
+        await this.evaluate(
+            (cli: MatrixClient, { roomId, membership }) => {
+                const isReady = () => {
+                    // Fetch the room on each check, because we get a different instance before and after the join arrives.
+                    const room = cli.getRoom(roomId);
+                    const myMembership = room?.getMyMembership();
+                    // @ts-ignore access to private field "logger"
+                    cli.logger.info(`waiting for room ${roomId}: membership now ${myMembership}`);
+                    return myMembership === membership;
+                };
+                if (isReady()) return;
+
+                const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+                    const room = cli.getRoom(roomId);
+                    const myMembership = room?.getMyMembership();
+                    throw new Error(
+                        `Timeout waiting for room ${roomId} membership (now '${myMembership}', wanted '${membership}')`,
+                    );
+                });
+
+                const readyPromise = new Promise<void>((resolve) => {
+                    async function onEvent() {
+                        if (isReady()) {
+                            cli.removeListener(window.matrixcs.ClientEvent.Event, onEvent);
+                            resolve();
+                        }
+                    }
+
+                    cli.on(window.matrixcs.ClientEvent.Event, onEvent);
+                });
+
+                return Promise.race([timeoutPromise, readyPromise]);
+            },
+            { roomId, membership },
+        );
+    }
+
+    /**
      * @param {MatrixEvent} event
      * @param {ReceiptType} receiptType
      * @param {boolean} unthreaded
@@ -356,24 +404,11 @@ export class Client {
     }
 
     /**
-     * Boostraps cross-signing.
+     * Bootstraps cross-signing.
      */
     public async bootstrapCrossSigning(credentials: Credentials): Promise<void> {
         const client = await this.prepareClient();
-        return client.evaluate(async (client, credentials) => {
-            await client.getCrypto().bootstrapCrossSigning({
-                authUploadDeviceSigningKeys: async (func) => {
-                    await func({
-                        type: "m.login.password",
-                        identifier: {
-                            type: "m.id.user",
-                            user: credentials.userId,
-                        },
-                        password: credentials.password,
-                    });
-                },
-            });
-        }, credentials);
+        return bootstrapCrossSigningForClient(client, credentials);
     }
 
     /**
@@ -438,4 +473,32 @@ export class Client {
             { roomId, visibility },
         );
     }
+}
+
+/** Call `CryptoApi.bootstrapCrossSigning` on the given Matrix client, using the given credentials to authenticate
+ * the UIA request.
+ */
+export function bootstrapCrossSigningForClient(
+    client: JSHandle<MatrixClient>,
+    credentials: Credentials,
+    resetKeys: boolean = false,
+) {
+    return client.evaluate(
+        async (client, { credentials, resetKeys }) => {
+            await client.getCrypto().bootstrapCrossSigning({
+                authUploadDeviceSigningKeys: async (func) => {
+                    await func({
+                        type: "m.login.password",
+                        identifier: {
+                            type: "m.id.user",
+                            user: credentials.userId,
+                        },
+                        password: credentials.password,
+                    });
+                },
+                setupNewCrossSigning: resetKeys,
+            });
+        },
+        { credentials, resetKeys },
+    );
 }

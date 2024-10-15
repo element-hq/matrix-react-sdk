@@ -345,7 +345,7 @@ export const verify = async (app: ElementAppPage, bob: Bot) => {
     const bobsVerificationRequestPromise = waitForVerificationRequest(bob);
 
     const roomInfo = await app.toggleRoomInfoPanel();
-    await page.locator(".mx_RightPanelTabs").getByText("People").click();
+    await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
     await roomInfo.getByText("Bob").click();
     await roomInfo.getByRole("button", { name: "Verify" }).click();
     await roomInfo.getByRole("button", { name: "Start Verification" }).click();
@@ -376,4 +376,15 @@ export async function awaitVerifier(
         }
         return verificationRequest.verifier;
     });
+}
+
+/** Log in a second device for the given bot user */
+export async function createSecondBotDevice(page: Page, homeserver: HomeserverInstance, bob: Bot) {
+    const bobSecondDevice = new Bot(page, homeserver, {
+        bootstrapSecretStorage: false,
+        bootstrapCrossSigning: false,
+    });
+    bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials.userId, bob.credentials.password));
+    await bobSecondDevice.prepareClient();
+    return bobSecondDevice;
 }

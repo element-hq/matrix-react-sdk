@@ -21,6 +21,17 @@ import { MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { _t } from "../languageHandler";
 
+export function downloadLabelForFile(content: MediaEventContent, withSize = true): string {
+    let text = _t("action|download");
+
+    if (content.info?.size && withSize) {
+        // If we know the size of the file then add it as human-readable string to the end of the link text
+        // so that the user knows how big a file they are downloading.
+        text += " (" + <string>fileSize(content.info.size, { base: 2, standard: "jedec" }) + ")";
+    }
+    return text;
+}
+
 /**
  * Extracts a human-readable label for the file attachment to use as
  * link text.
@@ -38,7 +49,9 @@ export function presentableTextForFile(
     shortened = false,
 ): string {
     let text = fallbackText;
-    if (content.body?.length) {
+    if (content.filename?.length) {
+        text = content.filename;
+    } else if (content.body?.length) {
         // The content body should be the name of the file including a
         // file extension.
         text = content.body;

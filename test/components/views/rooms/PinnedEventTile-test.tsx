@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import { EventTimeline, EventType, IEvent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
@@ -19,7 +19,6 @@ import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { getForwardableEvent } from "../../../../src/events";
 import { createRedactEventDialog } from "../../../../src/components/views/dialogs/ConfirmRedactDialog";
-import SettingsStore from "../../../../src/settings/SettingsStore.ts";
 
 jest.mock("../../../../src/components/views/dialogs/ConfirmRedactDialog", () => ({
     createRedactEventDialog: jest.fn(),
@@ -38,8 +37,6 @@ describe("<PinnedEventTile />", () => {
         permalinkCreator = new RoomPermalinkCreator(room);
         mockClient.getRoom = jest.fn().mockReturnValue(room);
         jest.spyOn(dis, "dispatch").mockReturnValue(undefined);
-        // Enable feature_pinning
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
     });
 
     /**

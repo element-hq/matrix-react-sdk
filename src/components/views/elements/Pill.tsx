@@ -10,6 +10,7 @@ import React, { ReactElement } from "react";
 import classNames from "classnames";
 import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
+import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -17,7 +18,6 @@ import { usePermalink } from "../../../hooks/usePermalink";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
-import { Icon as LinkIcon } from "../../../../res/img/element-icons/room/composer/link.svg";
 import { Icon as UserIcon } from "../../../../res/img/compound/user.svg";
 
 export enum PillType {
@@ -141,7 +141,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
         <bdi>
             <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
                 <Tooltip
-                    label={resourceId ?? ""}
+                    description={resourceId ?? ""}
                     open={resourceId ? undefined : false}
                     placement="right"
                     isTriggerInteractive={isAnchor}

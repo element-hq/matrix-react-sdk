@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked, Mocked } from "jest-mock";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act } from "jest-matrix-react";
 import { PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -82,22 +82,5 @@ describe("RoomPreviewCard", () => {
 
         await renderPreview();
         expect(screen.queryByRole("button", { name: /beta/i })).toBeNull();
-    });
-
-    it("shows instructions on Jitsi video rooms invites if video rooms are disabled", async () => {
-        jest.spyOn(room, "getType").mockReturnValue(RoomType.ElementVideo);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
-
-        await renderPreview();
-        screen.getByText(/enable video rooms in labs/i);
-    });
-
-    it("shows instructions on Element video rooms invites if video rooms are disabled", async () => {
-        jest.spyOn(room, "getType").mockReturnValue(RoomType.UnstableCall);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
-        enabledFeatures = ["feature_element_call_video_rooms"];
-
-        await renderPreview();
-        screen.getByText(/enable video rooms in labs/i);
     });
 });

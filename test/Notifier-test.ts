@@ -17,7 +17,7 @@ import {
     MatrixEvent,
     SyncState,
 } from "matrix-js-sdk/src/matrix";
-import { waitFor } from "@testing-library/react";
+import { waitFor } from "jest-matrix-react";
 import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import BasePlatform from "../src/BasePlatform";
@@ -423,15 +423,7 @@ describe("Notifier", () => {
             return callEvent;
         };
 
-        const setGroupCallsEnabled = (val: boolean) => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                if (name === "feature_group_calls") return val;
-            });
-        };
-
-        it("should show toast when group calls are supported", () => {
-            setGroupCallsEnabled(true);
-
+        it("shows group call toast", () => {
             const notifyEvent = emitCallNotifyEvent();
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
@@ -445,16 +437,7 @@ describe("Notifier", () => {
             );
         });
 
-        it("should not show toast when group calls are not supported", () => {
-            setGroupCallsEnabled(false);
-
-            emitCallNotifyEvent();
-
-            expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
-        });
-
         it("should not show toast when group call is already connected", () => {
-            setGroupCallsEnabled(true);
             const spyCallMemberships = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom").mockReturnValue([
                 new CallMembership(
                     mkEvent({
@@ -483,8 +466,6 @@ describe("Notifier", () => {
         });
 
         it("should not show toast when calling with non-group call event", () => {
-            setGroupCallsEnabled(true);
-
             emitCallNotifyEvent("event_type");
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();

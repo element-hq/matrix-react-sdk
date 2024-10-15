@@ -8,8 +8,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
+import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td, TranslationKey } from "../languageHandler";
+import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
@@ -35,6 +37,7 @@ import ServerSupportUnstableFeatureController from "./controllers/ServerSupportU
 import { WatchManager } from "./WatchManager";
 import { CustomTheme } from "../theme";
 import AnalyticsController from "./controllers/AnalyticsController";
+import FallbackIceServerController from "./controllers/FallbackIceServerController";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -274,14 +277,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
-    "feature_pinning": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|pinning"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: true,
-    },
     "feature_wysiwyg_composer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -308,10 +303,12 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
-    "feature_dehydration": {
+    "feature_exclude_insecure_devices": {
         isFeature: true,
         labsGroup: LabGroup.Encryption,
-        displayName: _td("labs|dehydration"),
+        controller: new DeviceIsolationModeController(),
+        displayName: _td("labs|exclude_insecure_devices"),
+        description: _td("labs|exclude_insecure_devices_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
@@ -574,18 +571,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
     },
-    "feature_new_room_decoration_ui": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        displayName: _td("labs|new_room_decoration_ui"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: true,
-        controller: new ReloadOnChangeController(),
-        betaInfo: {
-            title: _td("labs|new_room_decoration_ui_beta_title"),
-            caption: () => <p>{_t("labs|new_room_decoration_ui_beta_caption")}</p>,
-        },
-    },
     "feature_notifications": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -645,6 +630,19 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|preferences|user_timezone"),
         default: "",
+    },
+    "userTimezonePublish": {
+        // This is per-device so you can avoid having devices overwrite each other.
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("settings|preferences|publish_timezone"),
+        default: false,
+        controller: new ServerSupportUnstableFeatureController(
+            "userTimezonePublish",
+            defaultWatchManager,
+            [[UNSTABLE_MSC4133_EXTENDED_PROFILES]],
+            undefined,
+            _td("labs|extended_profiles_msc_support"),
+        ),
     },
     "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -862,6 +860,10 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
     },
+    "Registration.mobileRegistrationHelper": {
+        supportedLevels: [SettingLevel.CONFIG],
+        default: false,
+    },
     "autocompleteDelay": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: 200,
@@ -971,6 +973,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         description: _td("settings|voip|enable_fallback_ice_server_description"),
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
+        controller: new FallbackIceServerController(),
     },
     "showImages": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

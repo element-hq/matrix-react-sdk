@@ -16,7 +16,7 @@ import {
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 import { ReactElement } from "react";
 import { Mocked, mocked } from "jest-mock";
 
@@ -65,11 +65,6 @@ describe("TextForEvent", () => {
     });
 
     describe("TextForPinnedEvent", () => {
-        beforeAll(() => {
-            // enable feature_pinning setting
-            (SettingsStore.getValue as jest.Mock).mockImplementation((feature) => feature === "feature_pinning");
-        });
-
         it("mentions message when a single message was pinned, with no previously pinned messages", () => {
             const event = mockPinnedEvent(["message-1"]);
             const plainText = textForEvent(event, mockClient);

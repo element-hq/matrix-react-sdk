@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ICryptoCallbacks, SecretStorage } from "matrix-js-sdk/src/matrix";
-import { deriveKey } from "matrix-js-sdk/src/crypto/key_passphrase";
-import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
+import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type CreateSecretStorageDialog from "./async-components/views/dialogs/security/CreateSecretStorageDialog";
@@ -17,7 +16,6 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 import { isSecureBackupRequired } from "./utils/WellKnownUtils";
 import AccessSecretStorageDialog, { KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
-import SettingsStore from "./settings/SettingsStore";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
@@ -64,7 +62,7 @@ function makeInputToKey(
 ): (keyParams: KeyParams) => Promise<Uint8Array> {
     return async ({ passphrase, recoveryKey }): Promise<Uint8Array> => {
         if (passphrase) {
-            return deriveKey(passphrase, keyInfo.passphrase.salt, keyInfo.passphrase.iterations);
+            return deriveRecoveryKeyFromPassphrase(passphrase, keyInfo.passphrase.salt, keyInfo.passphrase.iterations);
         } else if (recoveryKey) {
             return decodeRecoveryKey(recoveryKey);
         }
@@ -122,7 +120,7 @@ async function getSecretStorageKey({
             keyInfo,
             checkPrivateKey: async (input: KeyParams): Promise<boolean> => {
                 const key = await inputToKey(input);
-                return MatrixClientPeg.safeGet().checkSecretStorageKey(key, keyInfo);
+                return MatrixClientPeg.safeGet().secretStorage.checkKey(key, keyInfo);
             },
         },
         /* className= */ undefined,
@@ -277,20 +275,6 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
             });
             logger.debug("accessSecretStorage: bootstrapSecretStorage");
             await crypto.bootstrapSecretStorage({});
-
-            const keyId = Object.keys(secretStorageKeys)[0];
-            if (keyId && SettingsStore.getValue("feature_dehydration")) {
-                let dehydrationKeyInfo = {};
-                if (secretStorageKeyInfo[keyId] && secretStorageKeyInfo[keyId].passphrase) {
-                    dehydrationKeyInfo = { passphrase: secretStorageKeyInfo[keyId].passphrase };
-                }
-                logger.log("accessSecretStorage: Setting dehydration key");
-                await cli.setDehydrationKey(secretStorageKeys[keyId], dehydrationKeyInfo, "Backup device");
-            } else if (!keyId) {
-                logger.warn("accessSecretStorage: Not setting dehydration key: no SSSS key found");
-            } else {
-                logger.log("accessSecretStorage: Not setting dehydration key: feature disabled");
-            }
         }
 
         logger.debug("accessSecretStorage: 4S now ready");

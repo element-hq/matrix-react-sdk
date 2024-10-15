@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "jest-matrix-react";
 import { IContent, MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
@@ -26,7 +26,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../src/editor/offset";
 import { Layout } from "../../../../src/settings/enums/Layout";
-import { IRoomState } from "../../../../src/components/structures/RoomView";
+import { IRoomState, MainSplitContentType } from "../../../../src/components/structures/RoomView";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { mockPlatformPeg } from "../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
@@ -47,7 +47,6 @@ describe("<SendMessageComposer/>", () => {
         showApps: false,
         isPeeking: false,
         showRightPanel: true,
-        threadRightPanel: false,
         joining: false,
         atEndOfLiveTimeline: true,
         showTopUnreadMessagesBar: false,
@@ -69,6 +68,7 @@ describe("<SendMessageComposer/>", () => {
         showDisplaynameChanges: true,
         matrixClientIsReady: false,
         timelineRenderingType: TimelineRenderingType.Room,
+        mainSplitContentType: MainSplitContentType.Timeline,
         liveTimeline: undefined,
         canSelfRedact: false,
         resizing: false,
@@ -573,10 +573,9 @@ describe("<SendMessageComposer/>", () => {
         const cli = stubClient();
         cli.isCryptoEnabled = jest.fn().mockReturnValue(true);
         cli.isRoomEncrypted = jest.fn().mockReturnValue(true);
-        cli.prepareToEncrypt = jest.fn();
         const room = mkStubRoom("!roomId:server", "Room", cli);
 
-        expect(cli.prepareToEncrypt).not.toHaveBeenCalled();
+        expect(cli.getCrypto()!.prepareToEncrypt).not.toHaveBeenCalled();
 
         const { container } = render(
             <MatrixClientContext.Provider value={cli}>
@@ -588,9 +587,9 @@ describe("<SendMessageComposer/>", () => {
 
         // Does not trigger on keydown as that'll cause false negatives for global shortcuts
         await userEvent.type(composer, "[ControlLeft>][KeyK][/ControlLeft]");
-        expect(cli.prepareToEncrypt).not.toHaveBeenCalled();
+        expect(cli.getCrypto()!.prepareToEncrypt).not.toHaveBeenCalled();
 
         await userEvent.type(composer, "Hello");
-        expect(cli.prepareToEncrypt).toHaveBeenCalled();
+        expect(cli.getCrypto()!.prepareToEncrypt).toHaveBeenCalled();
     });
 });

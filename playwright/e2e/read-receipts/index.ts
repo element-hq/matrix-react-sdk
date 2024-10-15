@@ -394,7 +394,7 @@ class Helpers {
      * Close the threads panel.
      */
     async closeThreadsPanel() {
-        await this.page.locator(".mx_RoomHeader").getByLabel("Threads").click();
+        await this.page.locator(".mx_RightPanel").getByTestId("base-card-close-button").click();
         await expect(this.page.locator(".mx_RightPanel")).not.toBeVisible();
     }
 

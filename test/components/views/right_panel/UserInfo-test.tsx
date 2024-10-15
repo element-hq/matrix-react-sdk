@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitFor, cleanup, act, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, cleanup, act, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Mocked, mocked } from "jest-mock";
 import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
@@ -92,6 +92,7 @@ let mockRoom: Mocked<Room>;
 let mockSpace: Mocked<Room>;
 let mockClient: Mocked<MatrixClient>;
 let mockCrypto: Mocked<CryptoApi>;
+const origDate = global.Date.prototype.toLocaleString;
 
 beforeEach(() => {
     mockRoom = mocked({
@@ -150,6 +151,8 @@ beforeEach(() => {
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
+        doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
+        getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
         mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
         removeListener: jest.fn(),
         currentState: {
@@ -229,6 +232,28 @@ describe("<UserInfo />", () => {
             expect(screen.getByRole("heading", { name: defaultUserId })).toBeInTheDocument();
         });
 
+        it("renders user timezone if set", async () => {
+            // For timezone, force a consistent locale.
+            jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(function (
+                this: Date,
+                _locale,
+                opts,
+            ) {
+                return origDate.call(this, "en-US", opts);
+            });
+            mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
+            mockClient.getExtendedProfileProperty.mockResolvedValue("Europe/London");
+            renderComponent();
+            await expect(screen.findByText(/\d\d:\d\d (AM|PM)/)).resolves.toBeInTheDocument();
+        });
+
+        it("does not renders user timezone if timezone is invalid", async () => {
+            mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
+            mockClient.getExtendedProfileProperty.mockResolvedValue("invalid-tz");
+            renderComponent();
+            expect(screen.queryByText(/\d\d:\d\d (AM|PM)/)).not.toBeInTheDocument();
+        });
+
         it("renders encryption info panel without pending verification", () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel });
             expect(screen.getByRole("heading", { name: /encryption/i })).toBeInTheDocument();
@@ -282,7 +307,7 @@ describe("<UserInfo />", () => {
         it("renders close button correctly when encryption panel with a pending verification request", async () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
             screen.getByTestId("base-card-close-button").focus();
-            await expect(screen.findByRole("tooltip", { name: "Cancel" })).resolves.toBeInTheDocument();
+            expect(screen.getByText("Cancel")).toBeInTheDocument();
         });
     });
 
