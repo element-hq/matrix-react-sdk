@@ -22,7 +22,7 @@ import {
     IEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -310,6 +310,12 @@ describe("RoomView", () => {
             await mountRoomView();
             expect(stores.rightPanelStore.isOpen).toEqual(true);
             expect(stores.rightPanelStore.currentCard.phase).toEqual(RightPanelPhases.Timeline);
+        });
+
+        it("should render joined video room view", async () => {
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            const { asFragment } = await mountRoomView();
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 

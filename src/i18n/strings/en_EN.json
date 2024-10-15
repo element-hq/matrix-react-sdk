@@ -283,6 +283,8 @@
             "security_code_prompt": "If asked, enter the code below on your other device.",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
             "sign_in_new_device": "Sign in new device",
+            "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
+            "unsupported_heading": "QR code not supported",
             "waiting_for_device": "Waiting for device to sign in"
         },
         "register_action": "Create Account",
@@ -477,7 +479,6 @@
         "encrypted": "Encrypted",
         "encryption_enabled": "Encryption enabled",
         "error": "Error",
-        "extensions": "Extensions",
         "faq": "FAQ",
         "favourites": "Favourites",
         "feedback": "Feedback",
@@ -905,16 +906,6 @@
         "incompatible_database_disable": "Continue With Encryption Disabled",
         "incompatible_database_sign_out_description": "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this",
         "incompatible_database_title": "Incompatible Database",
-        "key_signature_upload_cancelled": "Cancelled signature upload",
-        "key_signature_upload_completed": "Upload completed",
-        "key_signature_upload_failed": "Unable to upload",
-        "key_signature_upload_failed_body": "%(brand)s encountered an error during upload of:",
-        "key_signature_upload_failed_cross_signing_key_signature": "a new cross-signing key signature",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "a device cross-signing signature",
-        "key_signature_upload_failed_key_signature": "a key signature",
-        "key_signature_upload_failed_master_key_signature": "a new master key signature",
-        "key_signature_upload_failed_title": "Signature upload failed",
-        "key_signature_upload_success_title": "Signature upload success",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
@@ -930,8 +921,6 @@
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "not_supported": "<not supported>",
-        "old_version_detected_description": "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.",
-        "old_version_detected_title": "Old cryptography data detected",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
@@ -1423,7 +1412,6 @@
         "click_for_info": "Click for more info",
         "currently_experimental": "Currently experimental.",
         "custom_themes": "Support adding custom themes",
-        "dehydration": "Offline encrypted messaging using dehydrated devices",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
@@ -1461,9 +1449,6 @@
         "location_share_live_description": "Temporary implementation. Locations persist in room history.",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
-        "new_room_decoration_ui": "New room header",
-        "new_room_decoration_ui_beta_caption": "A new look for your rooms with a simpler, cleaner and more accessible room header.",
-        "new_room_decoration_ui_beta_title": "Room header",
         "notification_settings": "New Notification Settings",
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
@@ -1558,9 +1543,7 @@
         "error_send_description": "%(brand)s could not send your location. Please try again later.",
         "error_send_title": "We couldn't send your location",
         "error_sharing_live_location": "An error occurred whilst sharing your live location",
-        "error_sharing_live_location_try_again": "An error occurred whilst sharing your live location, please try again",
         "error_stopping_live_location": "An error occurred while stopping your live location",
-        "error_stopping_live_location_try_again": "An error occurred while stopping your live location, please try again",
         "expand_map": "Expand map",
         "failed_generic": "Failed to fetch your location. Please try again later.",
         "failed_load_map": "Unable to load map",
@@ -1590,7 +1573,6 @@
         "share_type_own": "My current location",
         "share_type_pin": "Drop a Pin",
         "share_type_prompt": "What location type do you want to share?",
-        "stop_and_close": "Stop and close",
         "toggle_attribution": "Toggle attribution"
     },
     "member_list": {
@@ -1838,18 +1820,17 @@
     "right_panel": {
         "add_integrations": "Add extensions",
         "add_topic": "Add topic",
-        "export_chat_button": "Export chat",
+        "extensions_button": "Extensions",
         "extensions_empty_description": "Select “%(addIntegrations)s” to browse and add extensions to this room",
         "extensions_empty_title": "Boost productivity with more tools, widgets and bots",
         "files_button": "Files",
-        "info": "Info",
         "pinned_messages": {
             "empty_description": "Select a message and choose “%(pinAction)s” to it include here.",
             "empty_title": "Pin important messages so that they can be easily discovered",
             "header": {
                 "one": "1 Pinned message",
                 "other": "%(count)s Pinned messages",
-                "zero": "Pinned message"
+                "zero": "Pinned messages"
             },
             "limits": {
                 "other": "You can only pin up to %(count)s widgets"
@@ -1861,7 +1842,6 @@
                 "title": "All new pinned messages"
             },
             "reply_thread": "Reply to a <link>thread message</link>",
-            "title": "Pinned messages",
             "unpin_all": {
                 "button": "Unpin all messages",
                 "content": "Make sure that you really want to remove all pinned messages. This action can’t be undone.",
@@ -1903,8 +1883,7 @@
         },
         "video_room_chat": {
             "title": "Chat"
-        },
-        "widgets_section": "Widgets"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "This invite was sent to %(email)s which is not associated with your account",
@@ -1925,7 +1904,6 @@
             "low_priority": "Low Priority",
             "mark_read": "Mark as read",
             "mark_unread": "Mark as unread",
-            "mentions_only": "Mentions only",
             "notifications_default": "Match default setting",
             "notifications_mute": "Mute room",
             "title": "Room options",
@@ -1968,22 +1946,11 @@
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
         "header": {
-            "close_call_button": "Close call",
-            "forget_room_button": "Forget room",
-            "hide_widgets_button": "Hide Widgets",
             "n_people_asking_to_join": {
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
             },
-            "room_is_public": "This room is public",
-            "show_widgets_button": "Show Widgets",
-            "video_call_button_ec": "Video call (%(brand)s)",
-            "video_call_button_jitsi": "Video call (Jitsi)",
-            "video_call_button_legacy": "Legacy video call",
-            "video_call_ec_change_layout": "Change layout",
-            "video_call_ec_layout_freedom": "Freedom",
-            "video_call_ec_layout_spotlight": "Spotlight",
-            "video_room_view_chat_button": "View chat timeline"
+            "room_is_public": "This room is public"
         },
         "header_avatar_open_settings_label": "Open room settings",
         "header_face_pile_tooltip": "People",
@@ -2056,6 +2023,7 @@
         "not_found_title": "This room or space does not exist.",
         "not_found_title_name": "%(roomName)s does not exist.",
         "peek_join_prompt": "You're previewing %(roomName)s. Want to join it?",
+        "pinned_message_badge": "Pinned message",
         "pinned_message_banner": {
             "button_close_list": "Close list",
             "button_view_all": "View all",
@@ -2077,10 +2045,6 @@
         "search": {
             "all_rooms_button": "Search all rooms",
             "placeholder": "Search messages…",
-            "result_count": {
-                "one": "(~%(count)s result)",
-                "other": "(~%(count)s results)"
-            },
             "summary": {
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"
@@ -2893,6 +2857,7 @@
             "sign_in_with_qr": "Link new device",
             "sign_in_with_qr_button": "Show QR code",
             "sign_in_with_qr_description": "Use a QR code to sign in to another device and set up secure messaging.",
+            "sign_in_with_qr_unsupported": "Not supported by your account provider",
             "sign_out": "Sign out of this session",
             "sign_out_all_other_sessions": "Sign out of all other sessions (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -3309,6 +3274,7 @@
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
+        "e2e_state": "State of the end-to-end encryption",
         "edits": {
             "tooltip_label": "Edited at %(date)s. Click to view edits.",
             "tooltip_sub": "Click to view edits",
@@ -3365,10 +3331,8 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "decrypt_label": "Decrypt %(text)s",
-            "download_label": "Download %(text)s",
             "error_decrypting": "Error decrypting attachment",
-            "error_invalid": "Invalid file%(extra)s"
+            "error_invalid": "Invalid file"
         },
         "m.image": {
             "error": "Unable to show image due to error",
@@ -3868,8 +3832,6 @@
     },
     "user_menu": {
         "link_new_device": "Link new device",
-        "link_new_device_not_supported": "Not supported",
-        "link_new_device_not_supported_caption": "You need to sign in manually",
         "settings": "All settings",
         "switch_theme_dark": "Switch to dark mode",
         "switch_theme_light": "Switch to light mode"

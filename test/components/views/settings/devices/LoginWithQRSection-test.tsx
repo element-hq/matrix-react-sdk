@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { IClientWellKnown, IServerVersions, MatrixClient, GET_LOGIN_TOKEN_CAPABILITY } from "matrix-js-sdk/src/matrix";
 import React from "react";
@@ -137,19 +137,19 @@ describe("<LoginWithQRSection />", () => {
 
             test("no homeserver support", async () => {
                 const { container } = render(getComponent({ versions: makeVersions({ "org.matrix.msc4108": false }) }));
-                expect(container.textContent).toBe(""); // show nothing
+                expect(container.textContent).toContain("Not supported by your account provider");
             });
 
             test("no support in crypto", async () => {
                 client.getCrypto()!.exportSecretsBundle = undefined;
                 const { container } = render(getComponent({ client }));
-                expect(container.textContent).toBe(""); // show nothing
+                expect(container.textContent).toContain("Not supported by your account provider");
             });
 
             test("failed to connect", async () => {
                 fetchMock.catch(500);
                 const { container } = render(getComponent({ client }));
-                expect(container.textContent).toBe(""); // show nothing
+                expect(container.textContent).toContain("Not supported by your account provider");
             });
         });
     });

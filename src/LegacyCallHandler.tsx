@@ -59,6 +59,7 @@ import { SdkContextClass } from "./contexts/SDKContext";
 import { showCantStartACallDialog } from "./voice-broadcast/utils/showCantStartACallDialog";
 import { isNotNull } from "./Typeguards";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
+import { Jitsi } from "./widgets/Jitsi.ts";
 
 export const PROTOCOL_PSTN = "m.protocol.pstn";
 export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
@@ -366,7 +367,7 @@ export default class LegacyCallHandler extends EventEmitter {
         // the mapped one: that's where we'll send the events.
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(call.roomId);
-        if (room) cli.prepareToEncrypt(room);
+        if (room) cli.getCrypto()?.prepareToEncrypt(room);
     };
 
     public getCallById(callId: string): MatrixCall | null {
@@ -764,7 +765,6 @@ export default class LegacyCallHandler extends EventEmitter {
                 cancelButton: _t("action|ok"),
                 onFinished: (allow) => {
                     SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
-                    cli.setFallbackICEServerAllowed(!!allow);
                 },
             },
             undefined,
@@ -908,12 +908,12 @@ export default class LegacyCallHandler extends EventEmitter {
             Modal.createDialog(ErrorDialog, {
                 description: _t("voip|cannot_call_yourself_description"),
             });
-        } else if (members.length === 2) {
+        } else if (members.length === 2 && !Jitsi.getInstance().useFor1To1Calls) {
             logger.info(`Place ${type} call in ${roomId}`);
 
             await this.placeMatrixCall(roomId, type, transferee);
         } else {
-            // > 2
+            // > 2 || useFor1To1Calls
             await this.placeJitsiCall(roomId, type);
         }
     }

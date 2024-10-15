@@ -46,10 +46,15 @@ module.exports = {
 
         "import/no-duplicates": ["error"],
         // Ban matrix-js-sdk/src imports in favour of matrix-js-sdk/src/matrix imports to prevent unleashing hell.
+        // Ban compound-design-tokens raw svg imports in favour of their React component counterparts
         "no-restricted-imports": [
             "error",
             {
                 paths: [
+                    {
+                        name: "@testing-library/react",
+                        message: "Please use jest-matrix-react instead",
+                    },
                     {
                         name: "matrix-js-sdk",
                         message: "Please use matrix-js-sdk/src/matrix instead",
@@ -92,6 +97,8 @@ module.exports = {
                             "!matrix-js-sdk/src/crypto-api",
                             "!matrix-js-sdk/src/types",
                             "!matrix-js-sdk/src/testing",
+                            "!matrix-js-sdk/src/utils/**",
+                            "matrix-js-sdk/src/utils/internal/**",
                             "matrix-js-sdk/lib",
                             "matrix-js-sdk/lib/",
                             "matrix-js-sdk/lib/**",
@@ -119,7 +126,6 @@ module.exports = {
                             "!matrix-js-sdk/src/extensible_events_v1/PollEndEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
                             "!matrix-js-sdk/src/crypto",
-                            "!matrix-js-sdk/src/crypto/aes",
                             "!matrix-js-sdk/src/crypto/keybackup",
                             "!matrix-js-sdk/src/crypto/deviceinfo",
                             "!matrix-js-sdk/src/crypto/dehydration",
@@ -148,6 +154,10 @@ module.exports = {
                         group: ["emojibase-regex/emoji*"],
                         message:
                             "This regex doesn't actually test for emoji. See the docs at https://emojibase.dev/docs/regex/ and prefer our own EMOJI_REGEX from HtmlUtils.",
+                    },
+                    {
+                        group: ["@vector-im/compound-design-tokens/icons/*"],
+                        message: "Please use @vector-im/compound-design-tokens/assets/web/icons/* instead",
                     },
                 ],
             },

@@ -10,7 +10,7 @@ import React, { forwardRef, ReactNode, KeyboardEvent, Ref, MouseEvent } from "re
 import classNames from "classnames";
 import { IconButton, Text } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
-import { Icon as ChevronLeftIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
+import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { _t } from "../../../languageHandler";
@@ -36,6 +36,12 @@ interface IProps {
     // Ref for the 'close' button the card
     closeButtonRef?: Ref<HTMLButtonElement>;
     children: ReactNode;
+}
+
+function closeRightPanel(ev: MouseEvent<HTMLButtonElement>): void {
+    ev.preventDefault();
+    ev.stopPropagation();
+    RightPanelStore.instance.popCard();
 }
 
 const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
@@ -81,12 +87,12 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
         }
 
         let closeButton;
-        if (onClose && !hideHeaderButtons) {
+        if (!hideHeaderButtons) {
             closeButton = (
                 <IconButton
                     size="28px"
                     data-testid="base-card-close-button"
-                    onClick={onClose}
+                    onClick={onClose ?? closeRightPanel}
                     ref={closeButtonRef}
                     tooltip={closeLabel ?? _t("action|close")}
                     subtleBackground
@@ -116,9 +122,16 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
                         <div className="mx_BaseCard_header">
                             {backButton}
                             {typeof header === "string" ? (
-                                <Text size="md" weight="medium" className="mx_BaseCard_header_title">
-                                    {header}
-                                </Text>
+                                <div className="mx_BaseCard_header_title">
+                                    <Text
+                                        size="md"
+                                        weight="medium"
+                                        className="mx_BaseCard_header_title_heading"
+                                        role="heading"
+                                    >
+                                        {header}
+                                    </Text>
+                                </div>
                             ) : (
                                 (header ?? <div className="mx_BaseCard_header_spacer" />)
                             )}

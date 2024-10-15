@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
 import { MsgType } from "matrix-js-sdk/src/matrix";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -335,7 +336,11 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
                 const reason = node.getAttribute("data-mx-spoiler") ?? undefined;
                 node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
-                const spoiler = <Spoiler reason={reason} contentHtml={node.outerHTML} />;
+                const spoiler = (
+                    <TooltipProvider>
+                        <Spoiler reason={reason} contentHtml={node.outerHTML} />
+                    </TooltipProvider>
+                );
 
                 ReactDOM.render(spoiler, spoilerContainer);
                 node.parentNode?.replaceChild(spoilerContainer, node);
@@ -556,6 +561,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const content = mxEvent.getContent();
         const isNotice = content.msgtype === MsgType.Notice;
         const isEmote = content.msgtype === MsgType.Emote;
+        const isCaption = [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(
+            content.msgtype as MsgType,
+        );
 
         const willHaveWrapper =
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
@@ -630,6 +638,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (isNotice) {
             return (
                 <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                    {body}
+                    {widgets}
+                </div>
+            );
+        }
+        if (isCaption) {
+            return (
+                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
                     {body}
                     {widgets}
                 </div>

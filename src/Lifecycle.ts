@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { ReactNode } from "react";
 import { createClient, MatrixClient, SSOAction, OidcTokenRefresher, decodeBase64 } from "matrix-js-sdk/src/matrix";
-import { IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
+import { AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -472,9 +472,9 @@ export interface IStoredSession {
     hsUrl: string;
     isUrl: string;
     hasAccessToken: boolean;
-    accessToken: string | IEncryptedPayload;
+    accessToken: string | AESEncryptedSecretStoragePayload;
     hasRefreshToken: boolean;
-    refreshToken?: string | IEncryptedPayload;
+    refreshToken?: string | AESEncryptedSecretStoragePayload;
     userId: string;
     deviceId: string;
     isGuest: boolean;
@@ -665,43 +665,6 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
 }
 
 /**
- * Hydrates an existing session by using the credentials provided. This will
- * not clear any local storage, unlike setLoggedIn().
- *
- * Stops the existing Matrix client (without clearing its data) and starts a
- * new one in its place. This additionally starts all other react-sdk services
- * which use the new Matrix client.
- *
- * If the credentials belong to a different user from the session already stored,
- * the old session will be cleared automatically.
- *
- * @param {IMatrixClientCreds} credentials The credentials to use
- *
- * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
- */
-export async function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
-    const oldUserId = MatrixClientPeg.safeGet().getUserId();
-    const oldDeviceId = MatrixClientPeg.safeGet().getDeviceId();
-
-    stopMatrixClient(); // unsets MatrixClientPeg.get()
-    localStorage.removeItem("mx_soft_logout");
-    _isLoggingOut = false;
-
-    const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
-    if (overwrite) {
-        logger.warn("Clearing all data: Old session belongs to a different user/session");
-    }
-
-    if (!credentials.pickleKey && credentials.deviceId !== undefined) {
-        logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
-        credentials.pickleKey =
-            (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
-    }
-
-    return doSetLoggedIn(credentials, overwrite, false);
-}
-
-/**
  * When we have a authenticated via OIDC-native flow and have a refresh token
  * try to create a token refresher.
  * @param credentials from current session
@@ -799,18 +762,6 @@ async function doSetLoggedIn(
         PosthogAnalytics.instance.startListeningToSettingsChanges(client);
     }
 
-    if (credentials.freshLogin && SettingsStore.getValue("feature_dehydration")) {
-        // If we just logged in, try to rehydrate a device instead of using a
-        // new device.  If it succeeds, we'll get a new device ID, so make sure
-        // we persist that ID to localStorage
-        const newDeviceId = await client.rehydrateDevice();
-        if (newDeviceId) {
-            credentials.deviceId = newDeviceId;
-        }
-
-        delete credentials.freshLogin;
-    }
-
     if (localStorage) {
         try {
             await persistCredentials(credentials);
@@ -824,6 +775,8 @@ async function doSetLoggedIn(
     }
     checkSessionLock();
 
+    // We are now logged in, so fire this. We have yet to start the client but the
+    // client_started dispatch is for that.
     dis.fire(Action.OnLoggedIn);
 
     const clientPegOpts: MatrixClientPegAssignOpts = {};
@@ -845,6 +798,12 @@ async function doSetLoggedIn(
 
     // Run the migrations after the MatrixClientPeg has been assigned
     SettingsStore.runMigrations(isFreshLogin);
+
+    if (isFreshLogin && !credentials.guest) {
+        // For newly registered users, set a flag so that we force them to verify,
+        // (we don't want to force users with existing sessions to verify though)
+        localStorage.setItem("must_verify_device", "true");
+    }
 
     return client;
 }

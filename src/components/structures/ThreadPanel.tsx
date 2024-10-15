@@ -130,7 +130,7 @@ export const ThreadPanelHeader: React.FC<{
     return (
         <div className="mx_BaseCard_header_title">
             <Tooltip label={_t("threads|mark_all_read")}>
-                <IconButton onClick={onMarkAllThreadsReadClick} aria-label={_t("threads|mark_all_read")} size="24px">
+                <IconButton onClick={onMarkAllThreadsReadClick} size="24px">
                     <MarkAllThreadsReadIcon />
                 </IconButton>
             </Tooltip>
@@ -193,7 +193,6 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
             }}
         >
             <BaseCard
-                hideHeaderButtons
                 header={
                     hasThreads && <ThreadPanelHeader filterOption={filterOption} setFilterOption={setFilterOption} />
                 }
