@@ -1397,7 +1397,6 @@
         "click_for_info": "Click for more info",
         "currently_experimental": "Currently experimental.",
         "custom_themes": "Support adding custom themes",
-        "dehydration": "Offline encrypted messaging using dehydrated devices",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
@@ -3315,10 +3314,8 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "decrypt_label": "Decrypt %(text)s",
-            "download_label": "Download %(text)s",
             "error_decrypting": "Error decrypting attachment",
-            "error_invalid": "Invalid file%(extra)s"
+            "error_invalid": "Invalid file"
         },
         "m.image": {
             "error": "Unable to show image due to error",
