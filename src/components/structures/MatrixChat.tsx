@@ -23,6 +23,7 @@ import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 // what-input helps improve keyboard accessibility
 import "what-input";
@@ -81,7 +82,6 @@ import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import UserSettingsDialog from "../views/dialogs/UserSettingsDialog";
 import CreateRoomDialog from "../views/dialogs/CreateRoomDialog";
-import KeySignatureUploadFailedDialog from "../views/dialogs/KeySignatureUploadFailedDialog";
 import IncomingSasDialog from "../views/dialogs/IncomingSasDialog";
 import CompleteSecurity from "./auth/CompleteSecurity";
 import Welcome from "../views/auth/Welcome";
@@ -412,7 +412,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private async postLoginSetup(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
-        const cryptoEnabled = cli.isCryptoEnabled();
+        const cryptoEnabled = Boolean(cli.getCrypto());
         if (!cryptoEnabled) {
             this.onLoggedIn();
         }
@@ -425,7 +425,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // from another device.
             promisesList.push(
                 (async (): Promise<void> => {
-                    crossSigningIsSetUp = await cli.userHasCrossSigningKeys();
+                    crossSigningIsSetUp = Boolean(await cli.getCrypto()?.userHasCrossSigningKeys());
                 })(),
             );
         }
@@ -1618,7 +1618,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             .catch((e) => logger.error("Unable to start DecryptionFailureTracker", e));
 
         cli.on(ClientEvent.Room, (room) => {
-            if (cli.isCryptoEnabled()) {
+            if (cli.getCrypto()) {
                 const blacklistEnabled = SettingsStore.getValueAt(
                     SettingLevel.ROOM_DEVICE,
                     "blacklistUnverifiedDevices",
@@ -1626,18 +1626,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     /*explicit=*/ true,
                 );
                 room.setBlacklistUnverifiedDevices(blacklistEnabled);
-            }
-        });
-        cli.on(CryptoEvent.Warning, (type) => {
-            switch (type) {
-                case "CRYPTO_WARNING_OLD_VERSION_DETECTED":
-                    Modal.createDialog(ErrorDialog, {
-                        title: _t("encryption|old_version_detected_title"),
-                        description: _t("encryption|old_version_detected_description", {
-                            brand: SdkConfig.get().brand,
-                        }),
-                    });
-                    break;
             }
         });
         cli.on(CryptoEvent.KeyBackupFailed, async (errcode): Promise<void> => {
@@ -1671,10 +1659,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     ) as unknown as Promise<typeof RecoveryMethodRemovedDialog>,
                 );
             }
-        });
-
-        cli.on(CryptoEvent.KeySignatureUploadFailure, (failures, source, continuation) => {
-            Modal.createDialog(KeySignatureUploadFailedDialog, { failures, source, continuation });
         });
 
         cli.on(CryptoEvent.VerificationRequestReceived, (request) => {
@@ -1722,7 +1706,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         }
 
-        if (cli.isCryptoEnabled()) {
+        if (cli.getCrypto()) {
             const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
             cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
 
@@ -2197,7 +2181,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         return (
             <ErrorBoundary>
-                <SDKContext.Provider value={this.stores}>{view}</SDKContext.Provider>
+                <SDKContext.Provider value={this.stores}>
+                    <TooltipProvider>{view}</TooltipProvider>
+                </SDKContext.Provider>
             </ErrorBoundary>
         );
     }

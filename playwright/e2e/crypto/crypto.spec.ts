@@ -43,6 +43,7 @@ const testMessages = async (page: Page, bob: Bot, bobRoomId: string) => {
 };
 
 const bobJoin = async (page: Page, bob: Bot) => {
+    // Wait for Bob to get the invite
     await bob.evaluate(async (cli) => {
         const bobRooms = cli.getRooms();
         if (!bobRooms.length) {
@@ -55,9 +56,13 @@ const bobJoin = async (page: Page, bob: Bot) => {
             });
         }
     });
-    const roomId = await bob.joinRoomByName("Alice");
 
+    const roomId = await bob.joinRoomByName("Alice");
     await expect(page.getByText("Bob joined the room")).toBeVisible();
+
+    // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
+    await bob.awaitRoomMembership(roomId);
+
     return roomId;
 };
 
@@ -221,7 +226,7 @@ test.describe("Cryptography", function () {
         // Assert that verified icon is rendered
         await page.getByTestId("base-card-back-button").click();
         await page.getByLabel("Room info").nth(1).click();
-        await expect(page.locator('.mx_RoomSummaryCard_badges [data-kind="success"]')).toContainText("Encrypted");
+        await expect(page.locator('.mx_RoomSummaryCard_badges [data-kind="green"]')).toContainText("Encrypted");
 
         // Take a snapshot of RoomSummaryCard with a verified E2EE icon
         await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("RoomSummaryCard-with-verified-e2ee.png");

@@ -283,6 +283,8 @@
             "security_code_prompt": "If asked, enter the code below on your other device.",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
             "sign_in_new_device": "Sign in new device",
+            "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
+            "unsupported_heading": "QR code not supported",
             "waiting_for_device": "Waiting for device to sign in"
         },
         "register_action": "Create Account",
@@ -904,16 +906,6 @@
         "incompatible_database_disable": "Continue With Encryption Disabled",
         "incompatible_database_sign_out_description": "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this",
         "incompatible_database_title": "Incompatible Database",
-        "key_signature_upload_cancelled": "Cancelled signature upload",
-        "key_signature_upload_completed": "Upload completed",
-        "key_signature_upload_failed": "Unable to upload",
-        "key_signature_upload_failed_body": "%(brand)s encountered an error during upload of:",
-        "key_signature_upload_failed_cross_signing_key_signature": "a new cross-signing key signature",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "a device cross-signing signature",
-        "key_signature_upload_failed_key_signature": "a key signature",
-        "key_signature_upload_failed_master_key_signature": "a new master key signature",
-        "key_signature_upload_failed_title": "Signature upload failed",
-        "key_signature_upload_success_title": "Signature upload success",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
@@ -929,8 +921,6 @@
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "not_supported": "<not supported>",
-        "old_version_detected_description": "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.",
-        "old_version_detected_title": "Old cryptography data detected",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
@@ -1422,7 +1412,6 @@
         "click_for_info": "Click for more info",
         "currently_experimental": "Currently experimental.",
         "custom_themes": "Support adding custom themes",
-        "dehydration": "Offline encrypted messaging using dehydrated devices",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
@@ -2868,6 +2857,7 @@
             "sign_in_with_qr": "Link new device",
             "sign_in_with_qr_button": "Show QR code",
             "sign_in_with_qr_description": "Use a QR code to sign in to another device and set up secure messaging.",
+            "sign_in_with_qr_unsupported": "Not supported by your account provider",
             "sign_out": "Sign out of this session",
             "sign_out_all_other_sessions": "Sign out of all other sessions (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -3284,6 +3274,7 @@
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
+        "e2e_state": "State of the end-to-end encryption",
         "edits": {
             "tooltip_label": "Edited at %(date)s. Click to view edits.",
             "tooltip_sub": "Click to view edits",
@@ -3340,10 +3331,8 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "decrypt_label": "Decrypt %(text)s",
-            "download_label": "Download %(text)s",
             "error_decrypting": "Error decrypting attachment",
-            "error_invalid": "Invalid file%(extra)s"
+            "error_invalid": "Invalid file"
         },
         "m.image": {
             "error": "Unable to show image due to error",
@@ -3843,8 +3832,6 @@
     },
     "user_menu": {
         "link_new_device": "Link new device",
-        "link_new_device_not_supported": "Not supported",
-        "link_new_device_not_supported_caption": "You need to sign in manually",
         "settings": "All settings",
         "switch_theme_dark": "Switch to dark mode",
         "switch_theme_light": "Switch to light mode"

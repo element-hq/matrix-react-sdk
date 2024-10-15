@@ -389,7 +389,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.suppressReadReceiptAnimation = false;
         const client = MatrixClientPeg.safeGet();
         if (!this.props.forExport) {
-            client.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             client.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
             this.props.mxEvent.on(MatrixEventEvent.Replaced, this.onReplaced);
@@ -429,7 +428,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             client.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
             const room = client.getRoom(this.props.mxEvent.getRoomId());
@@ -566,12 +564,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.verifyEvent();
         // decryption might, of course, trigger a height change, so call onHeightChanged after the re-render
         this.forceUpdate(this.props.onHeightChanged);
-    };
-
-    private onDeviceVerificationChanged = (userId: string, device: string): void => {
-        if (userId === this.props.mxEvent.getSender()) {
-            this.verifyEvent();
-        }
     };
 
     private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
@@ -1036,6 +1028,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             // no avatar or sender profile for continuation messages and call tiles
             avatarSize = null;
             needsSenderProfile = false;
+        } else if (this.context.timelineRenderingType === TimelineRenderingType.File) {
+            avatarSize = "20px";
+            needsSenderProfile = true;
         } else {
             avatarSize = "30px";
             needsSenderProfile = true;
@@ -1363,6 +1358,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-scroll-tokens": scrollToken,
                     },
                     [
+                        <a
+                            className="mx_EventTile_senderDetailsLink"
+                            key="mx_EventTile_senderDetailsLink"
+                            href={permalink}
+                            onClick={this.onPermalinkClicked}
+                        >
+                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
+                                {avatar}
+                                {sender}
+                                {timestamp}
+                            </div>
+                        </a>,
                         <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
                             {this.renderContextMenu()}
                             {renderTile(
@@ -1383,17 +1390,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 this.context.showHiddenEvents,
                             )}
                         </div>,
-                        <a
-                            className="mx_EventTile_senderDetailsLink"
-                            key="mx_EventTile_senderDetailsLink"
-                            href={permalink}
-                            onClick={this.onPermalinkClicked}
-                        >
-                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
-                                {sender}
-                                {timestamp}
-                            </div>
-                        </a>,
                     ],
                 );
             }
@@ -1531,7 +1527,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps> {
         // https://github.com/element-hq/compound/issues/294
         return (
             <Tooltip label={this.props.title} isTriggerInteractive={true}>
-                <div className={classes} tabIndex={0} />
+                <div className={classes} tabIndex={0} aria-label={_t("timeline|e2e_state")} />
             </Tooltip>
         );
     }
@@ -1567,7 +1563,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
         <div className="mx_EventTile_msgOption">
             <div className="mx_ReadReceiptGroup">
                 <Tooltip label={label} placement="top-end">
-                    <div className="mx_ReadReceiptGroup_button">
+                    <div className="mx_ReadReceiptGroup_button" role="status">
                         <span className="mx_ReadReceiptGroup_container">
                             <span className={receiptClasses}>{nonCssBadge}</span>
                         </span>

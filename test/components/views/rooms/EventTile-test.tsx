@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
     EventType,
@@ -169,6 +169,15 @@ describe("EventTile", () => {
         });
     });
 
+    describe("EventTile renderingType: File", () => {
+        it("should not display the pinned message badge", async () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            getComponent({}, TimelineRenderingType.File);
+
+            expect(screen.queryByText("Pinned message")).not.toBeInTheDocument();
+        });
+    });
+
     describe("EventTile renderingType: default", () => {
         it.each([[Layout.Group], [Layout.Bubble], [Layout.IRC]])(
             "should display the pinned message badge",
@@ -305,8 +314,8 @@ describe("EventTile", () => {
             expect(e2eIcons).toHaveLength(1);
             expect(e2eIcons[0].classList).toContain("mx_EventTile_e2eIcon_normal");
             fireEvent.focus(e2eIcons[0]);
-            expect(e2eIcons[0].getAttribute("aria-describedby")).toBeTruthy();
-            expect(document.getElementById(e2eIcons[0].getAttribute("aria-describedby")!)).toHaveTextContent(
+            expect(e2eIcons[0].getAttribute("aria-labelledby")).toBeTruthy();
+            expect(document.getElementById(e2eIcons[0].getAttribute("aria-labelledby")!)).toHaveTextContent(
                 expectedText,
             );
         });
