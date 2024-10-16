@@ -1410,7 +1410,6 @@
         "click_for_info": "Click for more info",
         "currently_experimental": "Currently experimental.",
         "custom_themes": "Support adding custom themes",
-        "dehydration": "Offline encrypted messaging using dehydrated devices",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
@@ -3272,6 +3271,7 @@
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
+        "e2e_state": "State of the end-to-end encryption",
         "edits": {
             "tooltip_label": "Edited at %(date)s. Click to view edits.",
             "tooltip_sub": "Click to view edits",
@@ -3328,10 +3328,8 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "decrypt_label": "Decrypt %(text)s",
-            "download_label": "Download %(text)s",
             "error_decrypting": "Error decrypting attachment",
-            "error_invalid": "Invalid file%(extra)s"
+            "error_invalid": "Invalid file"
         },
         "m.image": {
             "error": "Unable to show image due to error",

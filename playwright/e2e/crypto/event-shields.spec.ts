@@ -33,7 +33,7 @@ test.describe("Cryptography", function () {
             await app.client.bootstrapCrossSigning(aliceCredentials);
             await autoJoin(bob);
 
-            // create an encrypted room
+            // create an encrypted room, and wait for Bob to join it.
             testRoomId = await createSharedRoomWithUser(app, bob.credentials.userId, {
                 name: "TestRoom",
                 initial_state: [
@@ -46,6 +46,9 @@ test.describe("Cryptography", function () {
                     },
                 ],
             });
+
+            // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
+            await bob.awaitRoomMembership(testRoomId);
         });
 
         test("should show the correct shield on e2e events", async ({
@@ -67,7 +70,9 @@ test.describe("Cryptography", function () {
             const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_decryption_failure/);
             await lastE2eIcon.focus();
-            await expect(page.getByRole("tooltip")).toContainText("This message could not be decrypted");
+            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
+                "This message could not be decrypted",
+            );
 
             /* Should show a red padlock for an unencrypted message in an e2e room */
             await bob.evaluate(
@@ -87,7 +92,7 @@ test.describe("Cryptography", function () {
             await expect(last).toContainText("test unencrypted");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
-            await expect(page.getByRole("tooltip")).toContainText("Not encrypted");
+            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText("Not encrypted");
 
             /* Should show no padlock for an unverified user */
             // bob sends a valid event
@@ -120,7 +125,9 @@ test.describe("Cryptography", function () {
             await expect(lastTile).toContainText("test encrypted from unverified");
             await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastTileE2eIcon.focus();
-            await expect(page.getByRole("tooltip")).toContainText("Encrypted by a device not verified by its owner.");
+            await expect(await app.getTooltipForElement(lastTileE2eIcon)).toContainText(
+                "Encrypted by a device not verified by its owner.",
+            );
 
             /* In legacy crypto: should show a grey padlock for a message from a deleted device.
              * In rust crypto: should show a red padlock for a message from an unverified device.
@@ -156,7 +163,7 @@ test.describe("Cryptography", function () {
             await expect(last).toContainText("test encrypted from unverified");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
-            await expect(page.getByRole("tooltip")).toContainText(
+            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
                 workerInfo.project.name === "Legacy Crypto"
                     ? "Encrypted by an unknown or deleted device."
                     : "Encrypted by a device not verified by its owner.",
@@ -209,7 +216,7 @@ test.describe("Cryptography", function () {
             // The key is coming from backup, so it is not anymore possible to establish if the claimed device
             // creator of this key is authentic. The tooltip should be "The authenticity of this encrypted message can't be guaranteed on this device."
             // It is not "Encrypted by an unknown or deleted device." even if the claimed device is actually deleted.
-            await expect(page.getByRole("tooltip")).toContainText(
+            await expect(await app.getTooltipForElement(lastTileE2eIcon)).toContainText(
                 "The authenticity of this encrypted message can't be guaranteed on this device.",
             );
         });
@@ -287,13 +294,15 @@ test.describe("Cryptography", function () {
             // Let our app start syncing again
             await app.client.network.goOnline();
 
-            // Wait for the messages to arrive
+            // Wait for the messages to arrive. It can take quite a while for the sync to wake up.
             const last = page.locator(".mx_EventTile_last");
-            await expect(last).toContainText("test encrypted from unverified");
+            await expect(last).toContainText("test encrypted from unverified", { timeout: 20000 });
             const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
-            await expect(page.getByRole("tooltip")).toContainText("Encrypted by a device not verified by its owner.");
+            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
+                "Encrypted by a device not verified by its owner.",
+            );
 
             const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
             await expect(penultimate.locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
