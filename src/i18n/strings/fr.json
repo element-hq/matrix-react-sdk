@@ -1405,7 +1405,6 @@
         "click_for_info": "Cliquez pour en savoir plus",
         "currently_experimental": "Actuellement expérimental.",
         "custom_themes": "Autoriser l’ajout de thèmes personnalisés",
-        "dehydration": "Messagerie hors-ligne chiffrée utilisant des appareils déshydratés",
         "dynamic_room_predecessors": "Prédécesseurs de salon dynamique",
         "dynamic_room_predecessors_description": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
         "element_call_video_rooms": "Salons vidéo Element Call",
@@ -3197,8 +3196,6 @@
             "voice_call_unsupported": "%(senderName)s a passé un appel audio. (non pris en charge par ce navigateur)"
         },
         "m.file": {
-            "decrypt_label": "Déchiffrer %(text)s",
-            "download_label": "Télécharger %(text)s",
             "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe",
             "error_invalid": "Fichier %(extra)s non valide"
         },

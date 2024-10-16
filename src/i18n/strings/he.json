@@ -993,7 +993,6 @@
         "bridge_state_manager": "הגשר הזה מנוהל על ידי משתמש <user />.",
         "bridge_state_workspace": "סביבת עבודה: <networkLink/>",
         "custom_themes": "מיכה להוספת תבניות מותאמות אישית",
-        "dehydration": "שליחת הודעות מוצפנות במצב אופליין עם שימוש במכשיר מיובש",
         "group_developer": "מפתח",
         "group_encryption": "הצפנה",
         "group_experimental": "נִסיוֹנִי",
@@ -2108,8 +2107,6 @@
             "voice_call_unsupported": "%(senderName)s התחיל שיחה קולית. (אינו נתמך בדפדפן זה)"
         },
         "m.file": {
-            "decrypt_label": "פענח %(text)s",
-            "download_label": "הורד %(text)s",
             "error_decrypting": "שגיאה בפענוח קבצים מצורפים",
             "error_invalid": "קובץ לא תקין %(extra)s"
         },

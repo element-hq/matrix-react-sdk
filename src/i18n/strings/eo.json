@@ -1034,7 +1034,6 @@
         "bridge_state_workspace": "Laborspaco: <networkLink/>",
         "currently_experimental": "Nuntempe eksperimenta.",
         "custom_themes": "Subteni aldonadon de propraj haŭtoj",
-        "dehydration": "Eksterreta ĉifrita komunikado per alsalutaĵoj",
         "element_call_video_rooms": "Element Call videoĉambroj",
         "group_calls": "La nova grupvoka sperto",
         "group_developer": "Programisto",
@@ -2246,8 +2245,6 @@
             "voice_call_unsupported": "%(senderName)s ekigis voĉvokon. (mankas subteno en ĉi tiu foliumilo)"
         },
         "m.file": {
-            "decrypt_label": "Malĉifri %(text)s",
-            "download_label": "Elŝuti %(text)s",
             "error_decrypting": "Malĉifro de aldonaĵo eraris",
             "error_invalid": "Malvalida dosiero%(extra)s"
         },

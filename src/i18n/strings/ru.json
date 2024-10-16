@@ -1361,7 +1361,6 @@
         "click_for_info": "Нажмите, чтобы узнать больше",
         "currently_experimental": "На данный момент экспериментальный.",
         "custom_themes": "Поддержка сторонних тем",
-        "dehydration": "Автономный обмен зашифрованными сообщениями с сохранёнными устройствами",
         "dynamic_room_predecessors": "Родитель динамической комнаты",
         "dynamic_room_predecessors_description": "Включите MSC3946 (для поддержки архивных комнат)",
         "element_call_video_rooms": "Видеокомнаты Element Call",
@@ -3138,8 +3137,6 @@
             "voice_call_unsupported": "%(senderName)s сделал голосовой вызов. (не поддерживается этим браузером)"
         },
         "m.file": {
-            "decrypt_label": "Расшифровать %(text)s",
-            "download_label": "Скачать %(text)s",
             "error_decrypting": "Ошибка расшифровки вложения",
             "error_invalid": "Недопустимый файл%(extra)s"
         },

@@ -1158,7 +1158,6 @@
         "bridge_state_workspace": "ພື້ນທີ່ເຮັດວຽກ: <networkLink/>",
         "click_for_info": "ກົດສຳລັບຂໍ້ມູນເພີ່ມເຕີມ",
         "custom_themes": "ສະຫນັບສະຫນູນການເພີ່ມຫົວຂໍ້ ທີ່ກຳນົດເອງ",
-        "dehydration": "ຂໍ້ຄວາມເຂົ້າລະຫັດແບບອອບໄລນ໌ໂດຍໃຊ້ອຸປະກອນອົບແຫ້ງ",
         "group_developer": "ນັກພັດທະນາ",
         "group_encryption": "ການເຂົ້າລະຫັດ",
         "group_experimental": "ທົດລອງ",
@@ -2504,8 +2503,6 @@
             "voice_call_unsupported": "%(senderName)s ການໂທດ້ວຍສຽງ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)"
         },
         "m.file": {
-            "decrypt_label": "ຖອດລະຫັດ %(text)s",
-            "download_label": "ດາວໂຫລດ %(text)s",
             "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ",
             "error_invalid": "ໄຟລ໌ບໍ່ຖືກຕ້ອງ%(extra)s"
         },

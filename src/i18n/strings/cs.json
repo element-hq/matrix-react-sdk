@@ -1371,7 +1371,6 @@
         "click_for_info": "Klikněte pro více informací",
         "currently_experimental": "V současnosti experimentální.",
         "custom_themes": "Umožnit přidání vlastního vzhledu",
-        "dehydration": "Offline šifrovaná komunikace pomocí dehydrovaných zařízení",
         "dynamic_room_predecessors": "Předchůdci dynamické místnosti",
         "dynamic_room_predecessors_description": "Povolit MSC3946 (podpora pozdních archivů místností)",
         "element_call_video_rooms": "Element Call video místnosti",
@@ -3163,8 +3162,6 @@
             "voice_call_unsupported": "%(senderName)s zahájil(a) hovor. (není podporováno tímto prohlížečem)"
         },
         "m.file": {
-            "decrypt_label": "Dešifrovat %(text)s",
-            "download_label": "Stáhnout %(text)s",
             "error_decrypting": "Chyba při dešifrování přílohy",
             "error_invalid": "Neplatný soubor%(extra)s"
         },

@@ -1279,7 +1279,6 @@
         "click_for_info": "クリックすると詳細を表示",
         "currently_experimental": "現在実験中。",
         "custom_themes": "ユーザー定義のテーマの追加をサポート",
-        "dehydration": "乾燥した（dehydrated）端末を使用したオフラインの暗号化メッセージング",
         "dynamic_room_predecessors_description": "MSC3946を有効にする（遅延ルームアーカイブのサポート）",
         "element_call_video_rooms": "Element Callのビデオ通話ルーム",
         "experimental_description": "実験に参加したいですか？開発中のアイディアを試してください。これらの機能は完成していません。不安定な可能性や変更される可能性、また、開発が中止される可能性もあります。<a>詳細を確認</a>。",
@@ -2888,8 +2887,6 @@
             "voice_call_unsupported": "%(senderName)sが音声通話を行いました。（このブラウザーではサポートされていません）"
         },
         "m.file": {
-            "decrypt_label": "%(text)sを復号化",
-            "download_label": "%(text)sをダウンロード",
             "error_decrypting": "添付ファイルを復号化する際にエラーが発生しました",
             "error_invalid": "無効なファイル %(extra)s"
         },

@@ -1176,7 +1176,6 @@
         "bridge_state_workspace": "Espazo de traballo: <networkLink/>",
         "click_for_info": "Preme para máis info",
         "custom_themes": "Permitir engadir decorados personalizados",
-        "dehydration": "Mensaxería cifrada offline usando dispositivos \"deshidratados\"",
         "element_call_video_rooms": "Salas de chamadas de vídeo Element",
         "group_developer": "Desenvolvemento",
         "group_encryption": "Cifrado",
@@ -2652,8 +2651,6 @@
             "voice_call_unsupported": "%(senderName)s fixo unha chamada de voz. (non soportado neste navegador)"
         },
         "m.file": {
-            "decrypt_label": "Descifrar %(text)s",
-            "download_label": "Baixar %(text)s",
             "error_decrypting": "Fallo descifrando o anexo",
             "error_invalid": "Ficheiro non válido %(extra)s"
         },

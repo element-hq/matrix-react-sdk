@@ -1370,7 +1370,6 @@
         "click_for_info": "Klicka för mer info",
         "currently_experimental": "För närvarande experimentellt.",
         "custom_themes": "Stöd tilläggning av anpassade teman",
-        "dehydration": "Krypterad meddelandehantering offline med hjälp av frystorkade enheter",
         "dynamic_room_predecessors": "Dynamiska rumsföregångare",
         "dynamic_room_predecessors_description": "Aktivera MSC3946 (för att stöda sen-ankomna rumsarkiv)",
         "element_call_video_rooms": "Element Call videorum",
@@ -3155,8 +3154,6 @@
             "voice_call_unsupported": "%(senderName)s ringde ett röstsamtal. (stöds inte av denna webbläsare)"
         },
         "m.file": {
-            "decrypt_label": "Avkryptera %(text)s",
-            "download_label": "Ladda ner %(text)s",
             "error_decrypting": "Fel vid avkryptering av bilagan",
             "error_invalid": "Felaktig fil%(extra)s"
         },

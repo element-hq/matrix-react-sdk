@@ -1367,7 +1367,6 @@
         "click_for_info": "Lisateabe jaoks klõpsi",
         "currently_experimental": "Parasjagu katsejärgus.",
         "custom_themes": "Toeta kohandatud teemade lisamist",
-        "dehydration": "Võrguühenduseta kasutamiseks mõeldud krüptitud sõnumid dehydrated teenuse abil",
         "dynamic_room_predecessors": "Jututoa dünaamilised eellased",
         "dynamic_room_predecessors_description": "Võta kasutusele MSC3946 (jututoa ajaloo aeglane laadimine)",
         "element_call_video_rooms": "Element Call videotoad",
@@ -3106,8 +3105,6 @@
             "voice_call_unsupported": "%(senderName)s alustas häälkõnet. (sellel brauseril puudub niisuguste kõnede tugi)"
         },
         "m.file": {
-            "decrypt_label": "Dekrüpti %(text)s",
-            "download_label": "Laadi alla %(text)s",
             "error_decrypting": "Viga manuse dekrüptimisel",
             "error_invalid": "Vigane fail %(extra)s"
         },

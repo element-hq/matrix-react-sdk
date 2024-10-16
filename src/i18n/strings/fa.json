@@ -958,7 +958,6 @@
         "bridge_state_manager": "این پل ارتباطی توسط <user /> مدیریت می‌شود.",
         "bridge_state_workspace": "فضای کار:<networkLink/>",
         "custom_themes": "پشتیبانی از افزودن پوسته‌های ظاهری دلخواه",
-        "dehydration": "ارسال پیام رمزشده به شکل آفلاین با استفاده از دستگاه‌های خاص",
         "group_developer": "توسعه دهنده",
         "group_encryption": "رمزنگاری",
         "group_experimental": "تجربی",
@@ -1949,8 +1948,6 @@
             "voice_call_unsupported": "%(senderName)s تماس صوتی برقرار کرد. (توسط این مرورگر پشتیبانی نمی شود)"
         },
         "m.file": {
-            "decrypt_label": "رمزگشایی %(text)s",
-            "download_label": "دانلود 2%(text)s",
             "error_decrypting": "خطا در رمزگشایی پیوست",
             "error_invalid": "پرونده نامعتبر%(extra)s"
         },

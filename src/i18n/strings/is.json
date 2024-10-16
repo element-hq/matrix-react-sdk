@@ -2570,8 +2570,6 @@
             "voice_call_unsupported": "%(senderName)s hringdi raddsímtal. (Ekki stutt af þessum vafra)"
         },
         "m.file": {
-            "decrypt_label": "Afkóða %(text)s",
-            "download_label": "Niðurhala %(text)s",
             "error_decrypting": "Villa við afkóðun viðhengis",
             "error_invalid": "Ógild skrá%(extra)s"
         },

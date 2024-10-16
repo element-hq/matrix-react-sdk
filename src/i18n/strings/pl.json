@@ -1412,7 +1412,6 @@
         "click_for_info": "Kliknij po więcej informacji",
         "currently_experimental": "Aktualnie eksperymentalne.",
         "custom_themes": "Obsługa dodawania niestandardowych motywów",
-        "dehydration": "Szyfrowane wiadomości offline korzystające z urządzeń odwodnionych",
         "dynamic_room_predecessors": "Dynamiczne poprzedniki pokoju",
         "dynamic_room_predecessors_description": "Włącz MSC3946 (dla opóźnionych archiwów pokoju)",
         "element_call_video_rooms": "Pokoje rozmów wideo Element Call",
@@ -3333,8 +3332,6 @@
             "voice_call_unsupported": "%(senderName)s wykonał połączenie głosowe. (nie wspierane przez tę przeglądarkę)"
         },
         "m.file": {
-            "decrypt_label": "Odszyfruj %(text)s",
-            "download_label": "Pobierz %(text)s",
             "error_decrypting": "Błąd odszyfrowywania załącznika",
             "error_invalid": "Nieprawidłowy plik %(extra)s"
         },
@@ -3835,8 +3832,6 @@
     },
     "user_menu": {
         "link_new_device": "Powiąż nowe urządzenie",
-        "link_new_device_not_supported": "Nieobsługiwane",
-        "link_new_device_not_supported_caption": "Musisz się ręcznie zalogować",
         "settings": "Wszystkie ustawienia",
         "switch_theme_dark": "Przełącz na tryb ciemny",
         "switch_theme_light": "Przełącz na tryb jasny"
