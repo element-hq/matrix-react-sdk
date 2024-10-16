@@ -1233,7 +1233,6 @@
         "click_for_info": "Nhấp để có thêm thông tin",
         "currently_experimental": "Hiện đang thử nghiệm.",
         "custom_themes": "Hỗ trợ thêm các chủ đề tùy chỉnh",
-        "dehydration": "Nhắn tin được mã hóa ngoại tuyến bằng cách sử dụng các thiết khử nước",
         "dynamic_room_predecessors": "Tiền nhiệm động cho phòng",
         "element_call_video_rooms": "Phòng truyền hình Element Call",
         "experimental_description": "Muốn trải nghiệm? Thử các ý tưởng mới nhất còn đang được phát triển của chúng tôi. Các tính năng này chưa được hoàn thiện, chúng có thể không ổn định, có thể thay đổi, hay bị loại bỏ hoàn toàn. <a>Tìm hiểu thêm</a>.",
@@ -2828,8 +2827,6 @@
             "voice_call_unsupported": "%(senderName)s đã thực hiện một cuộc gọi thoại. (không được hỗ trợ bởi trình duyệt này)"
         },
         "m.file": {
-            "decrypt_label": "Giải mã %(text)s",
-            "download_label": "Tải xuống %(text)s",
             "error_decrypting": "Lỗi khi giải mã tệp đính kèm",
             "error_invalid": "Tệp%(extra)s không hợp lệ"
         },

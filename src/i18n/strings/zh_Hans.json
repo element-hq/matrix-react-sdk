@@ -1253,7 +1253,6 @@
         "click_for_info": "点击获取更多信息",
         "currently_experimental": "目前是实验性的。",
         "custom_themes": "支持添加自定义主题",
-        "dehydration": "需要离线设备（dehydrated devices）的加密消息离线传递",
         "element_call_video_rooms": "Element通话视频房间",
         "experimental_description": "想要做点实验？试试我们开发中的最新点子。这些功能尚未确定；它们可能不稳定，可能会变动，也可能被完全丢弃。<a>了解更多</a>。",
         "experimental_section": "早期预览",
@@ -2809,8 +2808,6 @@
             "voice_call_unsupported": "%(senderName)s 发起了语音通话。（此浏览器不支持）"
         },
         "m.file": {
-            "decrypt_label": "解密 %(text)s",
-            "download_label": "下载 %(text)s",
             "error_decrypting": "解密附件时出错",
             "error_invalid": "无效文件 %(extra)s"
         },

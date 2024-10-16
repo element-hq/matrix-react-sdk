@@ -1365,7 +1365,6 @@
         "click_for_info": "Kliknite pre viac informácií",
         "currently_experimental": "V súčasnosti experimentálne.",
         "custom_themes": "Umožniť pridávať vlastný vzhľad",
-        "dehydration": "Šifrované posielanie správ offline pomocou dehydrovaných zariadení",
         "dynamic_room_predecessors": "Predchodcovia dynamickej miestnosti",
         "dynamic_room_predecessors_description": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)",
         "element_call_video_rooms": "Element Call video miestnosti",
@@ -3140,8 +3139,6 @@
             "voice_call_unsupported": "%(senderName)s uskutočnil telefonát. (Nepodporované týmto prehliadačom)"
         },
         "m.file": {
-            "decrypt_label": "Dešifrovať %(text)s",
-            "download_label": "Stiahnuť %(text)s",
             "error_decrypting": "Chyba pri dešifrovaní prílohy",
             "error_invalid": "Neplatný súbor%(extra)s"
         },

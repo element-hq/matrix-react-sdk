@@ -854,7 +854,6 @@
         "bridge_state_manager": "Šis tiltas yra tvarkomas <user />.",
         "bridge_state_workspace": "Darbo aplinka: <networkLink/>",
         "custom_themes": "Palaikykite pridėdami pasirinktines temas",
-        "dehydration": "Šifruoti pranešimai neprisijungus naudojant dehidruotus įrenginius",
         "element_call_video_rooms": "Element skambučio vaizdo kambariai",
         "group_developer": "Kūrėjas",
         "group_encryption": "Šifravimas",
@@ -1990,8 +1989,6 @@
             "voice_call_unsupported": "%(senderName)s pradėjo vaizdo skambutį. (nepalaikoma šios naršyklės)"
         },
         "m.file": {
-            "decrypt_label": "Iššifruoti %(text)s",
-            "download_label": "Atsisiųsti %(text)s",
             "error_decrypting": "Klaida iššifruojant priedą",
             "error_invalid": "Neteisingas failas %(extra)s"
         },

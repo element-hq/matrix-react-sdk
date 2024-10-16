@@ -1334,7 +1334,6 @@
         "click_for_info": "點擊以取得更多資訊",
         "currently_experimental": "目前為實驗性。",
         "custom_themes": "支援新增自訂佈景主題",
-        "dehydration": "使用「脫水裝置」以離線方式傳輸加密訊息",
         "dynamic_room_predecessors": "動態聊天室前身",
         "dynamic_room_predecessors_description": "請啟用 MSC3946（為了支援遲到聊天室存檔）",
         "element_call_video_rooms": "Element Call 視訊聊天室",
@@ -3062,8 +3061,6 @@
             "voice_call_unsupported": "%(senderName)s 撥打了語音通話。（不被此瀏覽器支援）"
         },
         "m.file": {
-            "decrypt_label": "解密 %(text)s",
-            "download_label": "下載 %(text)s",
             "error_decrypting": "解密附件時出錯",
             "error_invalid": "不存在的文件 %(extra)s"
         },

@@ -1370,7 +1370,6 @@
         "click_for_info": "Clicca per altre info",
         "currently_experimental": "Al momento è sperimentale.",
         "custom_themes": "Supporta l'aggiunta di temi personalizzati",
-        "dehydration": "Messaggistica offline criptata usando dispositivi \"disidratati\"",
         "dynamic_room_predecessors": "Predecessori della stanza dinamici",
         "dynamic_room_predecessors_description": "Attiva MSC3946 (per supportare archivi della stanza arrivati in ritardo)",
         "element_call_video_rooms": "Stanze video di Element Call",
@@ -3156,8 +3155,6 @@
             "voice_call_unsupported": "%(senderName)s ha iniziato una telefonata. (non supportata da questo browser)"
         },
         "m.file": {
-            "decrypt_label": "Decifra %(text)s",
-            "download_label": "Scarica %(text)s",
             "error_decrypting": "Errore decifratura allegato",
             "error_invalid": "File non valido %(extra)s"
         },

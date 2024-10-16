@@ -2755,8 +2755,6 @@
             "voice_call_unsupported": "%(senderName)s soitti äänipuhelun. (selaimesi ei tue äänipuheluita)"
         },
         "m.file": {
-            "decrypt_label": "Pura %(text)s",
-            "download_label": "Lataa %(text)s",
             "error_decrypting": "Virhe purettaessa liitteen salausta",
             "error_invalid": "Virheellinen tiedosto%(extra)s"
         },

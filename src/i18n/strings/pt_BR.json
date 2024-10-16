@@ -975,7 +975,6 @@
         "bridge_state_manager": "Esta integração é desenvolvida por <user />.",
         "bridge_state_workspace": "Espaço de trabalho: <networkLink/>",
         "custom_themes": "Permite adicionar temas personalizados",
-        "dehydration": "Envio de mensagens criptografadas offline, usando dispositivos específicos",
         "group_developer": "Desenvolvedor",
         "group_encryption": "Criptografia",
         "group_messaging": "Mensagens",
@@ -2139,8 +2138,6 @@
             "voice_call_unsupported": "%(senderName)s iniciou uma chamada de voz. (não suportada por este navegador)"
         },
         "m.file": {
-            "decrypt_label": "Descriptografar %(text)s",
-            "download_label": "Baixar %(text)s",
             "error_decrypting": "Erro ao descriptografar o anexo",
             "error_invalid": "Arquivo inválido %(extra)s"
         },

@@ -1139,7 +1139,6 @@
         "bridge_state_workspace": "Χώρος εργασίας: <networkLink/>",
         "click_for_info": "Κλικ για περισσότερες πληροφορίες",
         "custom_themes": "Υποστήριξη προσθήκης προσαρμοσμένων θεμάτων",
-        "dehydration": "Κρυπτογραφημένα μηνύματα εκτός σύνδεσης με χρήση αφυδατωμένων συσκευών",
         "group_developer": "Προγραμματιστής",
         "group_encryption": "Κρυπτογράφηση",
         "group_experimental": "Πειραματικό",
@@ -2490,8 +2489,6 @@
             "voice_call_unsupported": "Ο %(senderName)s έκανε μια ηχητική κλήση. (δεν υποστηρίζεται από το πρόγραμμα περιήγησης)"
         },
         "m.file": {
-            "decrypt_label": "Αποκρυπτογράφηση %(text)s",
-            "download_label": "Λήψη %(text)s",
             "error_decrypting": "Σφάλμα κατά την αποκρυπτογράφηση της επισύναψης",
             "error_invalid": "Μη έγκυρο αρχείο %(extra)s"
         },

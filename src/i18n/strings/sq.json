@@ -1290,7 +1290,6 @@
         "click_for_info": "Klikoni për më tepër hollësi",
         "currently_experimental": "Aktualisht eksperimental.",
         "custom_themes": "Mbulim shtimi temash vetjake",
-        "dehydration": "Shkëmbim jashtë linje mesazhesh të fshehtëzuar duke përdorur pajisje të dehidratuara",
         "element_call_video_rooms": "Dhoma Thirrje Element me video",
         "experimental_description": "Ndiheni eksperimentues? Provoni idetë tona më të reja në zhvillim. Këto veçori s’janë të përfunduara; mund të jenë të paqëndrueshme, mund të ndryshojnë, ose mund të braktisen faqe. <a>Mësoni më tepër</a>.",
         "experimental_section": "Paraparje të hershme",
@@ -2950,8 +2949,6 @@
             "voice_call_unsupported": "%(senderName)s bëri një thirrje zanore. (e pambuluar nga ky shfletues)"
         },
         "m.file": {
-            "decrypt_label": "Shfshehtëzoje %(text)s",
-            "download_label": "Shkarko %(text)s",
             "error_decrypting": "Gabim në shfshehtëzim bashkëngjitjeje",
             "error_invalid": "Kartelë e pavlefshme%(extra)s"
         },

@@ -1331,7 +1331,6 @@
         "click_for_info": "Натисніть, щоб дізнатися більше",
         "currently_experimental": "Наразі експериментально.",
         "custom_themes": "Підтримка користувацьких тем",
-        "dehydration": "Зашифроване листування офлайн за допомогою збережених на сервері (dehydrated) пристроїв",
         "dynamic_room_predecessors": "Попередники динамічної кімнати",
         "dynamic_room_predecessors_description": "Увімкнути MSC3946 (для підтримки архівів пізніх кімнат)",
         "element_call_video_rooms": "Відео кімнати Element Call",
@@ -3071,8 +3070,6 @@
             "voice_call_unsupported": "%(senderName)s розпочинає голосовий виклик. (не підтримується цим браузером)"
         },
         "m.file": {
-            "decrypt_label": "Розшифрувати %(text)s",
-            "download_label": "Завантажити %(text)s",
             "error_decrypting": "Помилка розшифрування вкладення",
             "error_invalid": "Пошкоджений файл%(extra)s"
         },

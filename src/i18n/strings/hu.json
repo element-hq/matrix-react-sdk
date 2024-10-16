@@ -1350,7 +1350,6 @@
         "click_for_info": "Kattintson a további információkhoz",
         "currently_experimental": "Jelenleg kísérleti állapotban van.",
         "custom_themes": "Egyéni témák támogatásának hozzáadása",
-        "dehydration": "Kapcsolat nélküli titkosított üzenetküldés tartósított eszközökkel",
         "dynamic_room_predecessors": "A dinamikus szoba előfutárai",
         "dynamic_room_predecessors_description": "MSC3946 engedélyezése (a későn érkező szobaarchívumok támogatáshoz)",
         "element_call_video_rooms": "Element Call videószobák",
@@ -3075,8 +3074,6 @@
             "voice_call_unsupported": "%(senderName)s hanghívást indított. (ebben a böngészőben nem támogatott)"
         },
         "m.file": {
-            "decrypt_label": "%(text)s visszafejtése",
-            "download_label": "%(text)s letöltése",
             "error_decrypting": "Csatolmány visszafejtése sikertelen",
             "error_invalid": "Hibás fájl%(extra)s"
         },

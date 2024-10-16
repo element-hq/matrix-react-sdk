@@ -1264,7 +1264,6 @@
         "click_for_info": "Haz clic para más info.",
         "currently_experimental": "Actualmente en fase experimental.",
         "custom_themes": "Soporta la adición de temas personalizados",
-        "dehydration": "Mensajería cifrada y offline usando dispositivos deshidratados",
         "dynamic_room_predecessors": "Predecesores dinámicos de la sala",
         "element_call_video_rooms": "Salas de vídeo Element Call",
         "experimental_description": "¿Te apetece probar cosas experimentales? Aquí encontrarás nuestras ideas en desarrollo. No están terminadas, pueden ser inestables, cambiar o dejar de estar disponibles. <a>Más información</a>.",
@@ -2879,8 +2878,6 @@
             "voice_call_unsupported": "%(senderName)s hizo una llamada de voz. (no soportada por este navegador)"
         },
         "m.file": {
-            "decrypt_label": "Descifrar %(text)s",
-            "download_label": "Descargar %(text)s",
             "error_decrypting": "Error al descifrar adjunto",
             "error_invalid": "Archivo inválido %(extra)s"
         },

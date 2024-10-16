@@ -1161,7 +1161,6 @@
         "bridge_state_workspace": "Werkplaats: <networkLink/>",
         "click_for_info": "Klik voor meer info",
         "custom_themes": "Maatwerkthema's ondersteuning",
-        "dehydration": "Offline versleutelde berichten met gebruik van uitgedroogde apparaten",
         "element_call_video_rooms": "Element Call videokamers",
         "group_calls": "Nieuwe ervaring voor groepsgesprekken",
         "group_developer": "Ontwikkelaar",
@@ -2668,8 +2667,6 @@
             "voice_call_unsupported": "%(senderName)s poogt je te bellen, maar jouw browser ondersteunt dat niet"
         },
         "m.file": {
-            "decrypt_label": "%(text)s ontsleutelen",
-            "download_label": "%(text)s downloaden",
             "error_decrypting": "Fout bij het ontsleutelen van de bijlage",
             "error_invalid": "Ongeldig bestand %(extra)s"
         },

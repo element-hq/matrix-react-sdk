@@ -1350,7 +1350,6 @@
         "click_for_info": "Klik untuk info lanjut",
         "currently_experimental": "Saat ini masih dalam uji coba.",
         "custom_themes": "Dukungan penambahan tema kustom",
-        "dehydration": "Perpesanan terenkripsi luring menggunakan perangkat dehidrasi",
         "dynamic_room_predecessors": "Pendahulu ruang dinamis",
         "dynamic_room_predecessors_description": "Aktifkan MSC3946 (untuk mendukung arsip ruangan yang datang terlambat)",
         "element_call_video_rooms": "Ruangan video Element Call",
@@ -3109,8 +3108,6 @@
             "voice_call_unsupported": "%(senderName)s melakukan panggilan suara. (tidak didukung oleh browser ini)"
         },
         "m.file": {
-            "decrypt_label": "Dekripsi %(text)s",
-            "download_label": "Unduh %(text)s",
             "error_decrypting": "Terjadi kesalahan mendekripsi lampiran",
             "error_invalid": "File tidak absah%(extra)s"
         },
