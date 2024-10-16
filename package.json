@@ -228,7 +228,7 @@
         "mailhog": "^4.16.0",
         "matrix-web-i18n": "^3.2.1",
         "mocha-junit-reporter": "^2.2.0",
-        "node-fetch": "2",
+        "node-fetch": "3",
         "playwright-core": "^1.45.1",
         "postcss-scss": "^4.0.4",
         "prettier": "3.3.3",
