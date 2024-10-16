@@ -142,7 +142,6 @@ beforeEach(() => {
         isUserIgnored: jest.fn(),
         getIgnoredUsers: jest.fn(),
         setIgnoredUsers: jest.fn(),
-        isCryptoEnabled: jest.fn(),
         getUserId: jest.fn(),
         getSafeUserId: jest.fn(),
         getDomain: jest.fn(),
@@ -423,7 +422,6 @@ describe("<UserInfo />", () => {
 
     describe("with crypto enabled", () => {
         beforeEach(() => {
-            mockClient.isCryptoEnabled.mockReturnValue(true);
             mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
             mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
 
@@ -662,7 +660,6 @@ describe("<UserInfo />", () => {
 
     describe("with an encrypted room", () => {
         beforeEach(() => {
-            mockClient.isCryptoEnabled.mockReturnValue(true);
             mockClient.isRoomEncrypted.mockReturnValue(true);
         });
 

@@ -129,6 +129,7 @@ export function createTestClient(): MatrixClient {
             isEncryptionEnabledInRoom: jest.fn(),
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             setDeviceIsolationMode: jest.fn(),
+            prepareToEncrypt: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -207,7 +208,6 @@ export function createTestClient(): MatrixClient {
         relations: jest.fn().mockResolvedValue({
             events: [],
         }),
-        isCryptoEnabled: jest.fn().mockReturnValue(false),
         hasLazyLoadMembersEnabled: jest.fn().mockReturnValue(false),
         isInitialSyncComplete: jest.fn().mockReturnValue(true),
         fetchRoomEvent: jest.fn().mockRejectedValue({}),

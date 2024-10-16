@@ -98,7 +98,6 @@ describe("<MatrixChat />", () => {
         getThirdpartyProtocols: jest.fn().mockResolvedValue({}),
         getClientWellKnown: jest.fn().mockReturnValue({}),
         isVersionSupported: jest.fn().mockResolvedValue(false),
-        isCryptoEnabled: jest.fn().mockReturnValue(false),
         initRustCrypto: jest.fn(),
         getRoom: jest.fn(),
         getMediaHandler: jest.fn().mockReturnValue({
@@ -126,7 +125,6 @@ describe("<MatrixChat />", () => {
         }),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRooms: jest.fn().mockReturnValue([]),
-        userHasCrossSigningKeys: jest.fn(),
         setGlobalErrorOnUnknownDevices: jest.fn(),
         getCrypto: jest.fn().mockReturnValue({
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
@@ -1014,17 +1012,15 @@ describe("<MatrixChat />", () => {
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
                     bootstrapCrossSigning: jest.fn(),
                 };
-                loginClient.isCryptoEnabled.mockReturnValue(true);
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
-                loginClient.userHasCrossSigningKeys.mockClear().mockResolvedValue(false);
             });
 
             it("should go straight to logged in view when crypto is not enabled", async () => {
-                loginClient.isCryptoEnabled.mockReturnValue(false);
+                loginClient.getCrypto.mockReturnValue(undefined);
 
                 await getComponentAndLogin(true);
 
-                expect(loginClient.userHasCrossSigningKeys).not.toHaveBeenCalled();
+                expect(screen.getByRole("heading", { name: "Welcome Ernie" })).toBeInTheDocument();
             });
 
             it("should go straight to logged in view when user does not have cross signing keys and server does not support cross signing", async () => {
@@ -1045,7 +1041,7 @@ describe("<MatrixChat />", () => {
             describe("when server supports cross signing and user does not have cross signing setup", () => {
                 beforeEach(() => {
                     loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-                    loginClient.userHasCrossSigningKeys.mockResolvedValue(false);
+                    jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(false);
                 });
 
                 describe("when encryption is force disabled", () => {
@@ -1091,7 +1087,7 @@ describe("<MatrixChat />", () => {
 
                     await getComponentAndLogin();
 
-                    expect(loginClient.userHasCrossSigningKeys).toHaveBeenCalled();
+                    expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
 
                     // set up keys screen is rendered
                     await expect(await screen.findByText("Setting up keys")).toBeInTheDocument();
@@ -1099,11 +1095,11 @@ describe("<MatrixChat />", () => {
             });
 
             it("should show complete security screen when user has cross signing setup", async () => {
-                loginClient.userHasCrossSigningKeys.mockResolvedValue(true);
+                jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(true);
 
                 await getComponentAndLogin();
 
-                expect(loginClient.userHasCrossSigningKeys).toHaveBeenCalled();
+                expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
 
                 await flushPromises();
 
@@ -1116,7 +1112,7 @@ describe("<MatrixChat />", () => {
 
                 await getComponentAndLogin();
 
-                expect(loginClient.userHasCrossSigningKeys).toHaveBeenCalled();
+                expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
 
                 await flushPromises();
 

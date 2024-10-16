@@ -413,7 +413,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private async postLoginSetup(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
-        const cryptoEnabled = cli.isCryptoEnabled();
+        const cryptoEnabled = Boolean(cli.getCrypto());
         if (!cryptoEnabled) {
             this.onLoggedIn();
         }
@@ -426,7 +426,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // from another device.
             promisesList.push(
                 (async (): Promise<void> => {
-                    crossSigningIsSetUp = await cli.userHasCrossSigningKeys();
+                    crossSigningIsSetUp = Boolean(await cli.getCrypto()?.userHasCrossSigningKeys());
                 })(),
             );
         }
@@ -1619,7 +1619,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             .catch((e) => logger.error("Unable to start DecryptionFailureTracker", e));
 
         cli.on(ClientEvent.Room, (room) => {
-            if (cli.isCryptoEnabled()) {
+            if (cli.getCrypto()) {
                 const blacklistEnabled = SettingsStore.getValueAt(
                     SettingLevel.ROOM_DEVICE,
                     "blacklistUnverifiedDevices",
