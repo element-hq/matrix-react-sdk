@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { cleanup, render, waitFor } from "@testing-library/react";
+import { cleanup, render, waitFor } from "jest-matrix-react";
 import { MockedObject, mocked } from "jest-mock";
 import React from "react";
 import {
@@ -38,7 +38,6 @@ function makeClient() {
         getUser: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),
         isUserIgnored: jest.fn(),
-        isCryptoEnabled: jest.fn(),
         getUserId: jest.fn(),
         on: jest.fn(),
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),

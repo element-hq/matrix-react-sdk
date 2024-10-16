@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
-import { AllowedMentionAttributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
+import { AllowedMentionAttributes, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
 import { SyntheticEvent, useState, SetStateAction } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -388,7 +388,9 @@ function shouldIncrementEndIndex(text: string, index: number): boolean {
  */
 export function getMappedSuggestion(text: string, isAutoReplaceEmojiEnabled?: boolean): MappedSuggestion | null {
     if (isAutoReplaceEmojiEnabled) {
-        const emoji = EMOTICON_TO_EMOJI.get(text.toLocaleLowerCase());
+        // variations of plaintext emoitcons(E.g. :P vs :p vs :-P) are handled upstream by the emojibase-bindings/emojibase libraries.
+        // See rules for variations here https://github.com/milesj/emojibase/blob/master/packages/core/src/generateEmoticonPermutations.ts#L3-L32
+        const emoji = EMOTICON_TO_EMOJI.get(text);
         if (emoji?.unicode) {
             return { keyChar: "", text: emoji.unicode, type: "custom" };
         }

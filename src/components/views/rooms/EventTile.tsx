@@ -26,8 +26,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { EventShieldColour, EventShieldReason, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import {
+    CryptoEvent,
+    EventShieldColour,
+    EventShieldReason,
+    UserVerificationStatus,
+} from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 
 import ReplyChain from "../elements/ReplyChain";
@@ -1024,6 +1028,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             // no avatar or sender profile for continuation messages and call tiles
             avatarSize = null;
             needsSenderProfile = false;
+        } else if (this.context.timelineRenderingType === TimelineRenderingType.File) {
+            avatarSize = "20px";
+            needsSenderProfile = true;
         } else {
             avatarSize = "30px";
             needsSenderProfile = true;
@@ -1351,6 +1358,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-scroll-tokens": scrollToken,
                     },
                     [
+                        <a
+                            className="mx_EventTile_senderDetailsLink"
+                            key="mx_EventTile_senderDetailsLink"
+                            href={permalink}
+                            onClick={this.onPermalinkClicked}
+                        >
+                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
+                                {avatar}
+                                {sender}
+                                {timestamp}
+                            </div>
+                        </a>,
                         <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
                             {this.renderContextMenu()}
                             {renderTile(
@@ -1371,17 +1390,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 this.context.showHiddenEvents,
                             )}
                         </div>,
-                        <a
-                            className="mx_EventTile_senderDetailsLink"
-                            key="mx_EventTile_senderDetailsLink"
-                            href={permalink}
-                            onClick={this.onPermalinkClicked}
-                        >
-                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
-                                {sender}
-                                {timestamp}
-                            </div>
-                        </a>,
                     ],
                 );
             }
@@ -1519,7 +1527,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps> {
         // https://github.com/element-hq/compound/issues/294
         return (
             <Tooltip label={this.props.title} isTriggerInteractive={true}>
-                <div className={classes} tabIndex={0} />
+                <div className={classes} tabIndex={0} aria-label={_t("timeline|e2e_state")} />
             </Tooltip>
         );
     }
@@ -1555,7 +1563,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
         <div className="mx_EventTile_msgOption">
             <div className="mx_ReadReceiptGroup">
                 <Tooltip label={label} placement="top-end">
-                    <div className="mx_ReadReceiptGroup_button">
+                    <div className="mx_ReadReceiptGroup_button" role="status">
                         <span className="mx_ReadReceiptGroup_container">
                             <span className={receiptClasses}>{nonCssBadge}</span>
                         </span>
