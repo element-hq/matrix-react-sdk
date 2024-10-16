@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, RenderResult, screen } from "@testing-library/react";
+import { render, RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { mocked, MockedObject } from "jest-mock";
@@ -134,8 +134,6 @@ describe("CreateSecretStorageDialog", () => {
         });
 
         it("calls bootstrapSecretStorage once keys are restored if the backup is now trusted", async () => {
-            mockClient.isCryptoEnabled.mockReturnValue(true);
-
             const result = renderComponent();
             await result.findByText(/Enter your account password to confirm the upgrade/);
             expect(result.container).toMatchSnapshot();

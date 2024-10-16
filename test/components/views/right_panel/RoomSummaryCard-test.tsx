@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { render, fireEvent, screen, waitFor } from "jest-matrix-react";
 import { EventType, MatrixEvent, Room, MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked, MockedObject } from "jest-mock";
@@ -256,6 +256,36 @@ describe("<RoomSummaryCard />", () => {
         fireEvent.click(getByText(_t("common|settings")));
 
         expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "open_room_settings" });
+    });
+
+    it("opens room member list on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("People"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
+            { phase: RightPanelPhases.RoomMemberList },
+            true,
+        );
+    });
+
+    it("opens room threads list on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("Threads"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith({ phase: RightPanelPhases.ThreadPanel }, true);
+    });
+
+    it("opens room pinned messages on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("Pinned messages"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
+            { phase: RightPanelPhases.PinnedMessages },
+            true,
+        );
     });
 
     describe("pinning", () => {

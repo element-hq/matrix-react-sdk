@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitFor, cleanup, act, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, cleanup, act, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Mocked, mocked } from "jest-mock";
 import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
@@ -142,7 +142,6 @@ beforeEach(() => {
         isUserIgnored: jest.fn(),
         getIgnoredUsers: jest.fn(),
         setIgnoredUsers: jest.fn(),
-        isCryptoEnabled: jest.fn(),
         getUserId: jest.fn(),
         getSafeUserId: jest.fn(),
         getDomain: jest.fn(),
@@ -307,7 +306,7 @@ describe("<UserInfo />", () => {
         it("renders close button correctly when encryption panel with a pending verification request", async () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
             screen.getByTestId("base-card-close-button").focus();
-            await expect(screen.findByRole("tooltip", { name: "Cancel" })).resolves.toBeInTheDocument();
+            expect(screen.getByText("Cancel")).toBeInTheDocument();
         });
     });
 
@@ -424,7 +423,6 @@ describe("<UserInfo />", () => {
 
     describe("with crypto enabled", () => {
         beforeEach(() => {
-            mockClient.isCryptoEnabled.mockReturnValue(true);
             mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
             mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
 
@@ -663,7 +661,6 @@ describe("<UserInfo />", () => {
 
     describe("with an encrypted room", () => {
         beforeEach(() => {
-            mockClient.isCryptoEnabled.mockReturnValue(true);
             mockClient.isRoomEncrypted.mockReturnValue(true);
         });
 

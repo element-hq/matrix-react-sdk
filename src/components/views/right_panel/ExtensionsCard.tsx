@@ -10,8 +10,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
-import { Icon as PlusIcon } from "@vector-im/compound-design-tokens/icons/plus.svg";
-import { Icon as ExtensionsIcon } from "@vector-im/compound-design-tokens/icons/extensions.svg";
+import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
+import ExtensionsIcon from "@vector-im/compound-design-tokens/assets/web/icons/extensions";
 
 import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
@@ -157,13 +157,6 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
         }
     };
 
-    // The button is in the header to keep it outside the scrollable region
-    const header = (
-        <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
-            {_t("right_panel|add_integrations")}
-        </Button>
-    );
-
     let body: JSX.Element;
     if (realApps.length < 1) {
         body = (
@@ -197,7 +190,10 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
     }
 
     return (
-        <BaseCard header={header} className="mx_ExtensionsCard" onClose={onClose} hideHeaderButtons>
+        <BaseCard header={_t("right_panel|extensions_button")} className="mx_ExtensionsCard" onClose={onClose}>
+            <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
+                {_t("right_panel|add_integrations")}
+            </Button>
             {body}
         </BaseCard>
     );

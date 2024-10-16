@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
     EventType,
@@ -32,6 +32,8 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
+import PinningUtils from "../../../../src/utils/PinningUtils";
+import { Layout } from "../../../../src/settings/enums/Layout";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -89,6 +91,10 @@ describe("EventTile", () => {
             msg: "Hello world!",
             event: true,
         });
+    });
+
+    afterEach(() => {
+        jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
     });
 
     describe("EventTile thread summary", () => {
@@ -152,6 +158,36 @@ describe("EventTile", () => {
             expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
             expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(1);
         });
+    });
+
+    describe("EventTile renderingType: Threads", () => {
+        it("should display the pinned message badge", async () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            getComponent({}, TimelineRenderingType.Thread);
+
+            expect(screen.getByText("Pinned message")).toBeInTheDocument();
+        });
+    });
+
+    describe("EventTile renderingType: File", () => {
+        it("should not display the pinned message badge", async () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            getComponent({}, TimelineRenderingType.File);
+
+            expect(screen.queryByText("Pinned message")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("EventTile renderingType: default", () => {
+        it.each([[Layout.Group], [Layout.Bubble], [Layout.IRC]])(
+            "should display the pinned message badge",
+            async (layout) => {
+                jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+                getComponent({ layout });
+
+                expect(screen.getByText("Pinned message")).toBeInTheDocument();
+            },
+        );
     });
 
     describe("EventTile in the right panel", () => {
@@ -278,8 +314,8 @@ describe("EventTile", () => {
             expect(e2eIcons).toHaveLength(1);
             expect(e2eIcons[0].classList).toContain("mx_EventTile_e2eIcon_normal");
             fireEvent.focus(e2eIcons[0]);
-            expect(e2eIcons[0].getAttribute("aria-describedby")).toBeTruthy();
-            expect(document.getElementById(e2eIcons[0].getAttribute("aria-describedby")!)).toHaveTextContent(
+            expect(e2eIcons[0].getAttribute("aria-labelledby")).toBeTruthy();
+            expect(document.getElementById(e2eIcons[0].getAttribute("aria-labelledby")!)).toHaveTextContent(
                 expectedText,
             );
         });
