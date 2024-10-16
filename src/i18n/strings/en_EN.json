@@ -932,6 +932,8 @@
         "not_supported": "<not supported>",
         "old_version_detected_description": "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.",
         "old_version_detected_title": "Old cryptography data detected",
+        "pinned_identity_changed": "%(displayName)s's (%(userId)s) identity appears to have changed. <a>Learn more</a>",
+        "pinned_identity_changed_no_displayname": "%(userId)s's identity appears to have changed. <a>Learn more</a>",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
